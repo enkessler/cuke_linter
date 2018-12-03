@@ -9,3 +9,8 @@
 
 # rspec failure tracking
 .rspec_status
+
+# JetBrains IDE metadata folders
+/.idea
+
+Gemfile.lock
