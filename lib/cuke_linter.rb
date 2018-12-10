@@ -1,5 +1,9 @@
-require "cuke_linter/version"
+# require "cuke_linter/version"
 
 module CukeLinter
-  # Your code goes here...
+
+  def self.lint
+    puts '0 issues found'
+  end
+
 end

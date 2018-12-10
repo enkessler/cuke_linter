@@ -1,5 +1,6 @@
-require "bundler/setup"
-require "cuke_linter"
+require_relative 'common_env'
+require 'rspec'
+
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
