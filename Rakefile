@@ -17,6 +17,7 @@ namespace 'cuke_linter' do
     Rake::Task['racatt:test_everything'].invoke(rspec_args, cucumber_args)
   end
 
+  task :ci_build => 'cuke_linter:test_everything'
 end
 
 

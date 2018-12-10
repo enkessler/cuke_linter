@@ -1,5 +1,14 @@
+os:
+  - linux
+  - osx
 sudo: false
+
 language: ruby
 rvm:
+  - 2.3.3
+  - 2.4.0
   - 2.5.1
+
 before_install: gem install bundler -v 1.16.2
+
+script: bundle exec rake cuke_linter:ci_build
