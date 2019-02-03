@@ -4,7 +4,8 @@ RSpec.describe CukeLinter do
 
   let(:test_model_tree) { CukeLinter::ModelFactory.generate_lintable_model }
   let(:test_linters) { [CukeLinter::LinterFactory.generate_fake_linter] }
-  let(:linting_options) { { model_tree: test_model_tree, linters: test_linters } }
+  let(:test_formatters) { [[CukeLinter::FormatterFactory.generate_fake_formatter, "#{CukeLinter::FileHelper::create_directory}/junk_output_file.txt"]] }
+  let(:linting_options) { { model_tree: test_model_tree, linters: test_linters, formatters: test_formatters } }
 
 
   it 'returns the un-formatted linting data when linting' do
@@ -14,7 +15,10 @@ RSpec.describe CukeLinter do
   end
 
   it 'uses evey formatter provided' do
-    skip('finish me')
+    linting_options[:formatters] = [[CukeLinter::FormatterFactory.generate_fake_formatter(name: 'Formatter1')],
+                                    [CukeLinter::FormatterFactory.generate_fake_formatter(name: 'Formatter2')]]
+
+    expect { subject.lint(linting_options) }.to output("Formatter1: FakeLinter problem: path_to_file:1\nFormatter2: FakeLinter problem: path_to_file:1\n").to_stdout
   end
 
   it "uses the 'pretty' formatter if none are provided" do
@@ -22,11 +26,18 @@ RSpec.describe CukeLinter do
   end
 
   it 'outputs formatted linting data to the provided output location' do
-    skip('finish me')
+    output_path                  = "#{CukeLinter::FileHelper::create_directory}/output.txt"
+    linting_options[:formatters] = [[CukeLinter::FormatterFactory.generate_fake_formatter(name: 'Formatter1'),
+                                     output_path]]
+
+    expect { subject.lint(linting_options) }.to_not output.to_stdout
+    expect(File.read(output_path)).to eq("Formatter1: FakeLinter problem: path_to_file:1\n")
   end
 
   it 'outputs formatted data to STDOUT if not location is provided' do
-    skip('finish me')
+    linting_options[:formatters] = [[CukeLinter::FormatterFactory.generate_fake_formatter(name: 'Formatter1')]]
+
+    expect { subject.lint(linting_options) }.to output("Formatter1: FakeLinter problem: path_to_file:1\n").to_stdout
   end
 
   it 'lints every model in the model tree' do

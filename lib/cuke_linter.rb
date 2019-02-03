@@ -38,12 +38,18 @@ module CukeLinter
       end
     end
 
-    # TODO: test that the Pretty formatter is the default formatter
-    #     formatter = CukeLinter::PrettyFormatter.new
-#     formatter = formatters.first
+    formatters.each do |formatter_output_pair|
+      formatter = formatter_output_pair[0]
+      location  = formatter_output_pair[1]
 
-    # TODO: allow where output goes to be configurable (and then configure it to go somewhere else during testing so that the console isn't full of noise)
-    # output = formatter.format(linting_data)
+      formatted_data = formatter.format(linting_data)
+
+      if location
+        File.write(location, formatted_data)
+      else
+        puts formatted_data
+      end
+    end
 
     # TODO: keep this or always format data?
     linting_data
