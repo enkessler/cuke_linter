@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Eric Kessler"]
   spec.email         = ["morrow748@gmail.com"]
 
-  spec.summary       = %q{Lints feture files used by Cucumber and other similar frameworks.}
+  spec.summary       = %q{Lints feature files used by Cucumber and other similar frameworks.}
   spec.homepage      = 'https://github.com/enkessler/cuke_linter'
   spec.license       = "MIT"
 
