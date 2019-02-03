@@ -12,4 +12,12 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+
+  config.after(:suite) do
+    CukeLinter::FileHelper.created_directories.each do |dir_path|
+      FileUtils.remove_entry(dir_path, true)
+    end
+  end
+
 end
