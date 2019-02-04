@@ -1,6 +1,7 @@
 require 'cuke_modeler'
 
 require "cuke_linter/version"
+require 'cuke_linter/formatters/pretty_formatter'
 
 
 module CukeLinter
@@ -23,7 +24,7 @@ module CukeLinter
     @registered_linters.clear
   end
 
-  def self.lint(model_tree: CukeModeler::Directory.new(Dir.pwd), linters: @registered_linters.values, formatters: 7)
+  def self.lint(model_tree: CukeModeler::Directory.new(Dir.pwd), linters: @registered_linters.values, formatters: [[CukeLinter::PrettyFormatter.new]])
     # puts "model tree: #{model_tree}"
     # puts "linters: #{linters}"
     # puts "formatters: #{formatters}"

@@ -11,7 +11,7 @@ RSpec.describe CukeLinter do
   it 'returns the un-formatted linting data when linting' do
     results = subject.lint(linting_options)
 
-    expect(results).to eq([{ location: 'path_to_file:1', problem: 'FakeLinter problem' }])
+    expect(results).to eq([{ linter: 'FakeLinter', location: 'path_to_file:1', problem: 'FakeLinter problem' }])
   end
 
   it 'uses evey formatter provided' do
@@ -22,7 +22,14 @@ RSpec.describe CukeLinter do
   end
 
   it "uses the 'pretty' formatter if none are provided" do
-    skip('finish me')
+    linting_options.delete(:formatters)
+
+    expect { subject.lint(linting_options) }.to output(['FakeLinter',
+                                                        '  FakeLinter problem',
+                                                        '    path_to_file:1',
+                                                        '',
+                                                        '1 issues found',
+                                                        ''].join("\n")).to_stdout
   end
 
   it 'outputs formatted linting data to the provided output location' do
@@ -47,8 +54,8 @@ RSpec.describe CukeLinter do
 
     results = subject.lint(linting_options)
 
-    expect(results).to match_array([{ location: 'path_to_file:3', problem: 'FakeLinter problem' },
-                                    { location: 'path_to_file:5', problem: 'FakeLinter problem' }])
+    expect(results).to match_array([{ linter: 'FakeLinter', location: 'path_to_file:3', problem: 'FakeLinter problem' },
+                                    { linter: 'FakeLinter', location: 'path_to_file:5', problem: 'FakeLinter problem' }])
   end
 
   it 'models the current directory if a model tree is not provided' do
@@ -70,8 +77,8 @@ RSpec.describe CukeLinter do
 
     results = subject.lint(linting_options)
 
-    expect(results).to match_array([{ location: 'path_to_file:1', problem: 'FakeLinter1 problem' },
-                                    { location: 'path_to_file:1', problem: 'FakeLinter2 problem' }])
+    expect(results).to match_array([{ linter: 'FakeLinter1', location: 'path_to_file:1', problem: 'FakeLinter1 problem' },
+                                    { linter: 'FakeLinter2', location: 'path_to_file:1', problem: 'FakeLinter2 problem' }])
   end
 
   it 'uses all registered linters if none are provided' do
@@ -82,9 +89,9 @@ RSpec.describe CukeLinter do
 
     results = subject.lint(linting_options)
 
-    expect(results).to match_array([{ location: 'path_to_file:1', problem: 'FakeLinter1 problem' },
-                                    { location: 'path_to_file:1', problem: 'FakeLinter2 problem' },
-                                    { location: 'path_to_file:1', problem: 'FakeLinter3 problem' }])
+    expect(results).to match_array([{ linter: 'FakeLinter1', location: 'path_to_file:1', problem: 'FakeLinter1 problem' },
+                                    { linter: 'FakeLinter2', location: 'path_to_file:1', problem: 'FakeLinter2 problem' },
+                                    { linter: 'FakeLinter3', location: 'path_to_file:1', problem: 'FakeLinter3 problem' }])
   end
 
 end

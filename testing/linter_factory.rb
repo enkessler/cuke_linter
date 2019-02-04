@@ -7,7 +7,8 @@ module CukeLinter
       linter.define_singleton_method('lint') do |model|
         location = model.respond_to?(:source_line) ? "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" :
                        model.path
-        [{ problem:  "#{name} problem",
+        [{ linter:   name,
+           problem:  "#{name} problem",
            location: location }]
       end
 
