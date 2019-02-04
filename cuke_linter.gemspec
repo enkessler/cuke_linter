@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'cuke_modeler', '~> 1.5'
 
-  spec.add_development_dependency "bundler", "~> 1.16"
+  spec.add_development_dependency "bundler", "< 3.0"
   spec.add_development_dependency "cucumber", "~> 3.0"
   spec.add_development_dependency "racatt", "~> 1.0"
   spec.add_development_dependency "rake", "~> 12.0"
