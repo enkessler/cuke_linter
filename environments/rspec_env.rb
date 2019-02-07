@@ -2,7 +2,9 @@ require_relative 'common_env'
 require 'rspec'
 
 require_relative '../testing/rspec/spec/unit/formatters/formatter_unit_specs'
+require_relative '../testing/rspec/spec/unit/linters/linter_unit_specs'
 require_relative '../testing/rspec/spec/integration/formatters/formatter_integration_specs'
+require_relative '../testing/rspec/spec/integration/linters/linter_integration_specs'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

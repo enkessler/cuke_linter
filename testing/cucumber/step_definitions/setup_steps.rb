@@ -11,3 +11,16 @@ Given(/^the following linter data:$/) do |linter_data|
     end
   end
 end
+
+Given(/^the following feature:$/) do |text|
+  @model = CukeModeler::Feature.new(text)
+
+  fake_file_model      = CukeModeler::FeatureFile.new
+  fake_file_model.path = 'path_to_file'
+
+  @model.parent_model = fake_file_model
+end
+
+Given(/^a linter for features without scenarios$/) do
+  @linter = CukeLinter::FeatureWithoutScenariosLinter.new
+end

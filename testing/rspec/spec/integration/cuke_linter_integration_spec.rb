@@ -94,4 +94,14 @@ RSpec.describe CukeLinter do
                                     { linter: 'FakeLinter3', location: 'path_to_file:1', problem: 'FakeLinter3 problem' }])
   end
 
+  it 'includes the name of the linter in the linting data' do
+    linting_options[:linters] = [CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter1'),
+                                 CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter2')]
+
+    results = subject.lint(linting_options)
+
+    expect(results).to match_array([{ linter: 'FakeLinter1', location: 'path_to_file:1', problem: 'FakeLinter1 problem' },
+                                    { linter: 'FakeLinter2', location: 'path_to_file:1', problem: 'FakeLinter2 problem' }])
+  end
+
 end

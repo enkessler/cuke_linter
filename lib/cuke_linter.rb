@@ -2,6 +2,7 @@ require 'cuke_modeler'
 
 require "cuke_linter/version"
 require 'cuke_linter/formatters/pretty_formatter'
+require 'cuke_linter/linters/feature_without_scenarios_linter'
 
 
 module CukeLinter
@@ -35,7 +36,10 @@ module CukeLinter
       linters.each do |linter|
         # TODO: have linters lint only certain types of models
         #         linting_data.concat(linter.lint(model)) if relevant_model?(linter, model)
-        linting_data.concat(linter.lint(model))
+
+        linted_data = linter.lint(model)
+        linted_data.each { |data_point| data_point[:linter] = linter.name }
+        linting_data.concat(linted_data)
       end
     end
 
