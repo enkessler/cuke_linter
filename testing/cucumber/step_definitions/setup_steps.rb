@@ -24,3 +24,7 @@ end
 Given(/^a linter for features without scenarios$/) do
   @linter = CukeLinter::FeatureWithoutScenariosLinter.new
 end
+
+Given(/^no other linters have been registered$/) do
+  # There is no way to 'reset' the linters, so just assume that no changes have been made
+end

@@ -12,3 +12,7 @@ Then(/^an error is reported$/) do |table|
                                   location: error_record['location'].sub('<path_to_file>', @model.get_ancestor(:feature_file).path) })
   end
 end
+
+Then(/^the following linters are registered by default$/) do |linter_names|
+  expect(CukeLinter.registered_linters.keys).to eq(linter_names.raw.flatten)
+end

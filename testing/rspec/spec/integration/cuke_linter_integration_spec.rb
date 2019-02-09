@@ -104,4 +104,9 @@ RSpec.describe CukeLinter do
                                     { linter: 'FakeLinter2', location: 'path_to_file:1', problem: 'FakeLinter2 problem' }])
   end
 
+  it 'has a default set of registered linters' do
+    expect(subject.registered_linters.keys).to include('FeatureWithoutScenariosLinter')
+    expect(subject.registered_linters['FeatureWithoutScenariosLinter']).to be_a(CukeLinter::FeatureWithoutScenariosLinter)
+  end
+
 end

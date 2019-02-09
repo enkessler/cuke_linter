@@ -7,7 +7,7 @@ require 'cuke_linter/linters/feature_without_scenarios_linter'
 
 module CukeLinter
 
-  @registered_linters = {}
+  @registered_linters = { 'FeatureWithoutScenariosLinter' => FeatureWithoutScenariosLinter.new }
 
   def self.register_linter(linter:, name:)
     @registered_linters[name] = linter
