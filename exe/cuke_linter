@@ -1,6 +1,6 @@
-# #!/usr/bin/env ruby
-#
-# require "cuke_linter"
-#
-# CukeLinter.lint
+#!/usr/bin/env ruby
+
+require "cuke_linter"
+
+CukeLinter.lint
 

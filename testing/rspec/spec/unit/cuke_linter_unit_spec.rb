@@ -1,4 +1,22 @@
-require_relative '../../../environments/rspec_env'
+require_relative '../../../../environments/rspec_env'
+
+
+RSpec.describe 'the gem' do
+
+  let(:gemspec) { eval(File.read "#{__dir__}/../../../../cuke_linter.gemspec") }
+
+  it 'has an executable' do
+    expect(gemspec.executables).to include('cuke_linter')
+  end
+
+  it 'validates cleanly' do
+    mock_ui = Gem::MockGemUi.new
+    Gem::DefaultUserInteraction.use_ui(mock_ui) { gemspec.validate }
+
+    expect(mock_ui.error).to_not match(/warn/i)
+  end
+
+end
 
 
 RSpec.describe CukeLinter do
@@ -41,7 +59,7 @@ RSpec.describe CukeLinter do
     expect(CukeLinter).to respond_to(:registered_linters)
   end
 
-  it 'correctly registers, unregisters, and tracks linters' do
+  it 'correctly registers, unregisters, and tracks linters', :linter_registration do
     CukeLinter.clear_registered_linters
     CukeLinter.register_linter(name: 'foo', linter: :linter_1)
     CukeLinter.register_linter(name: 'bar', linter: :linter_2)
@@ -53,7 +71,7 @@ RSpec.describe CukeLinter do
                                                   'baz' => :linter_3, })
   end
 
-  it 'can clear all of its currently registered linters' do
+  it 'can clear all of its currently registered linters', :linter_registration do
     expect(CukeLinter).to respond_to(:clear_registered_linters)
 
     CukeLinter.register_linter(name: 'some_linter', linter: :the_linter)

@@ -1,5 +1,6 @@
 require_relative 'common_env'
 require 'rspec'
+require 'rubygems/mock_gem_ui'
 
 require_relative '../testing/rspec/spec/unit/formatters/formatter_unit_specs'
 require_relative '../testing/rspec/spec/unit/linters/linter_unit_specs'
@@ -17,6 +18,19 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
+  config.before(:suite) do
+    # Using a global variable instead of an instance variable because instance variables are not compatible with :suite hooks
+    $default_linters = Marshal.load(Marshal.dump(CukeLinter.registered_linters))
+  end
+
+  # Restore the original linters after any test that modifies them so that other tests can rely on them being only the default ones
+  config.after(:example, :linter_registration) do
+    CukeLinter.clear_registered_linters
+
+    $default_linters.each_pair do |name, linter|
+      CukeLinter.register_linter(name: name, linter: linter)
+    end
+  end
 
   config.after(:suite) do
     CukeLinter::FileHelper.created_directories.each do |dir_path|

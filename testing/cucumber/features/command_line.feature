@@ -2,7 +2,6 @@ Feature: Using cuke_linter on the command line
 
   Linting functionality can be used directly from the command line.
 
-  @wip
   Scenario: Linting features
 
     Given the cuke_linter executable is available
