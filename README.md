@@ -1,12 +1,14 @@
+[![Gem Version](https://badge.fury.io/rb/cuke_linter.svg)](https://rubygems.org/gems/cuke_linter)
 [![Build Status](https://travis-ci.org/enkessler/cuke_linter.svg?branch=master)](https://travis-ci.org/enkessler/cuke_linter)
 [![Build Status](https://ci.appveyor.com/api/projects/status/g5o70u747x073evy?svg=true)](https://ci.appveyor.com/project/enkessler/cuke-linter)
+[![Project License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php)
 
 
 # CukeLinter
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/cuke_linter`. To experiment with that code, run `bin/console` for an interactive prompt.
+So you have started to use Cucumber to describe your system in the abstract, natural language style of Gherkin. But wait! All of your feature files are themselves code and that means that they may need the same protection from anti-patterns as the lower level source code of your system. Enter `cuke_linter`.
 
-TODO: Delete this and the text above, and describe your gem
+This gem provides linting functionality for `.feature` files by building upon the modeling capabilities of the `cuke_modeler` gem. By passing models through a set of linters, reports can be generated that will inform you of potential bugs, style violations, or anything else that you can define as a problem  via custom linters! 
 
 ## Installation
 
@@ -26,20 +28,122 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+The easiest way to use the gem is to use all of the defaults by invoking it from the command line directly.
+
+```
+$ cuke_linter
+```
+
+The linter can also be used inside of a Ruby script, like so:
+
+```
+require 'cuke_linter'
+
+CukeLinter.lint
+```
+
+The linting will happen against a tree of `CukeModeler` models that is generated based on the current directory. You can generate your own model tree and use that instead, if desired.
+
+Custom linters can be any object that responds to `#lint` and returns a collection of detected issues in the format of
+
+```
+[
+ { problem: 'some linting issue',
+   location: 'path/to/file:line_number' },
+ { problem: 'some linting issue',
+   location: 'path/to/file:line_number' },
+   # etc.
+]
+```
+
+Note that a linter will receive, in turn, *every model* in the model tree in order for it to have the chance to detect problems with it. Checking the model's class before attempting to lint it is recommended.
+
+Custom formatters can be any object that responds to `#format` and takes input data in the following format:
+
+```
+[
+ { linter: 'some linter name',
+   problem: 'some linting issue',
+   location: 'path/to/file:line_number' },
+ { linter: 'some linter name',
+   problem: 'some linting issue',
+   location: 'path/to/file:line_number' },
+   # etc.
+]
+```
+
+All formatted data will be output to STDOUT unless a file location is provided as an alternative.
+
+Below is an example of using non-default linting options.
+
+```
+require 'cuke_linter'
+
+class MyCustomLinter
+
+  def name
+    'MyCustomLinter'
+  end
+
+  def lint(model)
+    return [] unless model.is_a?(CukeModeler::Scenario)
+
+    if model.name.empty?
+      [{ problem: 'Scenario has no name', location: "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" }]
+    else
+      []
+    end
+  end
+
+end
+
+class MyCustomFormatter
+
+  def format(linting_data)
+    formatted_data = ''
+
+    linting_data.each do |lint_item|
+      formatted_data << "#{lint_item[:linter]}\n"
+      formatted_data << "  #{lint_item[:problem]}\n"
+      formatted_data << "    #{lint_item[:location]}\n"
+    end
+
+    formatted_data
+  end
+
+end
+
+linter          = MyCustomLinter.new
+formatter       = MyCustomFormatter.new
+output_path     = "#{__dir__}/my_report.txt"
+model_tree_root = CukeModeler::Directory.new(Dir.pwd)
+
+# Providing the formatter twice so that it also is printed to the console
+CukeLinter.lint(linters: [linter], formatters: [[formatter], [formatter, output_path]], model_tree: model_tree_root)
+```
+
 
 For more information, see the documentation [here](https://app.cucumber.pro/projects/cuke_linter/documents/branch/master/).
 
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `bundle exec rake cuke_linter:test_everything` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/cuke_linter.
+Bug reports and pull requests are welcome on GitHub at https://github.com/enkessler/cuke_linter.
+
+1. Fork it
+2. Create your feature branch (off of the development branch)
+   `git checkout -b my-new-feature`
+3. Commit your changes
+   `git commit -am 'Add some feature'`
+4. Push to the branch
+   `git push origin my-new-feature`
+5. Create new Pull Request
 
 ## License
 
