@@ -8,7 +8,7 @@
 
 So you have started to use Cucumber to describe your system in the abstract, natural language style of Gherkin. But wait! All of your feature files are themselves code and that means that they may need the same protection from anti-patterns as the lower level source code of your system. Enter `cuke_linter`.
 
-This gem provides linting functionality for `.feature` files by building upon the modeling capabilities of the `cuke_modeler` gem. By passing models through a set of linters, reports can be generated that will inform you of potential bugs, style violations, or anything else that you can define as a problem  via custom linters! 
+This gem provides linting functionality for `.feature` files by building upon the modeling capabilities of the [cuke_modeler](https://github.com/enkessler/cuke_modeler) gem. By passing models through a set of linters, reports can be generated that will inform you of potential bugs, style violations, or anything else that you can define as a problem  via custom linters! 
 
 ## Installation
 
