@@ -6,10 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Nothing yet...
 
+
+## [0.1.0] - 2019-02-10
 
 ### Added
 - Custom linters, formatters, and command line usability
 
 
-[Unreleased]: https://github.com/enkessler/cuke_linter/compare/2bbd3f29f4eb45b6e9ea7d47c5bb47182bf4fde7...HEAD
+[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/enkessler/cuke_linter/compare/2bbd3f29f4eb45b6e9ea7d47c5bb47182bf4fde7...HEAD
