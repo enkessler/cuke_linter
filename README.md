@@ -4,6 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/enkessler/cuke_linter/badge.svg?branch=dev)](https://coveralls.io/github/enkessler/cuke_linter?branch=dev)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d1b86760e59a457c8e73/maintainability)](https://codeclimate.com/github/enkessler/cuke_linter/maintainability)
 [![Project License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php)
+[![Downloads](https://img.shields.io/gem/dt/cuke_linter.svg)](https://rubygems.org/gems/cuke_linter)
 
 
 # CukeLinter
