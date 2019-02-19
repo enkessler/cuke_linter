@@ -1,5 +1,7 @@
 require 'rake'
 require 'racatt'
+require 'coveralls/rake/task'
+
 
 
 namespace 'racatt' do
@@ -16,7 +18,10 @@ namespace 'cuke_linter' do
     Rake::Task['racatt:test_everything'].invoke(rspec_args, cucumber_args)
   end
 
-  task :ci_build => 'cuke_linter:test_everything'
+  # creates coveralls:push task
+  Coveralls::RakeTask.new
+
+  task :ci_build => ['cuke_linter:test_everything', 'coveralls:push']
 end
 
 

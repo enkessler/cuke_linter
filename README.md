@@ -1,6 +1,7 @@
 [![Gem Version](https://badge.fury.io/rb/cuke_linter.svg)](https://rubygems.org/gems/cuke_linter)
 [![Build Status](https://travis-ci.org/enkessler/cuke_linter.svg?branch=master)](https://travis-ci.org/enkessler/cuke_linter)
 [![Build Status](https://ci.appveyor.com/api/projects/status/g5o70u747x073evy?svg=true)](https://ci.appveyor.com/project/enkessler/cuke-linter)
+[![Coverage Status](https://coveralls.io/repos/github/enkessler/cuke_linter/badge.svg?branch=dev)](https://coveralls.io/github/enkessler/cuke_linter?branch=dev)
 [![Project License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php)
 
 

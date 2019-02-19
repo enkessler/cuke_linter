@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.command_name('rspec_tests')
+
 require_relative 'common_env'
 require 'rspec'
 require 'rubygems/mock_gem_ui'
