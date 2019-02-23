@@ -1,7 +1,18 @@
+Basic stuff:
 [![Gem Version](https://badge.fury.io/rb/cuke_linter.svg)](https://rubygems.org/gems/cuke_linter)
-[![Build Status](https://travis-ci.org/enkessler/cuke_linter.svg?branch=master)](https://travis-ci.org/enkessler/cuke_linter)
-[![Build Status](https://ci.appveyor.com/api/projects/status/g5o70u747x073evy?svg=true)](https://ci.appveyor.com/project/enkessler/cuke-linter)
 [![Project License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php)
+[![Downloads](https://img.shields.io/gem/dt/cuke_linter.svg)](https://rubygems.org/gems/cuke_linter)
+
+User stuff:
+[![Cucumber Docs](http://img.shields.io/badge/Documentation-Features-green.svg)](https://app.cucumber.pro/projects/cuke_linter)
+[![Yard Docs](http://img.shields.io/badge/Documentation-API-blue.svg)](https://www.rubydoc.info/gems/cuke_linter)
+
+Developer stuff:
+[![Build Status](https://travis-ci.org/enkessler/cuke_linter.svg?branch=dev)](https://travis-ci.org/enkessler/cuke_linter)
+[![Build Status](https://ci.appveyor.com/api/projects/status/g5o70u747x073evy?svg=true)](https://ci.appveyor.com/project/enkessler/cuke-linter)
+[![Coverage Status](https://coveralls.io/repos/github/enkessler/cuke_linter/badge.svg?branch=dev)](https://coveralls.io/github/enkessler/cuke_linter?branch=dev)
+[![Maintainability](https://api.codeclimate.com/v1/badges/d1b86760e59a457c8e73/maintainability)](https://codeclimate.com/github/enkessler/cuke_linter/maintainability)
+[![Inline docs](http://inch-ci.org/github/enkessler/cuke_linter.svg?branch=dev)](https://inch-ci.org/github/enkessler/cuke_linter?branch=dev)
 
 
 # CukeLinter
