@@ -14,6 +14,7 @@ Developer stuff:
 [![Maintainability](https://api.codeclimate.com/v1/badges/d1b86760e59a457c8e73/maintainability)](https://codeclimate.com/github/enkessler/cuke_linter/maintainability)
 [![Inline docs](http://inch-ci.org/github/enkessler/cuke_linter.svg?branch=dev)](https://inch-ci.org/github/enkessler/cuke_linter?branch=dev)
 
+---
 
 # CukeLinter
 
@@ -134,7 +135,7 @@ CukeLinter.lint(linters: [linter], formatters: [[formatter], [formatter, output_
 ```
 
 
-For more information, see the documentation [here](https://app.cucumber.pro/projects/cuke_linter/documents/branch/master/).
+For more information, see the documentation [here](https://app.cucumber.pro/projects/cuke_linter).
 
 
 ## Development
@@ -146,7 +147,7 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 Bug reports and pull requests are welcome on GitHub at https://github.com/enkessler/cuke_linter.
 
 1. Fork it
-2. Create your feature branch (off of the development branch)
+2. Create your feature branch **(off of the development branch)**
    `git checkout -b my-new-feature`
 3. Commit your changes
    `git commit -am 'Add some feature'`
