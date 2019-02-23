@@ -3,11 +3,13 @@ require 'cuke_modeler'
 require "cuke_linter/version"
 require 'cuke_linter/formatters/pretty_formatter'
 require 'cuke_linter/linters/feature_without_scenarios_linter'
+require 'cuke_linter/linters/example_without_name_linter'
 
 
 module CukeLinter
 
-  @registered_linters = { 'FeatureWithoutScenariosLinter' => FeatureWithoutScenariosLinter.new }
+  @registered_linters = { 'FeatureWithoutScenariosLinter' => FeatureWithoutScenariosLinter.new,
+                          'ExampleWithoutNameLinter'      => ExampleWithoutNameLinter.new }
 
   def self.register_linter(linter:, name:)
     @registered_linters[name] = linter

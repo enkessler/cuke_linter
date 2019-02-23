@@ -8,5 +8,5 @@ Feature: Feature without scenarios linter
       """
     When it is linted
     Then an error is reported
-      | problem                  | location         |
-      | Feature has no scenarios | <path_to_file>:1 |
+      | linter                        | problem                  | location         |
+      | FeatureWithoutScenariosLinter | Feature has no scenarios | <path_to_file>:1 |

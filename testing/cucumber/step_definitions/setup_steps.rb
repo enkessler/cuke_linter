@@ -28,3 +28,7 @@ end
 Given(/^no other linters have been registered$/) do
   # There is no way to 'reset' the linters, so just assume that no changes have been made
 end
+
+Given(/^a linter for examples without names$/) do
+  @linter = CukeLinter::ExampleWithoutNameLinter.new
+end

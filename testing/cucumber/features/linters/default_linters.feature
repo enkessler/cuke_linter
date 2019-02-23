@@ -5,3 +5,4 @@ Feature: Default Linters
     Given no other linters have been registered
     Then the following linters are registered by default
       | FeatureWithoutScenariosLinter |
+      | ExampleWithoutNameLinter      |

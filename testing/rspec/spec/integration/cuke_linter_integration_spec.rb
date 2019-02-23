@@ -107,6 +107,8 @@ RSpec.describe CukeLinter do
   it 'has a default set of registered linters' do
     expect(subject.registered_linters.keys).to include('FeatureWithoutScenariosLinter')
     expect(subject.registered_linters['FeatureWithoutScenariosLinter']).to be_a(CukeLinter::FeatureWithoutScenariosLinter)
+    expect(subject.registered_linters.keys).to include('ExampleWithoutNameLinter')
+    expect(subject.registered_linters['ExampleWithoutNameLinter']).to be_a(CukeLinter::ExampleWithoutNameLinter)
   end
 
 end
