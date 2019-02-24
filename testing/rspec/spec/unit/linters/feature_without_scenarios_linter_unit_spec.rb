@@ -70,6 +70,45 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
 
     end
 
+    context 'a feature with scenarios' do
+
+      context 'with a scenario' do
+
+        let(:test_model) do
+          gherkin = 'Feature:
+
+                     Scenario:'
+
+          CukeLinter::ModelFactory.generate_feature_model(source_text: gherkin)
+        end
+
+        it 'does not record a problem' do
+          expect(subject.lint(test_model)).to eq([])
+        end
+
+      end
+
+      context 'with an outline' do
+
+        let(:test_model) do
+          gherkin = 'Feature:
+
+                     Scenario Outline:
+                       * a step
+                     Examples:
+                       | param |'
+
+          CukeLinter::ModelFactory.generate_feature_model(source_text: gherkin)
+        end
+
+        it 'does not record a problem' do
+          expect(subject.lint(test_model)).to eq([])
+        end
+
+      end
+
+    end
+
     context 'a non-feature model' do
 
       it 'returns an empty set of results' do
