@@ -1,5 +1,10 @@
 Feature: Example without name linter
 
+  As a reader of documentation
+  I want every example to have a name
+  So that I can understand the significance of the example grouping
+
+
   Scenario: Linting
     Given a linter for examples without names
     And the following feature:

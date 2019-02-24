@@ -1,5 +1,10 @@
 Feature: Feature without scenarios linter
 
+  As a writer of documentation
+  I want features to have at least one use case
+  So that I do not have incomplete documentation
+
+
   Scenario: Linting
     Given a linter for features without scenarios
     And the following feature:
