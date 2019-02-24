@@ -109,6 +109,8 @@ RSpec.describe CukeLinter do
     expect(subject.registered_linters['FeatureWithoutScenariosLinter']).to be_a(CukeLinter::FeatureWithoutScenariosLinter)
     expect(subject.registered_linters.keys).to include('ExampleWithoutNameLinter')
     expect(subject.registered_linters['ExampleWithoutNameLinter']).to be_a(CukeLinter::ExampleWithoutNameLinter)
+    expect(subject.registered_linters.keys).to include('OutlineWithSingleExampleRowLinter')
+    expect(subject.registered_linters['OutlineWithSingleExampleRowLinter']).to be_a(CukeLinter::OutlineWithSingleExampleRowLinter)
   end
 
 end

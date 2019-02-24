@@ -32,3 +32,7 @@ end
 Given(/^a linter for examples without names$/) do
   @linter = CukeLinter::ExampleWithoutNameLinter.new
 end
+
+Given(/^a linter for outlines with only one example row$/) do
+  @linter = CukeLinter::OutlineWithSingleExampleRowLinter.new
+end
