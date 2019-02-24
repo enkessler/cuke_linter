@@ -29,15 +29,26 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
 
     context 'a feature with no scenarios' do
 
-      let(:test_model) do
+      let(:test_model_with_empty_scenarios) do
         model       = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
         model.tests = []
 
         model
       end
 
+      let(:test_model_with_nil_scenarios) do
+        model       = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
+        model.tests = nil
+
+        model
+      end
+
       it 'records a problem' do
-        results = subject.lint(test_model)
+        results = subject.lint(test_model_with_empty_scenarios)
+
+        expect(results.first[:problem]).to eq('Feature has no scenarios')
+
+        results = subject.lint(test_model_with_nil_scenarios)
 
         expect(results.first[:problem]).to eq('Feature has no scenarios')
       end
