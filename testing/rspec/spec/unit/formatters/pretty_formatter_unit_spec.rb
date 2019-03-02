@@ -59,6 +59,9 @@ RSpec.describe CukeLinter::PrettyFormatter do
                       location: 'path/to/the_file:3' },
                     { linter:   'SomeLinter',
                       problem:  'Some problem',
+                      location: 'path/to/the_file:3' },
+                    { linter:   'SomeLinter',
+                      problem:  'Some problem',
                       location: 'path/to/the_file:1' }]
 
     results = subject.format(linting_data)
@@ -68,8 +71,9 @@ RSpec.describe CukeLinter::PrettyFormatter do
                            '    path/to/the_file:1',
                            '    path/to/the_file:2',
                            '    path/to/the_file:3',
+                           '    path/to/the_file:3',
                            '',
-                           '3 issues found'].join("\n"))
+                           '4 issues found'].join("\n"))
   end
 
 end
