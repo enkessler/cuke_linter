@@ -1,4 +1,4 @@
-require_relative '../../../../../environments/rspec_env'
+require_relative '../../../../environments/rspec_env'
 
 
 RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
