@@ -19,6 +19,8 @@ namespace 'cuke_linter' do
 
   desc 'Run all of the tests'
   task :test_everything => [:clear_coverage] do
+    test_files = Dir.glob('testing/rspec/spec/**/*_spec.rb')
+    puts "test files (#{test_files.count}): #{test_files}"
     rspec_args    = '--pattern testing/rspec/spec/**/*_spec.rb -f d'
     cucumber_args = "testing/cucumber/features -r environments/cucumber_env.rb -f progress -t 'not @wip'"
 
