@@ -42,3 +42,5 @@ RSpec.configure do |config|
   end
 
 end
+
+puts "RSpec - files to run #{RSpec.configuration.files_to_run.count}: #{RSpec.configuration.files_to_run}"
