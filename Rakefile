@@ -1,6 +1,7 @@
 require 'rake'
 require 'racatt'
 require 'coveralls/rake/task'
+require 'colorize'
 
 
 namespace 'racatt' do
@@ -16,6 +17,17 @@ namespace 'cuke_linter' do
     FileUtils.remove_dir(code_coverage_directory, true)
   end
 
+  desc 'Check documentation with RDoc'
+  task :check_documentation do
+    output = `rdoc lib`
+    puts output
+
+    if output =~ /100.00% documented/
+      puts 'All code documented'.green
+    else
+      raise 'Parts of the gem are undocumented'.red
+    end
+  end
 
   desc 'Run all of the tests'
   task :test_everything => [:clear_coverage] do
