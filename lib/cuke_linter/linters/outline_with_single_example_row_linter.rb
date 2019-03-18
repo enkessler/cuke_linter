@@ -1,10 +1,15 @@
 module CukeLinter
+
+  # A linter that detects outlines that don't have multiple example rows
+
   class OutlineWithSingleExampleRowLinter
 
+    # Returns the name of the linter
     def name
       'OutlineWithSingleExampleRowLinter'
     end
 
+    # Lints the given model and returns linting data about said model
     def lint(model)
       return [] unless model.is_a?(CukeModeler::Outline)
       return [] if model.examples.nil?

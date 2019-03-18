@@ -1,4 +1,7 @@
 module CukeLinter
+
+  # A simple model used for testing
+
   class TestModel < CukeModeler::Model
 
     include CukeModeler::Sourceable
@@ -8,6 +11,9 @@ end
 
 
 module CukeLinter
+
+  # A helper module that generates various models for use in testing
+
   module ModelFactory
 
     def self.generate_feature_model(source_text: 'Feature:', parent_file_path: 'path_to_file')

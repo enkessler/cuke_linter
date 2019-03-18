@@ -1,6 +1,10 @@
 module CukeLinter
+
+  # Formats linting data into organized, user readable text
+
   class PrettyFormatter
 
+    # Formats the given linting data
     def format(data)
       categorized_problems = Hash.new { |linters, linter_name| linters[linter_name] = Hash.new { |problems, problem| problems[problem] = [] } }
 

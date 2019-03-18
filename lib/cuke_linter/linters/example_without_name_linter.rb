@@ -1,10 +1,15 @@
 module CukeLinter
+
+  # A linter that detects unnamed example groups
+
   class ExampleWithoutNameLinter
 
+    # Returns the name of the linter
     def name
       'ExampleWithoutNameLinter'
     end
 
+    # Lints the given model and returns linting data about said model
     def lint(model)
       return [] unless model.is_a?(CukeModeler::Example)
 
