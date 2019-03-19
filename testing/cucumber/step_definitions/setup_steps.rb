@@ -36,3 +36,7 @@ end
 Given(/^a linter for outlines with only one example row$/) do
   @linter = CukeLinter::OutlineWithSingleExampleRowLinter.new
 end
+
+Given(/^a linter for tests with too many steps$/) do
+  @linter = CukeLinter::TestWithTooManyStepsLinter.new
+end

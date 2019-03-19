@@ -2,9 +2,10 @@ require 'cuke_modeler'
 
 require "cuke_linter/version"
 require 'cuke_linter/formatters/pretty_formatter'
-require 'cuke_linter/linters/feature_without_scenarios_linter'
 require 'cuke_linter/linters/example_without_name_linter'
+require 'cuke_linter/linters/feature_without_scenarios_linter'
 require 'cuke_linter/linters/outline_with_single_example_row_linter'
+require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 
 # The top level namespace used by this gem
@@ -13,7 +14,8 @@ module CukeLinter
 
   @registered_linters = { 'FeatureWithoutScenariosLinter'     => FeatureWithoutScenariosLinter.new,
                           'ExampleWithoutNameLinter'          => ExampleWithoutNameLinter.new,
-                          'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new }
+                          'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
+                          'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
 
   # Registers for linting use the given linter object, tracked by the given name
   def self.register_linter(linter:, name:)
