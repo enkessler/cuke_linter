@@ -28,3 +28,15 @@ end
 Given(/^no other linters have been registered$/) do
   # There is no way to 'reset' the linters, so just assume that no changes have been made
 end
+
+Given(/^a linter for examples without names$/) do
+  @linter = CukeLinter::ExampleWithoutNameLinter.new
+end
+
+Given(/^a linter for outlines with only one example row$/) do
+  @linter = CukeLinter::OutlineWithSingleExampleRowLinter.new
+end
+
+Given(/^a linter for tests with too many steps$/) do
+  @linter = CukeLinter::TestWithTooManyStepsLinter.new
+end

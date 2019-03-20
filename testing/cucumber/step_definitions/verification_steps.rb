@@ -8,11 +8,12 @@ end
 
 Then(/^an error is reported$/) do |table|
   table.hashes.each do |error_record|
-    expect(@results).to include({ problem:  error_record['problem'],
+    expect(@results).to include({ linter:   error_record['linter'],
+                                  problem:  error_record['problem'],
                                   location: error_record['location'].sub('<path_to_file>', @model.get_ancestor(:feature_file).path) })
   end
 end
 
 Then(/^the following linters are registered by default$/) do |linter_names|
-  expect(CukeLinter.registered_linters.keys).to eq(linter_names.raw.flatten)
+  expect(CukeLinter.registered_linters.keys).to match_array(linter_names.raw.flatten)
 end

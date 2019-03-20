@@ -2,29 +2,42 @@ require 'cuke_modeler'
 
 require "cuke_linter/version"
 require 'cuke_linter/formatters/pretty_formatter'
+require 'cuke_linter/linters/example_without_name_linter'
 require 'cuke_linter/linters/feature_without_scenarios_linter'
+require 'cuke_linter/linters/outline_with_single_example_row_linter'
+require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
+
+# The top level namespace used by this gem
 
 module CukeLinter
 
-  @registered_linters = { 'FeatureWithoutScenariosLinter' => FeatureWithoutScenariosLinter.new }
+  @registered_linters = { 'FeatureWithoutScenariosLinter'     => FeatureWithoutScenariosLinter.new,
+                          'ExampleWithoutNameLinter'          => ExampleWithoutNameLinter.new,
+                          'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
+                          'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
 
+  # Registers for linting use the given linter object, tracked by the given name
   def self.register_linter(linter:, name:)
     @registered_linters[name] = linter
   end
 
+  # Unregisters the linter object tracked by the given name so that it is not used for linting
   def self.unregister_linter(name)
     @registered_linters.delete(name)
   end
 
+  # Lists the names of the currently registered linting objects
   def self.registered_linters
     @registered_linters
   end
 
+  # Unregisters all currently registered linting objects
   def self.clear_registered_linters
     @registered_linters.clear
   end
 
+  # Lints the tree of model objects rooted at the given model using the given linting objects and formatting the results with the given formatters and their respective output locations
   def self.lint(model_tree: CukeModeler::Directory.new(Dir.pwd), linters: @registered_linters.values, formatters: [[CukeLinter::PrettyFormatter.new]])
     # puts "model tree: #{model_tree}"
     # puts "linters: #{linters}"

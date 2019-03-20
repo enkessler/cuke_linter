@@ -1,5 +1,7 @@
 require 'rake'
 require 'racatt'
+require 'coveralls/rake/task'
+require 'colorize'
 
 
 namespace 'racatt' do
@@ -8,15 +10,38 @@ end
 
 namespace 'cuke_linter' do
 
+  desc 'Removes the current code coverage data'
+  task :clear_coverage do
+    code_coverage_directory = "#{__dir__}/coverage"
+
+    FileUtils.remove_dir(code_coverage_directory, true)
+  end
+
+  desc 'Check documentation with RDoc'
+  task :check_documentation do
+    output = `rdoc lib`
+    puts output
+
+    if output =~ /100.00% documented/
+      puts 'All code documented'.green
+    else
+      raise 'Parts of the gem are undocumented'.red
+    end
+  end
+
   desc 'Run all of the tests'
-  task :test_everything do
-    rspec_args = '--pattern testing/rspec/spec/**/*_spec.rb'
+  task :test_everything => [:clear_coverage] do
+    rspec_args    = '--pattern "testing/rspec/spec/**/*_spec.rb"'
     cucumber_args = "testing/cucumber/features -r environments/cucumber_env.rb -f progress -t 'not @wip'"
 
     Rake::Task['racatt:test_everything'].invoke(rspec_args, cucumber_args)
   end
 
-  task :ci_build => 'cuke_linter:test_everything'
+  # creates coveralls:push task
+  Coveralls::RakeTask.new
+
+  desc 'The task that CI will run. Do not run locally.'
+  task :ci_build => ['cuke_linter:test_everything', 'coveralls:push']
 end
 
 

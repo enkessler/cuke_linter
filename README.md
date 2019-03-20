@@ -1,14 +1,26 @@
+Basic stuff:
 [![Gem Version](https://badge.fury.io/rb/cuke_linter.svg)](https://rubygems.org/gems/cuke_linter)
-[![Build Status](https://travis-ci.org/enkessler/cuke_linter.svg?branch=master)](https://travis-ci.org/enkessler/cuke_linter)
-[![Build Status](https://ci.appveyor.com/api/projects/status/g5o70u747x073evy?svg=true)](https://ci.appveyor.com/project/enkessler/cuke-linter)
 [![Project License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/mit-license.php)
+[![Downloads](https://img.shields.io/gem/dt/cuke_linter.svg)](https://rubygems.org/gems/cuke_linter)
 
+User stuff:
+[![Cucumber Docs](http://img.shields.io/badge/Documentation-Features-green.svg)](https://app.cucumber.pro/projects/cuke_linter)
+[![Yard Docs](http://img.shields.io/badge/Documentation-API-blue.svg)](https://www.rubydoc.info/gems/cuke_linter)
+
+Developer stuff:
+[![Build Status](https://travis-ci.org/enkessler/cuke_linter.svg?branch=dev)](https://travis-ci.org/enkessler/cuke_linter)
+[![Build Status](https://ci.appveyor.com/api/projects/status/g5o70u747x073evy?svg=true)](https://ci.appveyor.com/project/enkessler/cuke-linter)
+[![Coverage Status](https://coveralls.io/repos/github/enkessler/cuke_linter/badge.svg?branch=dev)](https://coveralls.io/github/enkessler/cuke_linter?branch=dev)
+[![Maintainability](https://api.codeclimate.com/v1/badges/d1b86760e59a457c8e73/maintainability)](https://codeclimate.com/github/enkessler/cuke_linter/maintainability)
+[![Inline docs](http://inch-ci.org/github/enkessler/cuke_linter.svg?branch=dev)](https://inch-ci.org/github/enkessler/cuke_linter?branch=dev)
+
+---
 
 # CukeLinter
 
 So you have started to use Cucumber to describe your system in the abstract, natural language style of Gherkin. But wait! All of your feature files are themselves code and that means that they may need the same protection from anti-patterns as the lower level source code of your system. Enter `cuke_linter`.
 
-This gem provides linting functionality for `.feature` files by building upon the modeling capabilities of the `cuke_modeler` gem. By passing models through a set of linters, reports can be generated that will inform you of potential bugs, style violations, or anything else that you can define as a problem  via custom linters! 
+This gem provides linting functionality for `.feature` files by building upon the modeling capabilities of the [cuke_modeler](https://github.com/enkessler/cuke_modeler) gem. By passing models through a set of linters, reports can be generated that will inform you of potential bugs, style violations, or anything else that you can define as a problem  via custom linters! 
 
 ## Installation
 
@@ -123,7 +135,7 @@ CukeLinter.lint(linters: [linter], formatters: [[formatter], [formatter, output_
 ```
 
 
-For more information, see the documentation [here](https://app.cucumber.pro/projects/cuke_linter/documents/branch/master/).
+For more information, see the documentation [here](https://app.cucumber.pro/projects/cuke_linter).
 
 
 ## Development
@@ -135,7 +147,7 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 Bug reports and pull requests are welcome on GitHub at https://github.com/enkessler/cuke_linter.
 
 1. Fork it
-2. Create your feature branch (off of the development branch)
+2. Create your feature branch **(off of the development branch)**
    `git checkout -b my-new-feature`
 3. Commit your changes
    `git commit -am 'Add some feature'`
