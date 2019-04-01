@@ -115,4 +115,42 @@ RSpec.describe CukeLinter do
     expect(subject.registered_linters['TestWithTooManyStepsLinter']).to be_a(CukeLinter::TestWithTooManyStepsLinter)
   end
 
+  it 'returns to its default set of linters after being reset' do
+    original_names        = CukeLinter.registered_linters.keys
+    original_linter_types = CukeLinter.registered_linters.values.map(&:class)
+    new_linter            = CukeLinter::LinterFactory.generate_fake_linter
+
+    CukeLinter.register_linter(linter: new_linter, name: 'FakeLinter')
+    CukeLinter.reset_linters
+
+    expect(CukeLinter.registered_linters.keys).to eq(original_names)
+    expect(CukeLinter.registered_linters.values.map(&:class)).to eq(original_linter_types)
+  end
+
+  # To protect against someone modifying them
+  it 'does not reuse the old linting objects when resetting to the default linters' do
+    original_linter_ids = CukeLinter.registered_linters.values.map(&:object_id)
+
+    CukeLinter.reset_linters
+
+    expect(CukeLinter.registered_linters.values.map(&:object_id)).to_not match_array(original_linter_ids)
+  end
+
+
+  describe 'configuration' do
+
+    it 'unregisters disabled linters' do
+      config             = { 'FakeLinter1' => { 'Enabled' => false } }
+      configuration_file = CukeLinter::FileHelper.create_file(name: '.cuke_linter', extension: '', text: config.to_yaml)
+
+      CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter1'), name: 'FakeLinter1')
+      expect(subject.registered_linters['FakeLinter1']).to_not be nil
+
+      subject.load_configuration(config_file_path: configuration_file)
+
+      expect(subject.registered_linters['FakeLinter1']).to be nil
+    end
+
+  end
+
 end

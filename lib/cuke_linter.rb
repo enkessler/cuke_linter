@@ -12,33 +12,45 @@ require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 module CukeLinter
 
-  @registered_linters = { 'FeatureWithoutScenariosLinter'     => FeatureWithoutScenariosLinter.new,
-                          'ExampleWithoutNameLinter'          => ExampleWithoutNameLinter.new,
-                          'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
-                          'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
+  @original_linters = { 'FeatureWithoutScenariosLinter'     => FeatureWithoutScenariosLinter.new,
+                        'ExampleWithoutNameLinter'          => ExampleWithoutNameLinter.new,
+                        'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
+                        'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
+
+  def self.load_configuration(config_file_path:)
+    config = YAML.load_file(config_file_path)
+
+    config.each_pair do |linter_name, options|
+      unregister_linter(linter_name) if options.key?('Enabled') && !options['Enabled']
+    end
+  end
+
+  def self.reset_linters
+    @registered_linters = nil
+  end
 
   # Registers for linting use the given linter object, tracked by the given name
   def self.register_linter(linter:, name:)
-    @registered_linters[name] = linter
+    self.registered_linters[name] = linter
   end
 
   # Unregisters the linter object tracked by the given name so that it is not used for linting
   def self.unregister_linter(name)
-    @registered_linters.delete(name)
+    self.registered_linters.delete(name)
   end
 
   # Lists the names of the currently registered linting objects
   def self.registered_linters
-    @registered_linters
+    @registered_linters ||= Marshal.load(Marshal.dump(@original_linters))
   end
 
   # Unregisters all currently registered linting objects
   def self.clear_registered_linters
-    @registered_linters.clear
+    self.registered_linters.clear
   end
 
   # Lints the tree of model objects rooted at the given model using the given linting objects and formatting the results with the given formatters and their respective output locations
-  def self.lint(model_tree: CukeModeler::Directory.new(Dir.pwd), linters: @registered_linters.values, formatters: [[CukeLinter::PrettyFormatter.new]])
+  def self.lint(model_tree: CukeModeler::Directory.new(Dir.pwd), linters: self.registered_linters.values, formatters: [[CukeLinter::PrettyFormatter.new]])
     # puts "model tree: #{model_tree}"
     # puts "linters: #{linters}"
     # puts "formatters: #{formatters}"
