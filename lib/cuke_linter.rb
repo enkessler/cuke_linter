@@ -17,7 +17,12 @@ module CukeLinter
                         'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
                         'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
 
-  def self.load_configuration(config_file_path:)
+  def self.load_configuration(config_file_path: nil)
+    unless config_file_path
+      config_file_path = "#{Dir.pwd}/.cuke_linter"
+      raise 'No configuration file given and no .cuke_linter file found' unless File.exist?(config_file_path)
+    end
+
     config = YAML.load_file(config_file_path)
 
     config.each_pair do |linter_name, options|

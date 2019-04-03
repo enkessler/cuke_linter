@@ -31,3 +31,6 @@ Feature: Test with too many steps linter
     Then an error is reported
       | linter                     | problem                                          | location         |
       | TestWithTooManyStepsLinter | Test has too many steps. 11 steps found (max 10) | <path_to_file>:3 |
+
+  @wip
+  Scenario: Configuration of step count threshold

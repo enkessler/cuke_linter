@@ -1,6 +1,6 @@
 Feature: Configuration of linters
 
-  Instead of having to modify the linting object directly in a script at runtime, a configuration file can be used so that specific linters can be configured in a more convenient static manner.
+  Instead of having to modify the linting object directly in a script at runtime, a configuration file can be used so that specific linters can be configured in a more convenient static manner. Some configurable properties are available across all linters while some are linter specific.
 
 
   Scenario: Disabling a linter

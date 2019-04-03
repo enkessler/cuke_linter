@@ -21,7 +21,17 @@ When(/^the configuration file is used$/) do
 end
 
 And(/^the following code is used:$/) do |code|
-  code.sub!('<path_to>', @test_directory)
+  code.sub!('<path_to>', @root_test_directory)
 
-  eval(code)
+  if @working_directory
+    Dir.chdir(@working_directory) do
+      eval(code)
+    end
+  else
+    eval(code)
+  end
+end
+
+When(/^"([^"]*)" is the current directory$/) do |directory|
+  @working_directory = "#{@root_test_directory}/#{directory}"
 end

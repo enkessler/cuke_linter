@@ -151,6 +151,28 @@ RSpec.describe CukeLinter do
       expect(subject.registered_linters['FakeLinter1']).to be nil
     end
 
+    it 'uses the default configuration file in the current directory if no configuration file is provided' do
+      config             = { 'FakeLinter1' => { 'Enabled' => false } }
+      configuration_file = CukeLinter::FileHelper.create_file(name: '.cuke_linter', extension: '', text: config.to_yaml)
+
+      CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter1'), name: 'FakeLinter1')
+      expect(subject.registered_linters['FakeLinter1']).to_not be nil
+
+      Dir.chdir(File.dirname(configuration_file)) do
+        subject.load_configuration
+      end
+
+      expect(subject.registered_linters['FakeLinter1']).to be nil
+    end
+
+    it 'raise an exception if no default configuration file is found and no configuration file is provided' do
+      some_empty_directory = CukeLinter::FileHelper.create_directory
+
+      Dir.chdir(File.dirname(some_empty_directory)) do
+        expect { subject.load_configuration }.to raise_error('No configuration file given and no .cuke_linter file found')
+      end
+    end
+
   end
 
 end

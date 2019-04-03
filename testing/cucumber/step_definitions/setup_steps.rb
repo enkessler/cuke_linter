@@ -42,9 +42,9 @@ Given(/^a linter for tests with too many steps$/) do
 end
 
 Given(/^the following configuration file(?: "([^"]*)")?:$/) do |file_name, text|
-  file_name                ||= '.cuke_linter'
-  @test_directory          = CukeLinter::FileHelper.create_directory
-  @configuration_file_path = CukeLinter::FileHelper.create_file(directory: @test_directory, name: file_name, extension: '', text: text)
+  file_name ||= '.cuke_linter'
+
+  @configuration_file_path = CukeLinter::FileHelper.create_file(directory: @root_test_directory, name: file_name, extension: '', text: text)
 end
 
 Given(/^a linter "([^"]*)"$/) do |linter_class|
@@ -53,4 +53,8 @@ end
 
 Given(/^a linter registered as "([^"]*)"$/) do |linter_name|
   CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: linter_name), name: linter_name)
+end
+
+Given(/^a directory "([^"]*)"$/) do |directory_name|
+  @test_directory = CukeLinter::FileHelper.create_directory(directory: @root_test_directory, name: directory_name)
 end

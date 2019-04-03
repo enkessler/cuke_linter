@@ -11,6 +11,10 @@ Before do
   CukeLinter.clear_registered_linters
 end
 
+Before do
+  @root_test_directory = CukeLinter::FileHelper.create_directory
+end
+
 at_exit do
   CukeLinter::FileHelper.created_directories.each do |dir_path|
     FileUtils.remove_entry(dir_path, true)
