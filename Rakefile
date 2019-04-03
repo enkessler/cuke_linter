@@ -1,8 +1,9 @@
 require 'rake'
 require 'racatt'
 require 'coveralls/rake/task'
-require 'colorize'
+require 'rainbow'
 
+Rainbow.enabled = true
 
 namespace 'racatt' do
   Racatt.create_tasks
@@ -23,9 +24,9 @@ namespace 'cuke_linter' do
     puts output
 
     if output =~ /100.00% documented/
-      puts 'All code documented'.green
+      puts Rainbow('All code documented').green
     else
-      raise 'Parts of the gem are undocumented'.red
+      raise Rainbow('Parts of the gem are undocumented').red
     end
   end
 
