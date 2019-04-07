@@ -20,7 +20,7 @@ namespace 'cuke_linter' do
 
   desc 'Check documentation with RDoc'
   task :check_documentation do
-    output = `rdoc lib`
+    output = `rdoc lib -C`
     puts output
 
     if output =~ /100.00% documented/
@@ -43,6 +43,20 @@ namespace 'cuke_linter' do
 
   desc 'The task that CI will run. Do not run locally.'
   task :ci_build => ['cuke_linter:test_everything', 'coveralls:push']
+
+  desc 'Check that things look good before trying to release'
+  task :prerelease_check do
+    begin
+      Rake::Task['cuke_linter:test_everything'].invoke
+      Rake::Task['cuke_linter:check_documentation'].invoke
+    rescue => e
+      puts Rainbow("Something isn't right!").red
+      raise e
+    end
+
+    puts Rainbow('All is well. :)').green
+  end
+
 end
 
 

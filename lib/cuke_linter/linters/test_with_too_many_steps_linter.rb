@@ -9,6 +9,7 @@ module CukeLinter
       'TestWithTooManyStepsLinter'
     end
 
+    # Changes the linting settings on the linter using the provided configuration
     def configure(options)
       @step_threshold = options['StepThreshold'] if options['StepThreshold']
     end

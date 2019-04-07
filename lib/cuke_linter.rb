@@ -17,6 +17,7 @@ module CukeLinter
                         'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
                         'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
 
+  # Configures linters based on the given options
   def self.load_configuration(config_file_path: nil, config: nil)
     # TODO: define what happens if both a configuration file and a configuration are provided. Merge them or have direct config take precedence? Both?
 
@@ -34,6 +35,7 @@ module CukeLinter
     end
   end
 
+  # Returns the registered linters to their default state
   def self.reset_linters
     @registered_linters = nil
   end
