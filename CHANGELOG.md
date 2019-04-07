@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet...
+### Added
+ - Linter configuration: linters can now be configured via a configuration file
 
 ## [0.2.0] - 2019-03-19
 

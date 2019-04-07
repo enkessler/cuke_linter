@@ -31,3 +31,26 @@ Feature: Test with too many steps linter
     Then an error is reported
       | linter                     | problem                                          | location         |
       | TestWithTooManyStepsLinter | Test has too many steps. 11 steps found (max 10) | <path_to_file>:3 |
+
+  Scenario: Configuration of step count threshold
+    Given a linter for tests with too many steps has been registered
+    And the following configuration file:
+      """
+      TestWithTooManyStepsLinter:
+        StepThreshold: 3
+      """
+    And the following feature:
+      """
+      Feature:
+
+        Scenario:
+          * step 1
+          * step 2
+          * step 3
+          * step one too many...
+      """
+    When the configuration file is loaded
+    And the feature is linted
+    Then an error is reported
+      | linter                     | problem                                        | location         |
+      | TestWithTooManyStepsLinter | Test has too many steps. 4 steps found (max 3) | <path_to_file>:3 |

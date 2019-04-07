@@ -17,3 +17,11 @@ end
 Then(/^the following linters are registered by default$/) do |linter_names|
   expect(CukeLinter.registered_linters.keys).to match_array(linter_names.raw.flatten)
 end
+
+Then(/^no error is reported$/) do
+  expect(@results).to be_empty
+end
+
+Then(/^the linter "([^"]*)" is no longer registered$/) do |linter_name|
+  expect(CukeLinter.registered_linters).to_not have_key(linter_name)
+end

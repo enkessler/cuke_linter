@@ -22,6 +22,18 @@ module CukeLinter
         path
       end
 
+      def create_file(options = {})
+        options[:text]      ||= ''
+        options[:name]      ||= 'test_file'
+        options[:extension] ||= '.txt'
+        options[:directory] ||= create_directory
+
+        file_path = "#{options[:directory]}/#{options[:name]}#{options[:extension]}"
+        File.write(file_path, options[:text])
+
+        file_path
+      end
+
     end
 
   end

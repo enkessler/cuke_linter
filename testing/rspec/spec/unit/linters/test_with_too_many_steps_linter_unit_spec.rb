@@ -29,6 +29,7 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
 
 
   it_should_behave_like 'a linter at the unit level'
+  it_should_behave_like 'a configurable linter at the unit level'
 
 
   it 'has a name' do
@@ -133,6 +134,78 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
               expect(subject.lint(test_model)).to eq([])
             end
 
+          end
+
+        end
+
+      end
+
+
+      describe 'configuration' do
+
+        context 'with no configuration' do
+
+          let(:default_step_threshhold) { 10 }
+
+          context 'because configuration never happened' do
+
+            let(:unconfigured_test_model) do
+              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model.steps = []
+              (default_step_threshhold + 1).times { model.steps << :a_step }
+
+              model
+            end
+
+            it 'defaults to a step threshold of 10 steps' do
+              results = subject.lint(unconfigured_test_model)
+
+              expect(results.first[:problem]).to match(/^Test has too many steps. #{unconfigured_test_model.steps.count} steps found \(max 10\)/)
+            end
+
+          end
+
+          context 'because configuration did not set a step threshold' do
+            let(:configuration) { {} }
+            let(:configured_test_model) do
+              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model.steps = []
+              (default_step_threshhold + 1).times { model.steps << :a_step }
+
+              subject.configure(configuration)
+
+              model
+            end
+
+            it 'defaults to a step threshold of 10 steps' do
+              results = subject.lint(configured_test_model)
+
+              expect(results.first[:problem]).to match(/^Test has too many steps. #{configured_test_model.steps.count} steps found \(max 10\)/)
+            end
+
+          end
+
+        end
+
+
+        context 'with configuration' do
+
+          let(:step_threshhold) { 3 }
+          let(:configuration) { { 'StepThreshold' => step_threshhold } }
+          let(:configured_test_model) do
+            model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            model.steps = []
+            (step_threshhold + 1).times { model.steps << :a_step }
+
+            subject.configure(configuration)
+
+            model
+          end
+
+          it 'the step threshold used is the configured value' do
+            results = subject.lint(configured_test_model)
+
+            expect(results.first[:problem]).to match(/^Test has too many steps. #{configured_test_model.steps.count} steps found \(max #{step_threshhold}\)/)
           end
 
         end

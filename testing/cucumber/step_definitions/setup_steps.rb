@@ -25,8 +25,8 @@ Given(/^a linter for features without scenarios$/) do
   @linter = CukeLinter::FeatureWithoutScenariosLinter.new
 end
 
-Given(/^no other linters have been registered$/) do
-  # There is no way to 'reset' the linters, so just assume that no changes have been made
+Given(/^no other linters have been registered or unregistered$/) do
+  CukeLinter.reset_linters
 end
 
 Given(/^a linter for examples without names$/) do
@@ -39,4 +39,26 @@ end
 
 Given(/^a linter for tests with too many steps$/) do
   @linter = CukeLinter::TestWithTooManyStepsLinter.new
+end
+
+Given(/^a linter for tests with too many steps has been registered$/) do
+  CukeLinter.register_linter(linter: CukeLinter::TestWithTooManyStepsLinter.new, name: 'TestWithTooManyStepsLinter')
+end
+
+Given(/^the following configuration file(?: "([^"]*)")?:$/) do |file_name, text|
+  file_name ||= '.cuke_linter'
+
+  @configuration_file_path = CukeLinter::FileHelper.create_file(directory: @root_test_directory, name: file_name, extension: '', text: text)
+end
+
+Given(/^a linter "([^"]*)"$/) do |linter_class|
+  @linter = CukeLinter.const_get(linter_class).new
+end
+
+Given(/^a linter registered as "([^"]*)"$/) do |linter_name|
+  CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: linter_name), name: linter_name)
+end
+
+Given(/^a directory "([^"]*)"$/) do |directory_name|
+  @test_directory = CukeLinter::FileHelper.create_directory(directory: @root_test_directory, name: directory_name)
 end
