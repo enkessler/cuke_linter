@@ -32,8 +32,8 @@ namespace 'cuke_linter' do
 
   desc 'Run all of the tests'
   task :test_everything => [:clear_coverage] do
-    rspec_args    = '--pattern "testing/rspec/spec/**/*_spec.rb"'
-    cucumber_args = "testing/cucumber/features -r environments/cucumber_env.rb -f progress -t 'not @wip'"
+    rspec_args    = '--pattern "testing/rspec/spec/**/*_spec.rb" --force-color'
+    cucumber_args = "testing/cucumber/features -r environments/cucumber_env.rb -f progress -t 'not @wip' --color"
 
     Rake::Task['racatt:test_everything'].invoke(rspec_args, cucumber_args)
   end
