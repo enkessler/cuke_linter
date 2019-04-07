@@ -6,8 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Nothing yet...
+
+## [0.3.0] - 2019-04-07
+
 ### Added
- - Linter configuration: linters can now be configured via a configuration file
+ - Linter configuration: linters can now be configured (turned on/off, conditions changed, etc.) instead of having to always use the default settings
 
 ## [0.2.0] - 2019-03-19
 
@@ -24,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Custom linters, formatters, and command line usability
 
 
-[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/enkessler/cuke_linter/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/enkessler/cuke_linter/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/enkessler/cuke_linter/compare/2bbd3f29f4eb45b6e9ea7d47c5bb47182bf4fde7...v0.1.0
