@@ -16,7 +16,7 @@ When(/^(?:the feature|it) is linted$/) do
   @results = CukeLinter.lint(options)
 end
 
-When(/^the configuration file is used$/) do
+When(/^the configuration file is (?:used|loaded)$/) do
   CukeLinter.load_configuration(config_file_path: @configuration_file_path)
 end
 
