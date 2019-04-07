@@ -80,4 +80,22 @@ RSpec.describe CukeLinter do
     expect(CukeLinter.registered_linters).to eq({})
   end
 
+  it 'can reset to its default set of linters' do
+    expect(CukeLinter).to respond_to(:reset_linters)
+  end
+
+  describe 'configuration' do
+
+    it 'can load a configuration' do
+      expect(CukeLinter).to respond_to(:load_configuration)
+    end
+
+    it 'is configured optionally via a file or a directly provided configuration' do
+      expect(CukeLinter.method(:load_configuration).arity).to eq(-1)
+      expect(CukeLinter.method(:load_configuration).parameters).to match_array([[:key, :config_file_path],
+                                                                                [:key, :config]])
+    end
+
+  end
+
 end

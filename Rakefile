@@ -1,8 +1,9 @@
 require 'rake'
 require 'racatt'
 require 'coveralls/rake/task'
-require 'colorize'
+require 'rainbow'
 
+Rainbow.enabled = true
 
 namespace 'racatt' do
   Racatt.create_tasks
@@ -19,20 +20,20 @@ namespace 'cuke_linter' do
 
   desc 'Check documentation with RDoc'
   task :check_documentation do
-    output = `rdoc lib`
+    output = `rdoc lib -C`
     puts output
 
     if output =~ /100.00% documented/
-      puts 'All code documented'.green
+      puts Rainbow('All code documented').green
     else
-      raise 'Parts of the gem are undocumented'.red
+      raise Rainbow('Parts of the gem are undocumented').red
     end
   end
 
   desc 'Run all of the tests'
   task :test_everything => [:clear_coverage] do
-    rspec_args    = '--pattern "testing/rspec/spec/**/*_spec.rb"'
-    cucumber_args = "testing/cucumber/features -r environments/cucumber_env.rb -f progress -t 'not @wip'"
+    rspec_args    = '--pattern "testing/rspec/spec/**/*_spec.rb" --force-color'
+    cucumber_args = "testing/cucumber/features -r environments/cucumber_env.rb -f progress -t 'not @wip' --color"
 
     Rake::Task['racatt:test_everything'].invoke(rspec_args, cucumber_args)
   end
@@ -42,6 +43,20 @@ namespace 'cuke_linter' do
 
   desc 'The task that CI will run. Do not run locally.'
   task :ci_build => ['cuke_linter:test_everything', 'coveralls:push']
+
+  desc 'Check that things look good before trying to release'
+  task :prerelease_check do
+    begin
+      Rake::Task['cuke_linter:test_everything'].invoke
+      Rake::Task['cuke_linter:check_documentation'].invoke
+    rescue => e
+      puts Rainbow("Something isn't right!").red
+      raise e
+    end
+
+    puts Rainbow('All is well. :)').green
+  end
+
 end
 
 
