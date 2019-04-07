@@ -1,6 +1,15 @@
 Feature: Using a configuration
 
-  Configuration can be done through a configuration file. This file can be explicitly provided or a default configuration file will be used.
+  Configuration can be done during a script or through a configuration file. This file can be explicitly provided or a default configuration file will be used.
+
+
+  Scenario: Providing a configuration directly
+    Given a linter registered as "SomeLinter"
+    When the following code is used:
+      """
+      CukeLinter.load_configuration(config: { 'SomeLinter' => { 'Enabled' => false } })
+      """
+    Then the linter "SomeLinter" is no longer registered
 
   Scenario: Loading a configuration from a file
     Given a linter registered as "SomeLinter"

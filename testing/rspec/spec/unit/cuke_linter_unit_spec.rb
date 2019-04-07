@@ -90,9 +90,10 @@ RSpec.describe CukeLinter do
       expect(CukeLinter).to respond_to(:load_configuration)
     end
 
-    it 'is configured via an optional file' do
+    it 'is configured optionally via a file or a directly provided configuration' do
       expect(CukeLinter.method(:load_configuration).arity).to eq(-1)
-      expect(CukeLinter.method(:load_configuration).parameters).to match_array([[:key, :config_file_path]])
+      expect(CukeLinter.method(:load_configuration).parameters).to match_array([[:key, :config_file_path],
+                                                                                [:key, :config]])
     end
 
   end
