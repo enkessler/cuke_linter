@@ -134,8 +134,14 @@ model_tree_root = CukeModeler::Directory.new(Dir.pwd)
 CukeLinter.lint(linters: [linter], formatters: [[formatter], [formatter, output_path]], model_tree: model_tree_root)
 ```
 
+### Configuration
 
-For more information, see the documentation [here](https://app.cucumber.pro/projects/cuke_linter).
+Rather than using the default linters or providing a custom set of of modified linters every time linting occurs, which linters to use and any linter specific modifications can be configured in a more static manner via a configuration file or setting the configuration directly in code. See [documentation](#documentation) for specifics.
+
+
+### <a id="documentation"></a>Everything Else
+
+For more detailed examples of usage, see the documentation [here](https://app.cucumber.pro/projects/cuke_linter).
 
 
 ## Development

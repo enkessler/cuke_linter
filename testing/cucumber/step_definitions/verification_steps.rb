@@ -14,7 +14,7 @@ Then(/^an error is reported$/) do |table|
   end
 end
 
-Then(/^the following linters are registered by default$/) do |linter_names|
+Then(/^the following linters are registered(?: by default)?$/) do |linter_names|
   expect(CukeLinter.registered_linters.keys).to match_array(linter_names.raw.flatten)
 end
 

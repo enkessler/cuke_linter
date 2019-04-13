@@ -62,3 +62,7 @@ end
 Given(/^a directory "([^"]*)"$/) do |directory_name|
   @test_directory = CukeLinter::FileHelper.create_directory(directory: @root_test_directory, name: directory_name)
 end
+
+Given(/^no linters are currently registered$/) do
+  CukeLinter.clear_registered_linters
+end
