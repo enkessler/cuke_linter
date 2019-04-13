@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Nothing yet...
 
+## [0.3.1] - 2019-04-13
+
+### Added
+ - Now declaring required Ruby version. It's always been 2.x but now the gem actually says it officially.
+
 ## [0.3.0] - 2019-04-07
 
 ### Added
@@ -28,7 +33,8 @@ Nothing yet...
 - Custom linters, formatters, and command line usability
 
 
-[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/enkessler/cuke_linter/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/enkessler/cuke_linter/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/enkessler/cuke_linter/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/enkessler/cuke_linter/compare/2bbd3f29f4eb45b6e9ea7d47c5bb47182bf4fde7...v0.1.0
