@@ -22,6 +22,7 @@ end
 
 And(/^the following code is used:$/) do |code|
   code.sub!('<path_to>', @root_test_directory)
+  code.sub!('<code_to_generate_a_new_linter_instance>', 'CukeLinter::LinterFactory.generate_fake_linter')
 
   if @working_directory
     Dir.chdir(@working_directory) do

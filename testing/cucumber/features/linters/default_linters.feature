@@ -12,3 +12,24 @@ Feature: Default Linters
       | FeatureWithoutScenariosLinter     |
       | OutlineWithSingleExampleRowLinter |
       | TestWithTooManyStepsLinter        |
+
+  Scenario: Registering new linters
+    Given no linters are currently registered
+    When the following code is used:
+      """
+      linter_object = <code_to_generate_a_new_linter_instance>
+
+      CukeLinter.register_linter(linter: linter_object,  name: 'MyNewLinter')
+      """
+    Then the following linters are registered
+      | MyNewLinter |
+
+  Scenario: Unregistering existing linters
+    Given a linter registered as "SomeLinter"
+    When the following code is used:
+      """
+      linter_object = <code_to_generate_a_new_linter_instance>
+
+      CukeLinter.unregister_linter('SomeLinter')
+      """
+    Then the linter "SomeLinter" is no longer registered
