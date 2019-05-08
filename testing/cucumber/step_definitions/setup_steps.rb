@@ -89,3 +89,7 @@ And(/^a model to lint$/) do
 
   @model.parent_model = fake_file_model
 end
+
+Given(/^the following custom linter class:$/) do |code|
+  eval(code)
+end

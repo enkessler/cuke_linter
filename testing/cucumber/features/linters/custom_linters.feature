@@ -14,8 +14,8 @@ Feature: Custom linters
                        end
 
       @linter = CukeLinter::Linter.new(name: custom_name,
-                                      message: custom_message,
-                                      rule: custom_rule)
+                                       message: custom_message,
+                                       rule: custom_rule)
       """
     And a model to lint
     When the model is linted
@@ -23,5 +23,32 @@ Feature: Custom linters
       | linter         | problem           | location                           |
       | MyCustomLinter | My custom message | <path_to_file>:<model_line_number> |
 
-  @wip
   Scenario: Creating a custom linter class
+    Given the following custom linter class:
+      """
+      class MyCustomLinter < CukeLinter::Linter
+
+        def initialize
+          custom_name    = 'MyCustomLinter'
+          custom_message = 'My custom message'
+          custom_rule    = lambda do |model|
+                             # Your logic here, return true for a problem and false for not problem
+                             true
+                           end
+
+          super(name: custom_name,
+                message: custom_message,
+                rule: custom_rule)
+        end
+
+      end
+      """
+    And the following code is used:
+      """
+      @linter = MyCustomLinter.new
+      """
+    And a model to lint
+    When the model is linted
+    Then an error is reported
+      | linter         | problem           | location                           |
+      | MyCustomLinter | My custom message | <path_to_file>:<model_line_number> |
