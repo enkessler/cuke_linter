@@ -28,17 +28,17 @@ Feature: Custom linters
       """
       class MyCustomLinter < CukeLinter::Linter
 
-        def initialize
-          custom_name    = 'MyCustomLinter'
-          custom_message = 'My custom message'
-          custom_rule    = lambda do |model|
-                             # Your logic here, return true for a problem and false for not problem
-                             true
-                           end
+        def name
+          'MyCustomLinter'
+        end
 
-          super(name: custom_name,
-                message: custom_message,
-                rule: custom_rule)
+        def message
+          'My custom message'
+        end
+
+        def rule(model)
+          # Your logic here, return true for a problem and false for not problem
+          true
         end
 
       end
