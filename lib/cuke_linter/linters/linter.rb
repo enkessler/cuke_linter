@@ -7,10 +7,12 @@ module CukeLinter
       @rule    = rule
     end
 
+    # Returns the name of the linter
     def name
       @name
     end
 
+    # Lints the given model and returns linting data about said model
     def lint(model)
       raise 'No linting rule provided!' unless @rule || respond_to?(:rule)
 
@@ -19,7 +21,7 @@ module CukeLinter
       if problem_found
         problem_message = respond_to?(:message) ? message : @message
 
-        [{ problem: problem_message, location: "#{model.parent_model.path}:#{model.source_line}" }]
+        [{ problem: problem_message, location: "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" }]
       else
         []
       end
