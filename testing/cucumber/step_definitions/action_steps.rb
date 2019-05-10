@@ -8,7 +8,7 @@ When(/^it is formatted by the "([^"]*)" formatter$/) do |linter_name|
   @results = CukeLinter.const_get("#{linter_name.capitalize}Formatter").new.format(@linter_data)
 end
 
-When(/^(?:the feature|it) is linted$/) do
+When(/^(?:the feature|the model|it) is linted$/) do
   options           = { model_tree: @model,
                         formatters: [[CukeLinter::FormatterFactory.generate_fake_formatter, "#{CukeLinter::FileHelper::create_directory}/junk_output_file.txt"]] }
   options[:linters] = [@linter] if @linter
