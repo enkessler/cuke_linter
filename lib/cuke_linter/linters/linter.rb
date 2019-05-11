@@ -21,9 +21,9 @@ module CukeLinter
       if problem_found
         problem_message = respond_to?(:message) ? message : @message
 
-        [{ problem: problem_message, location: "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" }]
+        { problem: problem_message, location: "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" }
       else
-        []
+        nil
       end
     end
 

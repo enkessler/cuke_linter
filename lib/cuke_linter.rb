@@ -74,9 +74,12 @@ module CukeLinter
         # TODO: have linters lint only certain types of models
         #         linting_data.concat(linter.lint(model)) if relevant_model?(linter, model)
 
-        linted_data = linter.lint(model)
-        linted_data.each { |data_point| data_point[:linter] = linter.name }
-        linting_data.concat(linted_data)
+        result = linter.lint(model)
+
+        if result
+          result[:linter] = linter.name
+          linting_data << result
+        end
       end
     end
 

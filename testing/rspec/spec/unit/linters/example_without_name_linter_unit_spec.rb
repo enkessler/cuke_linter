@@ -44,13 +44,13 @@ RSpec.describe CukeLinter::ExampleWithoutNameLinter do
       end
 
       it 'records a problem' do
-        results = subject.lint(test_model_with_nil_name)
+        result = subject.lint(test_model_with_nil_name)
 
-        expect(results.first[:problem]).to eq('Example has no name')
+        expect(result[:problem]).to eq('Example has no name')
 
-        results = subject.lint(test_model_with_blank_name)
+        result = subject.lint(test_model_with_blank_name)
 
-        expect(results.first[:problem]).to eq('Example has no name')
+        expect(result[:problem]).to eq('Example has no name')
       end
 
       it 'records the location of the problem' do
@@ -61,21 +61,21 @@ RSpec.describe CukeLinter::ExampleWithoutNameLinter do
         model_2.name        = nil
         model_2.source_line = 3
 
-        results = subject.lint(model_1)
-        expect(results.first[:location]).to eq('path_to_file:1')
+        result = subject.lint(model_1)
+        expect(result[:location]).to eq('path_to_file:1')
 
-        results = subject.lint(model_2)
-        expect(results.first[:location]).to eq('path_to_file:3')
+        result = subject.lint(model_2)
+        expect(result[:location]).to eq('path_to_file:3')
       end
 
     end
 
     context 'a non-example model' do
 
-      it 'returns an empty set of results' do
-        results = subject.lint(CukeModeler::Model.new)
+      it 'returns no result' do
+        result = subject.lint(CukeModeler::Model.new)
 
-        expect(results).to eq([])
+        expect(result).to eq(nil)
       end
 
     end

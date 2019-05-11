@@ -29,14 +29,14 @@ RSpec.describe CukeLinter::Linter do
     end
 
     it 'uses the provided rule' do
-      expect(subject.lint(good_data)).to be_empty
-      expect(subject.lint(bad_data)).to_not be_empty
+      expect(subject.lint(good_data)).to be_nil
+      expect(subject.lint(bad_data)).to_not be_nil
     end
 
     it 'uses the provided message' do
-      results = subject.lint(bad_data)
+      result = subject.lint(bad_data)
 
-      expect(results.first[:problem]).to eq(linter_message)
+      expect(result[:problem]).to eq(linter_message)
     end
 
   end
@@ -68,14 +68,14 @@ RSpec.describe CukeLinter::Linter do
     end
 
     it 'uses the provided #rule' do
-      expect(subject.lint(good_data)).to be_empty
-      expect(subject.lint(bad_data)).to_not be_empty
+      expect(subject.lint(good_data)).to be_nil
+      expect(subject.lint(bad_data)).to_not be_nil
     end
 
     it 'uses the provided #message' do
-      results = subject.lint(bad_data)
+      result = subject.lint(bad_data)
 
-      expect(results.first[:problem]).to eq(linter_message)
+      expect(result[:problem]).to eq(linter_message)
     end
 
   end
@@ -113,14 +113,14 @@ RSpec.describe CukeLinter::Linter do
     end
 
     it 'uses #rule instead of the provided rule' do
-      expect(subject.lint(good_data)).to be_empty
-      expect(subject.lint(bad_data)).to_not be_empty
+      expect(subject.lint(good_data)).to be_nil
+      expect(subject.lint(bad_data)).to_not be_nil
     end
 
     it 'uses #message instead of the provided message' do
-      results = subject.lint(bad_data)
+      result = subject.lint(bad_data)
 
-      expect(results.first[:problem]).to eq('Method Foo!')
+      expect(result[:problem]).to eq('Method Foo!')
     end
 
   end
@@ -150,16 +150,16 @@ RSpec.describe CukeLinter::Linter do
       # Default name
       linter_options[:name] = nil
       linter                = CukeLinter::Linter.new(linter_options)
-      results               = linter.lint(bad_data)
+      result                = linter.lint(bad_data)
 
-      expect(results.first[:problem]).to eq('Linter problem detected')
+      expect(result[:problem]).to eq('Linter problem detected')
 
       # Value name
       linter_options[:name] = 'Value name'
       linter                = CukeLinter::Linter.new(linter_options)
-      results               = linter.lint(bad_data)
+      result                = linter.lint(bad_data)
 
-      expect(results.first[:problem]).to eq('Value name problem detected')
+      expect(result[:problem]).to eq('Value name problem detected')
 
       # Method name
       class CustomLinter < CukeLinter::Linter;
@@ -170,9 +170,9 @@ RSpec.describe CukeLinter::Linter do
 
       linter_options[:name] = nil
       linter                = CustomLinter.new(linter_options)
-      results               = linter.lint(bad_data)
+      result                = linter.lint(bad_data)
 
-      expect(results.first[:problem]).to eq('Method name problem detected')
+      expect(result[:problem]).to eq('Method name problem detected')
     end
 
   end

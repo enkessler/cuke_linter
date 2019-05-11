@@ -60,29 +60,29 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
         end
 
         it 'records a problem' do
-          results = subject.lint(test_model)
+          result = subject.lint(test_model)
 
-          expect(results.first[:problem]).to match(/^Test has too many steps. \d+ steps found \(max 10\)/)
+          expect(result[:problem]).to match(/^Test has too many steps. \d+ steps found \(max 10\)/)
         end
 
         it 'records the location of the problem' do
           test_model.source_line = 1
-          results                = subject.lint(test_model)
-          expect(results.first[:location]).to eq('path_to_file:1')
+          result                 = subject.lint(test_model)
+          expect(result[:location]).to eq('path_to_file:1')
 
           test_model.source_line = 3
-          results                = subject.lint(test_model)
-          expect(results.first[:location]).to eq('path_to_file:3')
+          result                 = subject.lint(test_model)
+          expect(result[:location]).to eq('path_to_file:3')
         end
 
         it 'includes the number of steps found in the problem record' do
           step_count = test_model.steps.count
-          results    = subject.lint(test_model)
-          expect(results.first[:problem]).to eq("Test has too many steps. #{step_count} steps found (max 10)")
+          result     = subject.lint(test_model)
+          expect(result[:problem]).to eq("Test has too many steps. #{step_count} steps found (max 10)")
 
           test_model.steps << :another_step
-          results = subject.lint(test_model)
-          expect(results.first[:problem]).to eq("Test has too many steps. #{step_count + 1} steps found (max 10)")
+          result = subject.lint(test_model)
+          expect(result[:problem]).to eq("Test has too many steps. #{step_count + 1} steps found (max 10)")
         end
 
       end
@@ -99,7 +99,7 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
           end
 
           it 'does not record a problem' do
-            expect(subject.lint(test_model)).to eq([])
+            expect(subject.lint(test_model)).to eq(nil)
           end
 
         end
@@ -116,7 +116,7 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
             end
 
             it 'does not record a problem' do
-              expect(subject.lint(test_model)).to eq([])
+              expect(subject.lint(test_model)).to eq(nil)
             end
 
           end
@@ -131,7 +131,7 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
             end
 
             it 'does not record a problem' do
-              expect(subject.lint(test_model)).to eq([])
+              expect(subject.lint(test_model)).to eq(nil)
             end
 
           end
@@ -158,9 +158,9 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
             end
 
             it 'defaults to a step threshold of 10 steps' do
-              results = subject.lint(unconfigured_test_model)
+              result = subject.lint(unconfigured_test_model)
 
-              expect(results.first[:problem]).to match(/^Test has too many steps. #{unconfigured_test_model.steps.count} steps found \(max 10\)/)
+              expect(result[:problem]).to match(/^Test has too many steps. #{unconfigured_test_model.steps.count} steps found \(max 10\)/)
             end
 
           end
@@ -178,9 +178,9 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
             end
 
             it 'defaults to a step threshold of 10 steps' do
-              results = subject.lint(configured_test_model)
+              result = subject.lint(configured_test_model)
 
-              expect(results.first[:problem]).to match(/^Test has too many steps. #{configured_test_model.steps.count} steps found \(max 10\)/)
+              expect(result[:problem]).to match(/^Test has too many steps. #{configured_test_model.steps.count} steps found \(max 10\)/)
             end
 
           end
@@ -203,9 +203,9 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
           end
 
           it 'the step threshold used is the configured value' do
-            results = subject.lint(configured_test_model)
+            result = subject.lint(configured_test_model)
 
-            expect(results.first[:problem]).to match(/^Test has too many steps. #{configured_test_model.steps.count} steps found \(max #{step_threshhold}\)/)
+            expect(result[:problem]).to match(/^Test has too many steps. #{configured_test_model.steps.count} steps found \(max #{step_threshhold}\)/)
           end
 
         end
@@ -218,10 +218,10 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
 
       let(:test_model) { CukeModeler::Model.new }
 
-      it 'returns an empty set of results' do
-        results = subject.lint(test_model)
+      it 'returns no result' do
+        result = subject.lint(test_model)
 
-        expect(results).to eq([])
+        expect(result).to eq(nil)
       end
 
     end
