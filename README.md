@@ -65,6 +65,8 @@ Custom linters can be any object that responds to `#lint` and returns a detected
 
 Note that a linter will receive, in turn, *every model* in the model tree in order for it to have the chance to detect problems with it. Checking the model's class before attempting to lint it is recommended.
 
+**In order to simplify the process of creating custom linters a base class is provided (see [documentation](#documentation)).**
+
 Custom formatters can be any object that responds to `#format` and takes input data in the following format:
 
 ```
