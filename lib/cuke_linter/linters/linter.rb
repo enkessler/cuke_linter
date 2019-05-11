@@ -1,6 +1,10 @@
 module CukeLinter
+
+  # A generic linter that can be used to make arbitrary linting rules
+
   class Linter
 
+    # Creates a new linter object
     def initialize(name: nil, message: nil, rule: nil)
       @name    = name || self.class.name.split('::').last
       @message = message || "#{self.name} problem detected"

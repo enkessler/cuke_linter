@@ -4,6 +4,7 @@ module CukeLinter
 
   class OutlineWithSingleExampleRowLinter < Linter
 
+    # The rule used to determine if a model has a problem
     def rule(model)
       return false unless model.is_a?(CukeModeler::Outline)
       return false if model.examples.nil?
@@ -13,6 +14,7 @@ module CukeLinter
       examples_rows.count == 1
     end
 
+    # The message used to describe the problem that has been found
     def message
       'Outline has only one example row'
     end

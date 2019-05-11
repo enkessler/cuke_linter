@@ -9,6 +9,7 @@ module CukeLinter
       @step_threshold = options['StepThreshold'] if options['StepThreshold']
     end
 
+    # The rule used to determine if a model has a problem
     def rule(model)
       return false unless model.is_a?(CukeModeler::Scenario) || model.is_a?(CukeModeler::Outline)
 
@@ -18,6 +19,7 @@ module CukeLinter
       @linted_step_count > @linted_step_threshold
     end
 
+    # The message used to describe the problem that has been found
     def message
       "Test has too many steps. #{@linted_step_count} steps found (max #{@linted_step_threshold})"
     end
