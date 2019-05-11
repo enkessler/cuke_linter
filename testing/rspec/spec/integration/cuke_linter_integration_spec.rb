@@ -82,16 +82,21 @@ RSpec.describe CukeLinter do
   end
 
   it 'uses all registered linters if none are provided', :linter_registration do
+    CukeLinter.clear_registered_linters
     CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter1'), name: 'FakeLinter1')
     CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter2'), name: 'FakeLinter2')
     CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter3'), name: 'FakeLinter3')
-    linting_options.delete(:linters)
 
-    results = subject.lint(linting_options)
+    begin
+      linting_options.delete(:linters)
+      results = subject.lint(linting_options)
 
-    expect(results).to match_array([{ linter: 'FakeLinter1', location: 'path_to_file:1', problem: 'FakeLinter1 problem' },
-                                    { linter: 'FakeLinter2', location: 'path_to_file:1', problem: 'FakeLinter2 problem' },
-                                    { linter: 'FakeLinter3', location: 'path_to_file:1', problem: 'FakeLinter3 problem' }])
+      expect(results).to match_array([{ linter: 'FakeLinter1', location: 'path_to_file:1', problem: 'FakeLinter1 problem' },
+                                      { linter: 'FakeLinter2', location: 'path_to_file:1', problem: 'FakeLinter2 problem' },
+                                      { linter: 'FakeLinter3', location: 'path_to_file:1', problem: 'FakeLinter3 problem' }])
+    ensure
+      CukeLinter.reset_linters
+    end
   end
 
   it 'includes the name of the linter in the linting data' do
@@ -136,6 +141,12 @@ RSpec.describe CukeLinter do
     expect(CukeLinter.registered_linters.values.map(&:object_id)).to_not match_array(original_linter_ids)
   end
 
+  it 'can handle a mixture of problematic and non-problematic models' do
+    linting_options[:linters] = [CukeLinter::LinterFactory.generate_fake_linter(finds_problems: true),
+                                 CukeLinter::LinterFactory.generate_fake_linter(finds_problems: false)]
+
+    expect { subject.lint(linting_options) }.to_not raise_error
+  end
 
   describe 'configuration' do
 

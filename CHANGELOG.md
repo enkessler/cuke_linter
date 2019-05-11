@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Nothing yet...
 
+## [0.4.0] - 2019-05-11
+
+### Added
+ - A base linter class has been added that can be used to create custom linters more easily by providing common boilerplate code that every linter would need.
+
+### Changed
+ - Linters now return only a single problem instead of returning a collection of problems.
+
 ## [0.3.1] - 2019-04-13
 
 ### Added
@@ -33,7 +41,8 @@ Nothing yet...
 - Custom linters, formatters, and command line usability
 
 
-[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/enkessler/cuke_linter/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/enkessler/cuke_linter/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/enkessler/cuke_linter/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/enkessler/cuke_linter/compare/v0.1.0...v0.2.0

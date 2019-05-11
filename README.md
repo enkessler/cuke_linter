@@ -56,19 +56,16 @@ CukeLinter.lint
 
 The linting will happen against a tree of `CukeModeler` models that is generated based on the current directory. You can generate your own model tree and use that instead, if desired.
 
-Custom linters can be any object that responds to `#lint` and returns a collection of detected issues in the format of
+Custom linters can be any object that responds to `#lint` and returns a detected issue (or `nil`) in the format of
 
 ```
-[
- { problem: 'some linting issue',
-   location: 'path/to/file:line_number' },
- { problem: 'some linting issue',
-   location: 'path/to/file:line_number' },
-   # etc.
-]
+{ problem: 'some linting issue',
+  location: 'path/to/file:line_number' }
 ```
 
 Note that a linter will receive, in turn, *every model* in the model tree in order for it to have the chance to detect problems with it. Checking the model's class before attempting to lint it is recommended.
+
+**In order to simplify the process of creating custom linters a base class is provided (see [documentation](#documentation)).**
 
 Custom formatters can be any object that responds to `#format` and takes input data in the following format:
 
@@ -98,12 +95,12 @@ class MyCustomLinter
   end
 
   def lint(model)
-    return [] unless model.is_a?(CukeModeler::Scenario)
+    return nil unless model.is_a?(CukeModeler::Scenario)
 
     if model.name.empty?
-      [{ problem: 'Scenario has no name', location: "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" }]
+      { problem: 'Scenario has no name', location: "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" }
     else
-      []
+      nil
     end
   end
 

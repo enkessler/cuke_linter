@@ -2,22 +2,18 @@ module CukeLinter
 
   # A linter that detects empty features
 
-  class FeatureWithoutScenariosLinter
+  class FeatureWithoutScenariosLinter < Linter
 
-    # Returns the name of the linter
-    def name
-      'FeatureWithoutScenariosLinter'
+    # The rule used to determine if a model has a problem
+    def rule(model)
+      return false unless model.is_a?(CukeModeler::Feature)
+
+      model.tests.nil? || model.tests.empty?
     end
 
-    # Lints the given model and returns linting data about said model
-    def lint(model)
-      return [] unless model.is_a?(CukeModeler::Feature)
-
-      if model.tests.nil? || model.tests.empty?
-        [{ problem: 'Feature has no scenarios', location: "#{model.parent_model.path}:#{model.source_line}" }]
-      else
-        []
-      end
+    # The message used to describe the problem that has been found
+    def message
+      'Feature has no scenarios'
     end
 
   end

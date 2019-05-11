@@ -66,3 +66,30 @@ end
 Given(/^no linters are currently registered$/) do
   CukeLinter.clear_registered_linters
 end
+
+Given(/^the following custom linter object:$/) do |code|
+  code.sub!('<path_to>', @root_test_directory)
+  code.sub!('<code_to_generate_a_new_linter_instance>', 'CukeLinter::LinterFactory.generate_fake_linter')
+
+  if @working_directory
+    Dir.chdir(@working_directory) do
+      eval(code)
+    end
+  else
+    eval(code)
+  end
+end
+
+And(/^a model to lint$/) do
+  # Any old model should be fine
+  @model = CukeModeler::Feature.new
+
+  fake_file_model      = CukeModeler::FeatureFile.new
+  fake_file_model.path = 'path_to_file'
+
+  @model.parent_model = fake_file_model
+end
+
+Given(/^the following custom linter class:$/) do |code|
+  eval(code)
+end

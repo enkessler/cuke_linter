@@ -50,11 +50,11 @@ namespace 'cuke_linter' do
       Rake::Task['cuke_linter:test_everything'].invoke
       Rake::Task['cuke_linter:check_documentation'].invoke
     rescue => e
-      puts Rainbow("Something isn't right!").red
+      puts Rainbow("-----------------------\nSomething isn't right!").red
       raise e
     end
 
-    puts Rainbow('All is well. :)').green
+    puts Rainbow("-----------------------\nAll is well. :)").green
   end
 
 end

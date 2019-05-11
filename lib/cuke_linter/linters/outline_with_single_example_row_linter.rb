@@ -2,25 +2,21 @@ module CukeLinter
 
   # A linter that detects outlines that don't have multiple example rows
 
-  class OutlineWithSingleExampleRowLinter
+  class OutlineWithSingleExampleRowLinter < Linter
 
-    # Returns the name of the linter
-    def name
-      'OutlineWithSingleExampleRowLinter'
-    end
-
-    # Lints the given model and returns linting data about said model
-    def lint(model)
-      return [] unless model.is_a?(CukeModeler::Outline)
-      return [] if model.examples.nil?
+    # The rule used to determine if a model has a problem
+    def rule(model)
+      return false unless model.is_a?(CukeModeler::Outline)
+      return false if model.examples.nil?
 
       examples_rows = model.examples.collect(&:argument_rows).flatten
 
-      if examples_rows.count == 1
-        [{ problem: 'Outline has only one example row', location: "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" }]
-      else
-        []
-      end
+      examples_rows.count == 1
+    end
+
+    # The message used to describe the problem that has been found
+    def message
+      'Outline has only one example row'
     end
 
   end
