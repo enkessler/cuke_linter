@@ -11,6 +11,7 @@ Feature: Default Linters
       | ExampleWithoutNameLinter          |
       | FeatureWithoutScenariosLinter     |
       | OutlineWithSingleExampleRowLinter |
+      | SingleTestBackgroundLinter        |
       | StepWithEndPeriodLinter           |
       | TestWithTooManyStepsLinter        |
 

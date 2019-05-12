@@ -53,6 +53,15 @@ module CukeLinter
       model
     end
 
+    def self.generate_background_model(source_text: "Background:\n* a step", parent_file_path: 'path_to_file')
+      fake_parent_model = generate_feature_model(parent_file_path: parent_file_path)
+
+      model              = CukeModeler::Background.new(source_text)
+      model.parent_model = fake_parent_model
+
+      model
+    end
+
     def self.generate_step_model(source_text: '* a step', parent_file_path: 'path_to_file')
       fake_parent_model = generate_scenario_model(parent_file_path: parent_file_path)
 
