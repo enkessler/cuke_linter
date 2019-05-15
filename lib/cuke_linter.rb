@@ -27,8 +27,6 @@ module CukeLinter
                         'StepWithEndPeriodLinter'           => StepWithEndPeriodLinter.new,
                         'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new,
                         'TestStepWithTooManyCharactersLinter' => TestStepWithTooManyCharactersLinter.new }
-
-
   # Configures linters based on the given options
   def self.load_configuration(config_file_path: nil, config: nil)
     # TODO: define what happens if both a configuration file and a configuration are provided. Merge them or have direct config take precedence? Both?

@@ -52,10 +52,10 @@ end
 
 Given(/^a linter for backgrounds that do more than setup$/) do
   @linter = CukeLinter::BackgroundDoesMoreThanSetupLinter.new
-=======
+end
+
 Given("a linter for test steps with too many characters") do
   @linter = CukeLinter::TestStepWithTooManyCharactersLinter.new
->>>>>>> linter which warns when a step is too long
 end
 
 Given("a linter for test steps with too many characters") do

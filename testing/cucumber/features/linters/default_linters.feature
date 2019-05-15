@@ -8,6 +8,7 @@ Feature: Default Linters
   Scenario: Using the default linters
     Given no other linters have been registered or unregistered
     Then the following linters are registered by default
+<<<<<<< HEAD
       | BackgroundDoesMoreThanSetupLinter |
       | ExampleWithoutNameLinter          |
       | FeatureWithoutDescriptionLinter   |
@@ -17,6 +18,13 @@ Feature: Default Linters
       | StepWithEndPeriodLinter           |
       | TestStepWithTooManyCharactersLinter |
       | TestWithTooManyStepsLinter        |
+=======
+      | ExampleWithoutNameLinter            |
+      | FeatureWithoutScenariosLinter       |
+      | OutlineWithSingleExampleRowLinter   |
+      | TestWithTooManyStepsLinter          |
+      | TestStepWithTooManyCharactersLinter |
+>>>>>>> linter which warns when a step is too long
 
 
   Scenario: Registering new linters
