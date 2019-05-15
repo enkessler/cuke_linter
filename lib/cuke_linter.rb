@@ -11,6 +11,7 @@ require 'cuke_linter/linters/outline_with_single_example_row_linter'
 require 'cuke_linter/linters/single_test_background_linter'
 require 'cuke_linter/linters/step_with_end_period_linter'
 require 'cuke_linter/linters/test_with_too_many_steps_linter'
+require 'cuke_linter/linters/test_step_with_too_many_characters_linter'
 
 
 # The top level namespace used by this gem
@@ -24,7 +25,8 @@ module CukeLinter
                         'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
                         'SingleTestBackgroundLinter'        => SingleTestBackgroundLinter.new,
                         'StepWithEndPeriodLinter'           => StepWithEndPeriodLinter.new,
-                        'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
+                        'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new,
+                        'TestStepWithTooManyCharactersLinter' => TestStepWithTooManyCharactersLinter.new }
 
 
   # Configures linters based on the given options
