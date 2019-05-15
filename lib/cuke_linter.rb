@@ -25,7 +25,8 @@ module CukeLinter
                         'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
                         'SingleTestBackgroundLinter'        => SingleTestBackgroundLinter.new,
                         'StepWithEndPeriodLinter'           => StepWithEndPeriodLinter.new,
-                        'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
+                        'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new,
+                        'TestStepWithTooManyCharactersLinter' => TestStepWithTooManyCharactersLinter.new }
 
 
   # Configures linters based on the given options
