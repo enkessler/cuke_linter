@@ -3,6 +3,7 @@ require 'cuke_modeler'
 require "cuke_linter/version"
 require 'cuke_linter/formatters/pretty_formatter'
 require 'cuke_linter/linters/linter'
+require 'cuke_linter/linters/background_does_more_than_setup_linter'
 require 'cuke_linter/linters/example_without_name_linter'
 require 'cuke_linter/linters/feature_without_scenarios_linter'
 require 'cuke_linter/linters/outline_with_single_example_row_linter'
@@ -15,7 +16,8 @@ require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 module CukeLinter
 
-  @original_linters = { 'ExampleWithoutNameLinter'          => ExampleWithoutNameLinter.new,
+  @original_linters = { 'BackgroundDoesMoreThanSetupLinter' => BackgroundDoesMoreThanSetupLinter.new,
+                        'ExampleWithoutNameLinter'          => ExampleWithoutNameLinter.new,
                         'FeatureWithoutScenariosLinter'     => FeatureWithoutScenariosLinter.new,
                         'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
                         'SingleTestBackgroundLinter'        => SingleTestBackgroundLinter.new,

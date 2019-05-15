@@ -49,6 +49,10 @@ Given(/^a linter for backgrounds applied to only one test$/) do
   @linter = CukeLinter::SingleTestBackgroundLinter.new
 end
 
+Given(/^a linter for backgrounds that do more than setup$/) do
+  @linter = CukeLinter::BackgroundDoesMoreThanSetupLinter.new
+end
+
 Given(/^a linter for tests with too many steps has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::TestWithTooManyStepsLinter.new, name: 'TestWithTooManyStepsLinter')
 end
