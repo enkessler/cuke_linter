@@ -46,7 +46,7 @@ Given(/^a linter for tests with too many steps has been registered$/) do
 end
 
 Given("a linter for scenarios/features without a description") do
-  @linter = CukeLinter::FeatureOrScenarioWihoutDescriptionLinter.new
+  @linter = CukeLinter::FeatureOrScenarioWithoutDescriptionLinter.new
 end
 
 Given(/^the following configuration file(?: "([^"]*)")?:$/) do |file_name, text|
