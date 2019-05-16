@@ -13,5 +13,5 @@ Feature: Scenario without description linter
       """
     When it is linted
     Then an error is reported
-      | linter                                   | problem                     | location         |
-      | FeatureOrScenarioWihoutDescriptionLinter | Scenario has no description | <path_to_file>:1 |
+      | linter                                    | problem                     | location         |
+      | FeatureOrScenarioWithoutDescriptionLinter | Scenario has no description | <path_to_file>:1 |
