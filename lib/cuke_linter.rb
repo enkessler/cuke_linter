@@ -7,16 +7,18 @@ require 'cuke_linter/linters/example_without_name_linter'
 require 'cuke_linter/linters/feature_without_scenarios_linter'
 require 'cuke_linter/linters/outline_with_single_example_row_linter'
 require 'cuke_linter/linters/test_with_too_many_steps_linter'
+require 'cuke_linter/linters/feature_or_scenario_without_description_linter'
 
 
 # The top level namespace used by this gem
 
 module CukeLinter
 
-  @original_linters = { 'FeatureWithoutScenariosLinter'     => FeatureWithoutScenariosLinter.new,
-                        'ExampleWithoutNameLinter'          => ExampleWithoutNameLinter.new,
-                        'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
-                        'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
+  @original_linters = { 'FeatureWithoutScenariosLinter'             => FeatureWithoutScenariosLinter.new,
+                        'ExampleWithoutNameLinter'                  => ExampleWithoutNameLinter.new,
+                        'OutlineWithSingleExampleRowLinter'         => OutlineWithSingleExampleRowLinter.new,
+                        'TestWithTooManyStepsLinter'                => TestWithTooManyStepsLinter.new,
+                        'FeatureOrScenarioWithoutDescriptionLinter' => FeatureOrScenarioWithoutDescriptionLinter.new }
 
   # Configures linters based on the given options
   def self.load_configuration(config_file_path: nil, config: nil)
