@@ -1,6 +1,6 @@
 module CukeLinter
 
-  # A linter that detects unnamed example groups
+  # A linter that detects features that don't have a description
 
   class FeatureWithoutDescriptionLinter < Linter
 

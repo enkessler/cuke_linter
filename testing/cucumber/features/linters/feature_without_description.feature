@@ -1,7 +1,7 @@
 Feature: Feature without description linter
 
   As a writer of documentation
-  I want features to have at a description
+  I want features to have a description
   So that I do not have incomplete documentation
 
 
