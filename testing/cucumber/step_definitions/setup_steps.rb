@@ -57,6 +57,10 @@ Given(/^a linter for tests with too many steps has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::TestWithTooManyStepsLinter.new, name: 'TestWithTooManyStepsLinter')
 end
 
+Given("a linter for features without a description") do
+  @linter = CukeLinter::FeatureWithoutDescriptionLinter.new
+end
+
 Given(/^the following configuration file(?: "([^"]*)")?:$/) do |file_name, text|
   file_name ||= '.cuke_linter'
 
