@@ -11,7 +11,9 @@ RSpec.describe CukeLinter::FeatureWithoutDescriptionLinter do
   end
 
   let(:bad_data) do
-    CukeLinter::ModelFactory.generate_feature_model
+    feature_text = 'Feature: without a description'
+
+    CukeLinter::ModelFactory.generate_feature_model(source_text: feature_text)
   end
 
   it_should_behave_like 'a linter at the unit level'
@@ -24,21 +26,48 @@ RSpec.describe CukeLinter::FeatureWithoutDescriptionLinter do
   describe 'linting' do
   
     context 'a feature with no description' do
-    
-      let(:feature_with_no_description) do
-        CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
+
+      context 'because the description is empty' do
+
+        let(:feature_with_no_description) do
+          model             = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
+          model.description = ''
+
+          model
+        end
+
+
+        it 'records a problem' do
+          result = subject.lint(feature_with_no_description)
+          expect(result[:problem]).to eq('Feature has no description')
+        end
+
+        it 'records the location of the problem' do
+          result = subject.lint(feature_with_no_description)
+          expect(result[:location]).to eq('path_to_file:1')
+        end
       end
 
-      it 'records a problem' do
-        result = subject.lint(feature_with_no_description)
-        expect(result[:problem]).to eq('Feature has no description')
-      end
+      context 'because the description is nil' do
 
-      it 'records the location of the problem' do
-        result = subject.lint(feature_with_no_description)
-        expect(result[:location]).to eq('path_to_file:1')
-      end
+        let(:feature_with_no_description) do
+          model             = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
+          model.description = nil
 
+          model
+        end
+
+        it 'records a problem' do
+          result = subject.lint(feature_with_no_description)
+          expect(result[:problem]).to eq('Feature has no description')
+        end
+
+        it 'records the location of the problem' do
+          result = subject.lint(feature_with_no_description)
+          expect(result[:location]).to eq('path_to_file:1')
+        end
+
+      end
     end
     
     context 'a feature with a description' do
