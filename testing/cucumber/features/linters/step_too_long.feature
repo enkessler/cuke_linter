@@ -17,8 +17,8 @@ Feature: Test step with too many characters
       """
     When it is linted
     Then an error is reported
-      | linter                              | problem                                          | location         |
-      | TestStepWithTooManyCharactersLinter | Step is too long. 121 characters found (max 120) | <path_to_file>:4 |
+      | linter                          | problem                                          | location         |
+      | StepWithTooManyCharactersLinter | Step is too long. 121 characters found (max 120) | <path_to_file>:4 |
 
 
   Scenario: Configuration of step count threshold
@@ -26,7 +26,7 @@ Feature: Test step with too many characters
     Given a linter for test steps with too many characters has been registered
     And the following configuration file:
       """
-      TestStepWithTooManyCharactersLinter:
+      StepWithTooManyCharactersLinter:
         StepLengthThreshold: 55
       """
     And the following feature:
@@ -39,5 +39,5 @@ Feature: Test step with too many characters
     When the configuration file is loaded
     And the feature is linted
     Then an error is reported
-      | linter                     | problem                                        | location         |
-      | TestStepWithTooManyCharactersLinter | Step is too long. 56 characters found (max 55) | <path_to_file>:4 |
+      | linter                          | problem                                        | location         |
+      | StepWithTooManyCharactersLinter | Step is too long. 56 characters found (max 55) | <path_to_file>:4 |
