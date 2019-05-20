@@ -17,8 +17,8 @@ Feature: Test step with too many characters
       """
     When it is linted
     Then an error is reported
-      | linter                          | problem                                          | location         |
-      | StepWithTooManyCharactersLinter | Step is too long. 121 characters found (max 120) | <path_to_file>:4 |
+      | linter                          | problem                                         | location         |
+      | StepWithTooManyCharactersLinter | Step is too long. 121 characters found (max 80) | <path_to_file>:4 |
 
 
   Scenario: Configuration of step count threshold
