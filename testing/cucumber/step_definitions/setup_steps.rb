@@ -41,7 +41,6 @@ Given(/^a linter for tests with too many steps$/) do
   @linter = CukeLinter::TestWithTooManyStepsLinter.new
 end
 
-<<<<<<< HEAD
 Given(/^a linter for steps the end with a period$/) do
   @linter = CukeLinter::StepWithEndPeriodLinter.new
 end
@@ -62,13 +61,8 @@ Given(/^a linter for tests with too many steps has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::TestWithTooManyStepsLinter.new, name: 'TestWithTooManyStepsLinter')
 end
 
-<<<<<<< HEAD
 Given("a linter for features without a description") do
   @linter = CukeLinter::FeatureWithoutDescriptionLinter.new
-=======
-Given(/^a linter for test steps with too many characters has been registered$/) do
-  CukeLinter.register_linter(linter: CukeLinter::TestStepWithTooManyCharactersLinter.new, name: 'TestStepWithTooManyCharactersLinter')
->>>>>>> linter which warns when a step is too long
 end
 
 Given(/^a linter for test steps with too many characters has been registered$/) do
