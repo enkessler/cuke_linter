@@ -12,6 +12,7 @@ require 'cuke_linter/linters/single_test_background_linter'
 require 'cuke_linter/linters/step_with_end_period_linter'
 require 'cuke_linter/linters/step_with_too_many_characters_linter'
 require 'cuke_linter/linters/test_with_too_many_steps_linter'
+require 'cuke_linter/linters/test_step_with_too_many_characters_linter'
 
 
 # The top level namespace used by this gem
