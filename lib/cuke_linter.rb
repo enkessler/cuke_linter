@@ -39,6 +39,7 @@ module CukeLinter
     end
 
     config = config || YAML.load_file(config_file_path)
+    
     config.each_pair do |linter_name, options|
       unregister_linter(linter_name) if options.key?('Enabled') && !options['Enabled']
 
