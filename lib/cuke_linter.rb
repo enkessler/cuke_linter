@@ -5,6 +5,7 @@ require 'cuke_linter/formatters/pretty_formatter'
 require 'cuke_linter/linters/linter'
 require 'cuke_linter/linters/background_does_more_than_setup_linter'
 require 'cuke_linter/linters/example_without_name_linter'
+require 'cuke_linter/linters/feature_without_description_linter'
 require 'cuke_linter/linters/feature_without_scenarios_linter'
 require 'cuke_linter/linters/outline_with_single_example_row_linter'
 require 'cuke_linter/linters/single_test_background_linter'
@@ -18,11 +19,13 @@ module CukeLinter
 
   @original_linters = { 'BackgroundDoesMoreThanSetupLinter' => BackgroundDoesMoreThanSetupLinter.new,
                         'ExampleWithoutNameLinter'          => ExampleWithoutNameLinter.new,
+                        'FeatureWithoutDescriptionLinter'   => FeatureWithoutDescriptionLinter.new,
                         'FeatureWithoutScenariosLinter'     => FeatureWithoutScenariosLinter.new,
                         'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
                         'SingleTestBackgroundLinter'        => SingleTestBackgroundLinter.new,
                         'StepWithEndPeriodLinter'           => StepWithEndPeriodLinter.new,
                         'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
+
 
   # Configures linters based on the given options
   def self.load_configuration(config_file_path: nil, config: nil)

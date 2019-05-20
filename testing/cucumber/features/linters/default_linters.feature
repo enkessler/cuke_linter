@@ -10,11 +10,13 @@ Feature: Default Linters
     Then the following linters are registered by default
       | BackgroundDoesMoreThanSetupLinter |
       | ExampleWithoutNameLinter          |
+      | FeatureWithoutDescriptionLinter   |
       | FeatureWithoutScenariosLinter     |
       | OutlineWithSingleExampleRowLinter |
       | SingleTestBackgroundLinter        |
       | StepWithEndPeriodLinter           |
       | TestWithTooManyStepsLinter        |
+
 
   Scenario: Registering new linters
     Given no linters are currently registered
