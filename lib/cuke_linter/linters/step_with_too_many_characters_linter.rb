@@ -4,7 +4,7 @@ module CukeLinter
 
   class StepWithTooManyCharactersLinter < Linter
   
-    DEFAULT_STEP_LENGTH_THRESHOLD = 120
+    DEFAULT_STEP_LENGTH_THRESHOLD = 80
 
     # Changes the linting settings on the linter using the provided configuration
     def configure(options)
