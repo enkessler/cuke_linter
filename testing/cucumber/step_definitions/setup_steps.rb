@@ -55,7 +55,7 @@ Given(/^a linter for backgrounds that do more than setup$/) do
 end
 
 Given("a linter for test steps with too many characters") do
-  @linter = CukeLinter::TestStepWithTooManyCharactersLinter.new
+  @linter = CukeLinter::StepWithTooManyCharactersLinter.new
 end
 
 Given("a linter for test steps with too many characters") do
@@ -76,7 +76,7 @@ Given(/^a linter for test steps with too many characters has been registered$/) 
 end
 
 Given(/^a linter for test steps with too many characters has been registered$/) do
-  CukeLinter.register_linter(linter: CukeLinter::TestStepWithTooManyCharactersLinter.new, name: 'TestStepWithTooManyCharactersLinter')
+  CukeLinter.register_linter(linter: CukeLinter::StepWithTooManyCharactersLinter.new, name: 'StepWithTooManyCharactersLinter')
 end
 
 Given(/^the following configuration file(?: "([^"]*)")?:$/) do |file_name, text|

@@ -2,7 +2,7 @@ module CukeLinter
 
   # A linter that detects scenarios and outlines that have too many steps
 
-  class TestStepWithTooManyCharactersLinter < Linter
+  class StepWithTooManyCharactersLinter < Linter
   
     DEFAULT_STEP_LENGTH_THRESHOLD = 120
 
