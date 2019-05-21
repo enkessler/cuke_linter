@@ -2,6 +2,18 @@ require_relative '../../../../environments/rspec_env'
 
 RSpec.describe CukeLinter do
 
+
+  describe 'gem executable' do
+
+    it 'can be run directly' do
+      success = system('cuke_linter')
+
+      expect(success).to eq(true), "Command failed with exit code: #{$?}"
+    end
+
+  end
+
+
   let(:test_model_tree) { CukeLinter::ModelFactory.generate_lintable_model }
   let(:test_linters) { [CukeLinter::LinterFactory.generate_fake_linter] }
   let(:test_formatters) { [[CukeLinter::FormatterFactory.generate_fake_formatter, "#{CukeLinter::FileHelper::create_directory}/junk_output_file.txt"]] }
