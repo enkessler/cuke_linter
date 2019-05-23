@@ -103,14 +103,18 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
     context 'when configured' do
       let(:character_threshold) { 10 }
       let(:configuration) { {'StepLengthThreshold' => character_threshold} }
-      let(:configured_model) do
-        subject.configure(configuration)
+
+      subject { linter = CukeLinter::StepWithTooManyCharactersLinter.new
+                linter.configure(configuration)
+                linter }
+
+      let(:test_model) do
         step = 'x' * (character_threshold + 1)
         CukeLinter::ModelFactory.generate_step_model(source_text: "* #{step}")
       end
       
       it 'uses the maximum character length provided by configuration' do
-        result = subject.lint(configured_model)
+        result = subject.lint(test_model)
         
         expect( result[:problem]).to match(/^Step is too long. \d+ characters found \(max 10\)/)
       end
