@@ -117,7 +117,7 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
       
     end
     
-    context 'a non-test model' do
+    context 'a non-step model' do
 
       let(:test_model) { CukeModeler::Model.new }
 
