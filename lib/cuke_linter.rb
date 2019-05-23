@@ -10,6 +10,7 @@ require 'cuke_linter/linters/feature_without_scenarios_linter'
 require 'cuke_linter/linters/outline_with_single_example_row_linter'
 require 'cuke_linter/linters/single_test_background_linter'
 require 'cuke_linter/linters/step_with_end_period_linter'
+require 'cuke_linter/linters/step_with_too_many_characters_linter'
 require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 
@@ -24,8 +25,9 @@ module CukeLinter
                         'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
                         'SingleTestBackgroundLinter'        => SingleTestBackgroundLinter.new,
                         'StepWithEndPeriodLinter'           => StepWithEndPeriodLinter.new,
+                        'StepWithTooManyCharactersLinter'   => StepWithTooManyCharactersLinter.new,
                         'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
-
+                        
 
   # Configures linters based on the given options
   def self.load_configuration(config_file_path: nil, config: nil)
@@ -37,7 +39,7 @@ module CukeLinter
     end
 
     config = config || YAML.load_file(config_file_path)
-
+    
     config.each_pair do |linter_name, options|
       unregister_linter(linter_name) if options.key?('Enabled') && !options['Enabled']
 

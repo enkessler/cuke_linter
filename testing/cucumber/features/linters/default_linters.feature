@@ -15,7 +15,9 @@ Feature: Default Linters
       | OutlineWithSingleExampleRowLinter |
       | SingleTestBackgroundLinter        |
       | StepWithEndPeriodLinter           |
+      | StepWithTooManyCharactersLinter   |
       | TestWithTooManyStepsLinter        |
+
 
 
   Scenario: Registering new linters
