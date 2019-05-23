@@ -27,8 +27,8 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
   describe 'linting' do
   
     let(:default_character_threshold) { 80 }
-  
-    context 'because the step is too long' do
+
+    context 'when the step is too long' do
 
       let(:step_too_long_model) do
         step = 'x' * (default_character_threshold + 1)
@@ -47,6 +47,16 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
         expect(result[:location]).to eq('path_to_file:4')
       end
 
+      it 'includes the number of characters found in the problem record' do
+        character_count = step_too_long_model.text.length
+        result          = subject.lint(step_too_long_model)
+        expect(result[:problem]).to eq("Step is too long. #{character_count} characters found (max 80)")
+
+        step_too_long_model.text += 'x'
+        result                   = subject.lint(step_too_long_model)
+        expect(result[:problem]).to eq("Step is too long. #{character_count + 1} characters found (max 80)")
+      end
+
     end
     
     context 'when the step is the maximum length' do
@@ -62,11 +72,43 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
       end
       
     end
-  
+
+    context 'when the step is below the maximum length' do
+
+      let(:step_below_length_model) do
+        step = 'x' * (default_character_threshold - 1)
+        CukeLinter::ModelFactory.generate_step_model(source_text: "* #{step}")
+      end
+
+      it 'does not record a problem' do
+        result = subject.lint(step_below_length_model)
+        expect(result).to eq(nil)
+      end
+
+    end
+
+    context 'when the step has no text' do
+
+      let(:step_with_nil_text_model) do
+        model      = CukeLinter::ModelFactory.generate_step_model
+        model.text = nil
+
+        model
+      end
+
+      it 'does not record a problem' do
+        result = subject.lint(step_with_nil_text_model)
+        expect(result).to eq(nil)
+      end
+
+    end
+
   end
 
   describe 'configuration' do
-    
+
+    context 'with no configuration' do
+
     let(:default_character_threshold) { 80 }
     
     context 'because configuration never happened' do
@@ -97,6 +139,8 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
         
         expect( result[:problem]).to match(/^Step is too long. \d+ characters found \(max 80\)/)
       end
+
+    end
 
     end
 
