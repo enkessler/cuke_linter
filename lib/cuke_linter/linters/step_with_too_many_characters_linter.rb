@@ -3,7 +3,8 @@ module CukeLinter
   # A linter that detects steps that are too long
 
   class StepWithTooManyCharactersLinter < Linter
-  
+
+    # The threshold used if not otherwise configured
     DEFAULT_STEP_LENGTH_THRESHOLD = 80
 
     # Changes the linting settings on the linter using the provided configuration
