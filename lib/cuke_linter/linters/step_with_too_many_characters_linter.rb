@@ -25,6 +25,10 @@ module CukeLinter
       "Step is too long. #{@linted_step_length} characters found (max #{step_length_threshold})"
     end
 
+
+    private
+
+
     # The maximum length allowable of a step
     def step_length_threshold
       @step_length_threshold || DEFAULT_STEP_LENGTH_THRESHOLD

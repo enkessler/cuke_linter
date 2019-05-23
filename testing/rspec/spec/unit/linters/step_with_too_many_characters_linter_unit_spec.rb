@@ -77,8 +77,6 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
       end
       
       it 'defaults to a maximum of 80 characters' do
-        expect(subject.step_length_threshold).to eq default_character_threshold
-        
         result = subject.lint(default_model)
         
         expect( result[:problem]).to match(/^Step is too long. \d+ characters found \(max 80\)/)
@@ -95,8 +93,6 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
       end
 
       it 'defaults to a maximum of 80 characters' do
-        expect(subject.step_length_threshold).to eq default_character_threshold
-        
         result = subject.lint(configured_model)
         
         expect( result[:problem]).to match(/^Step is too long. \d+ characters found \(max 80\)/)
@@ -117,7 +113,6 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
         result = subject.lint(configured_model)
         
         expect( result[:problem]).to match(/^Step is too long. \d+ characters found \(max 10\)/)
-        expect(subject.step_length_threshold).to eq(character_threshold)
       end
       
     end
