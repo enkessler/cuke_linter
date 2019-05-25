@@ -3,9 +3,14 @@ require 'cuke_modeler'
 require "cuke_linter/version"
 require 'cuke_linter/formatters/pretty_formatter'
 require 'cuke_linter/linters/linter'
+require 'cuke_linter/linters/background_does_more_than_setup_linter'
 require 'cuke_linter/linters/example_without_name_linter'
+require 'cuke_linter/linters/feature_without_description_linter'
 require 'cuke_linter/linters/feature_without_scenarios_linter'
 require 'cuke_linter/linters/outline_with_single_example_row_linter'
+require 'cuke_linter/linters/single_test_background_linter'
+require 'cuke_linter/linters/step_with_end_period_linter'
+require 'cuke_linter/linters/step_with_too_many_characters_linter'
 require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 
@@ -13,10 +18,16 @@ require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 module CukeLinter
 
-  @original_linters = { 'FeatureWithoutScenariosLinter'     => FeatureWithoutScenariosLinter.new,
+  @original_linters = { 'BackgroundDoesMoreThanSetupLinter' => BackgroundDoesMoreThanSetupLinter.new,
                         'ExampleWithoutNameLinter'          => ExampleWithoutNameLinter.new,
+                        'FeatureWithoutDescriptionLinter'   => FeatureWithoutDescriptionLinter.new,
+                        'FeatureWithoutScenariosLinter'     => FeatureWithoutScenariosLinter.new,
                         'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
+                        'SingleTestBackgroundLinter'        => SingleTestBackgroundLinter.new,
+                        'StepWithEndPeriodLinter'           => StepWithEndPeriodLinter.new,
+                        'StepWithTooManyCharactersLinter'   => StepWithTooManyCharactersLinter.new,
                         'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
+                        
 
   # Configures linters based on the given options
   def self.load_configuration(config_file_path: nil, config: nil)
@@ -28,7 +39,7 @@ module CukeLinter
     end
 
     config = config || YAML.load_file(config_file_path)
-
+    
     config.each_pair do |linter_name, options|
       unregister_linter(linter_name) if options.key?('Enabled') && !options['Enabled']
 

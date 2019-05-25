@@ -13,4 +13,7 @@
 # JetBrains IDE metadata folders
 /.idea
 
+# Mac metadata directories
+.DS_Store
+
 Gemfile.lock

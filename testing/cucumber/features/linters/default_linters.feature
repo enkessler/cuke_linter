@@ -8,10 +8,17 @@ Feature: Default Linters
   Scenario: Using the default linters
     Given no other linters have been registered or unregistered
     Then the following linters are registered by default
+      | BackgroundDoesMoreThanSetupLinter |
       | ExampleWithoutNameLinter          |
+      | FeatureWithoutDescriptionLinter   |
       | FeatureWithoutScenariosLinter     |
       | OutlineWithSingleExampleRowLinter |
+      | SingleTestBackgroundLinter        |
+      | StepWithEndPeriodLinter           |
+      | StepWithTooManyCharactersLinter   |
       | TestWithTooManyStepsLinter        |
+
+
 
   Scenario: Registering new linters
     Given no linters are currently registered
