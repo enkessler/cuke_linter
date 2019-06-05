@@ -1,5 +1,7 @@
 Feature: Pretty formatter
 
+  The 'pretty' formatter is a basic text formatter that organizes problems into something simple and human readable.
+
   Scenario: Formatting linter data
     Given the following linter data:
       | linter name     | problem             | location             |
