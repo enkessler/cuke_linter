@@ -5,7 +5,7 @@ RSpec.describe CukeLinter do
   let(:test_model_tree) { CukeLinter::ModelFactory.generate_lintable_model }
   let(:test_linters) { [CukeLinter::LinterFactory.generate_fake_linter] }
   let(:test_formatters) { [[CukeLinter::FormatterFactory.generate_fake_formatter, "#{CukeLinter::FileHelper::create_directory}/junk_output_file.txt"]] }
-  let(:linting_options) { { model_tree: test_model_tree, linters: test_linters, formatters: test_formatters } }
+  let(:linting_options) { { model_trees: [test_model_tree], linters: test_linters, formatters: test_formatters } }
 
 
   it 'returns the un-formatted linting data when linting' do
@@ -47,28 +47,92 @@ RSpec.describe CukeLinter do
     expect { subject.lint(linting_options) }.to output("Formatter1: FakeLinter problem: path_to_file:1\n").to_stdout
   end
 
-  it 'lints every model in the model tree' do
-    child_model                  = CukeLinter::ModelFactory.generate_lintable_model(source_line: 3)
-    parent_model                 = CukeLinter::ModelFactory.generate_lintable_model(source_line: 5, children: [child_model])
-    linting_options[:model_tree] = parent_model
+  context 'with only model trees' do
 
-    results = subject.lint(linting_options)
+    before(:each) do
+      child_model      = CukeLinter::ModelFactory.generate_lintable_model(source_line: 3)
+      parent_model     = CukeLinter::ModelFactory.generate_lintable_model(source_line: 5, children: [child_model])
+      multi_node_tree  = parent_model
+      single_node_tree = CukeLinter::ModelFactory.generate_lintable_model(source_line: 7)
 
-    expect(results).to match_array([{ linter: 'FakeLinter', location: 'path_to_file:3', problem: 'FakeLinter problem' },
-                                    { linter: 'FakeLinter', location: 'path_to_file:5', problem: 'FakeLinter problem' }])
-  end
-
-  it 'models the current directory if a model tree is not provided' do
-    test_dir = CukeLinter::FileHelper::create_directory
-    File.write("#{test_dir}/test_feature.feature", "Feature:")
-    linting_options.delete(:model_tree)
-
-    Dir.chdir(test_dir) do
-      @results = subject.lint(linting_options)
+      linting_options[:model_trees] = [single_node_tree, multi_node_tree]
+      linting_options.delete(:file_paths)
     end
 
-    # There should be 3 models to lint: the directory, the file, and the feature
-    expect(@results.count).to eq(3)
+    it 'lints every model in each model tree' do
+      results = subject.lint(linting_options)
+
+      expect(results).to match_array([{ linter: 'FakeLinter', location: 'path_to_file:3', problem: 'FakeLinter problem' },
+                                      { linter: 'FakeLinter', location: 'path_to_file:5', problem: 'FakeLinter problem' },
+                                      { linter: 'FakeLinter', location: 'path_to_file:7', problem: 'FakeLinter problem' }])
+    end
+
+  end
+
+  context 'with only file paths' do
+
+    before(:each) do
+      @a_feature_file    = CukeLinter::FileHelper::create_file(text: "\nFeature:", extension: '.feature')
+      a_non_feature_file = CukeLinter::FileHelper::create_file(text: 'Some text', extension: '.foo')
+      @a_directory       = CukeLinter::FileHelper::create_directory
+      File.write("#{@a_directory}/test_feature.feature", "Feature:")
+
+      linting_options[:file_paths] = [@a_feature_file, a_non_feature_file, @a_directory]
+      linting_options.delete(:model_trees)
+    end
+
+    it 'lints every model in each path' do
+      results = subject.lint(linting_options)
+
+      expect(results).to match_array([{ linter: 'FakeLinter', location: @a_directory, problem: 'FakeLinter problem' },
+                                      { linter: 'FakeLinter', location: "#{@a_directory}/test_feature.feature", problem: 'FakeLinter problem' },
+                                      { linter: 'FakeLinter', location: "#{@a_directory}/test_feature.feature:1", problem: 'FakeLinter problem' },
+                                      { linter: 'FakeLinter', location: @a_feature_file, problem: 'FakeLinter problem' },
+                                      { linter: 'FakeLinter', location: "#{@a_feature_file}:2", problem: 'FakeLinter problem' }])
+    end
+
+  end
+
+  context 'with both model trees and file paths' do
+
+    before(:each) do
+      a_model         = CukeLinter::ModelFactory.generate_lintable_model(source_line: 3)
+      @a_feature_file = CukeLinter::FileHelper::create_file(text: 'Feature:', extension: '.feature')
+
+      linting_options[:model_trees] = [a_model]
+      linting_options[:file_paths]  = [@a_feature_file]
+    end
+
+
+    it 'lints every model in each model tree and file path' do
+      results = subject.lint(linting_options)
+
+      expect(results).to match_array([{ linter: 'FakeLinter', location: 'path_to_file:3', problem: 'FakeLinter problem' },
+                                      { linter: 'FakeLinter', location: @a_feature_file, problem: 'FakeLinter problem' },
+                                      { linter: 'FakeLinter', location: "#{@a_feature_file}:1", problem: 'FakeLinter problem' }])
+    end
+
+  end
+
+  context 'with neither model trees or file paths' do
+
+    before(:each) do
+      linting_options.delete(:model_trees)
+      linting_options.delete(:file_paths)
+    end
+
+    it 'models the current directory' do
+      test_dir = CukeLinter::FileHelper::create_directory
+      File.write("#{test_dir}/test_feature.feature", "Feature:")
+
+      Dir.chdir(test_dir) do
+        @results = subject.lint(linting_options)
+      end
+
+      # There should be 3 models to lint: the directory, the feature file, and the feature
+      expect(@results.count).to eq(3)
+    end
+
   end
 
   it 'uses evey linter provided' do

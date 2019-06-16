@@ -54,20 +54,20 @@ require 'cuke_linter'
 CukeLinter.lint
 ```
 
-The linting will happen against a tree of `CukeModeler` models that is generated based on the current directory. You can generate your own model tree and use that instead, if desired.
+The linting will happen against a tree of `CukeModeler` models that is generated based on the current directory. You can generate your own model trees and use them instead, if desired, or even provide specific file paths that will be modeled and linted.
 
-Custom linters can be any object that responds to `#lint` and returns a detected issue (or `nil`) in the format of
+`cuke_linter` comes with a set of pre-made linters and will use them by default but custom linters can be used instead. Custom linters can be any object that responds to `#lint` and returns a detected issue (or `nil`) in the format of
 
 ```
 { problem: 'some linting issue',
   location: 'path/to/file:line_number' }
 ```
 
-Note that a linter will receive, in turn, *every model* in the model tree in order for it to have the chance to detect problems with it. Checking the model's class before attempting to lint it is recommended.
+Note that a linter will receive, in turn, *every model* in a model tree in order for it to have the chance to detect problems with it. Checking the model's class before attempting to lint it is recommended.
 
 **In order to simplify the process of creating custom linters a base class is provided (see [documentation](#documentation)).**
 
-Custom formatters can be any object that responds to `#format` and takes input data in the following format:
+`cuke_linter` comes with a set of pre-made formatters and will use them by default but custom formatters can be used instead. Custom formatters can be any object that responds to `#format` and takes input data in the following format:
 
 ```
 [
@@ -122,13 +122,14 @@ class MyCustomFormatter
 
 end
 
-linter          = MyCustomLinter.new
-formatter       = MyCustomFormatter.new
-output_path     = "#{__dir__}/my_report.txt"
-model_tree_root = CukeModeler::Directory.new(Dir.pwd)
+linter               = MyCustomLinter.new
+formatter            = MyCustomFormatter.new
+output_path          = "#{__dir__}/my_report.txt"
+model_tree_root      = CukeModeler::Directory.new(Dir.pwd)
+additional_file_path = 'path/to/some.feature'
 
 # Providing the formatter twice so that it also is printed to the console
-CukeLinter.lint(linters: [linter], formatters: [[formatter], [formatter, output_path]], model_tree: model_tree_root)
+CukeLinter.lint(linters: [linter], formatters: [[formatter], [formatter, output_path]], model_trees: [model_tree_root], file_paths: [additional_file_path])
 ```
 
 ### Configuration

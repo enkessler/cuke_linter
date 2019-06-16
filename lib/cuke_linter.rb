@@ -27,7 +27,7 @@ module CukeLinter
                         'StepWithEndPeriodLinter'           => StepWithEndPeriodLinter.new,
                         'StepWithTooManyCharactersLinter'   => StepWithTooManyCharactersLinter.new,
                         'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
-                        
+
 
   # Configures linters based on the given options
   def self.load_configuration(config_file_path: nil, config: nil)
@@ -72,24 +72,36 @@ module CukeLinter
     self.registered_linters.clear
   end
 
-  # Lints the tree of model objects rooted at the given model using the given linting objects and formatting the results with the given formatters and their respective output locations
-  def self.lint(model_tree: CukeModeler::Directory.new(Dir.pwd), linters: self.registered_linters.values, formatters: [[CukeLinter::PrettyFormatter.new]])
-    # puts "model tree: #{model_tree}"
-    # puts "linters: #{linters}"
-    # puts "formatters: #{formatters}"
+  # Lints the given model trees and file paths using the given linting objects and formatting the results with the given formatters and their respective output locations
+  def self.lint(file_paths: [], model_trees: [], linters: self.registered_linters.values, formatters: [[CukeLinter::PrettyFormatter.new]])
+
+    model_trees      = [CukeModeler::Directory.new(Dir.pwd)] if model_trees.empty? && file_paths.empty?
+    file_path_models = file_paths.collect do |file_path|
+      case
+        when File.directory?(file_path)
+          CukeModeler::Directory.new(file_path)
+        when File.file?(file_path) && File.extname(file_path) == '.feature'
+          CukeModeler::FeatureFile.new(file_path)
+        else
+          # Non-feature files are not modeled
+      end
+    end.compact # Compacting in order to get rid of any `nil` values left over from non-feature files
 
     linting_data = []
+    model_sets   = model_trees + file_path_models
 
-    model_tree.each_model do |model|
-      linters.each do |linter|
-        # TODO: have linters lint only certain types of models
-        #         linting_data.concat(linter.lint(model)) if relevant_model?(linter, model)
+    model_sets.each do |model_tree|
+      model_tree.each_model do |model|
+        linters.each do |linter|
+          # TODO: have linters lint only certain types of models
+          #         linting_data.concat(linter.lint(model)) if relevant_model?(linter, model)
 
-        result = linter.lint(model)
+          result = linter.lint(model)
 
-        if result
-          result[:linter] = linter.name
-          linting_data << result
+          if result
+            result[:linter] = linter.name
+            linting_data << result
+          end
         end
       end
     end
