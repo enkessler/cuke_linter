@@ -1,7 +1,8 @@
 When(/^the following command is executed:$/) do |command|
-  command = "bundle exec ruby #{@executable_directory}/#{command}"
+  command = "bundle exec ruby #{@executable_directory || "#{PROJECT_ROOT}/exe"}/#{command}"
+  command.gsub!('<path_to>', @root_test_directory)
 
-  @output = `#{command}`
+  @results = @output = `#{command}`
 end
 
 When(/^it is formatted by the "([^"]*)" formatter$/) do |linter_name|

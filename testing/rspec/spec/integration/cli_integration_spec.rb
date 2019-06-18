@@ -15,6 +15,13 @@ RSpec.describe 'the Command Line Interface' do
                   end
 
                   { std_out: std_out, std_err: std_err, status: status } }
+  let(:expected_help_text) { ['Usage: cuke_linter [options]',
+                              '    -p, --path PATH      The file path that should be linted. Can be a file or directory.',
+                              '                         This option can be specified multiple times in order to lint',
+                              '                         multiple, unconnected locations.',
+                              '    -h, --help           Display the help that you are reading now.',
+                              '    -v, --version        Display the version of the gem being used.',
+                              ''].join("\n") }
 
 
   it 'can run cleanly by default' do
@@ -24,16 +31,71 @@ RSpec.describe 'the Command Line Interface' do
 
   describe 'option flags' do
 
+    context 'with a path flag' do
+      ['-p', '--path'].each do |path_flag|
+
+        let(:flag) { path_flag }
+
+        context 'with path arguments' do
+          let(:test_directory) { CukeLinter::FileHelper.create_directory }
+          let(:file_1) { CukeLinter::FileHelper.create_file(directory: test_directory,
+                                                            name:      'some',
+                                                            extension: '.feature',
+                                                            text:      'Feature:
+                                                                          Scenario: A scenario
+                                                                            * a step') }
+          let(:file_2) { CukeLinter::FileHelper.create_file(directory: test_directory,
+                                                            name:      'a_directory/with_a',
+                                                            extension: '.feature',
+                                                            text:      'Feature:
+                                                                          Scenario: A scenario
+                                                                            * a step') }
+          let(:file_1_path) { file_1 }
+          let(:file_2_directory) { File.dirname(file_2) }
+          let(:command) { "bundle exec ruby ./#{executable_name} #{flag} #{file_1_path} #{flag} #{file_2_directory}" }
+
+
+          it "lints that locations specified by '#{path_flag}'" do
+            expect(results[:std_out]).to eq(['FeatureWithoutDescriptionLinter',
+                                             '  Feature has no description',
+                                             '    <path_to>/a_directory/with_a.feature:1',
+                                             '    <path_to>/some.feature:1',
+                                             '',
+                                             '2 issues found',
+                                             ''].join("\n").gsub('<path_to>', test_directory))
+          end
+
+        end
+
+        context 'without path arguments' do
+
+          let(:command) { "bundle exec ruby ./#{executable_name} #{flag}" }
+
+
+          it 'complains about the missing argument' do
+            expect(results[:std_out]).to include("missing argument: #{flag}")
+          end
+
+          it 'displays the help text' do
+            expect(results[:std_out]).to include(expected_help_text)
+          end
+
+          it 'exits with an error' do
+            expect(results[:status].exitstatus).to eq(1)
+          end
+
+        end
+
+      end
+    end
+
     context 'with a help flag' do
       ['-h', '--help'].each do |help_flag|
 
         let(:flag) { help_flag }
 
         it "'#{help_flag}' displays the help text" do
-          expect(results[:std_out]).to eq(['Usage: cuke_linter [options]',
-                                           '    -h, --help           Display the help that you are reading now.',
-                                           '    -v, --version        Display the version of the gem being used.',
-                                           ''].join("\n"))
+          expect(results[:std_out]).to eq(expected_help_text)
         end
 
         it 'exits cleanly' do
@@ -68,9 +130,7 @@ RSpec.describe 'the Command Line Interface' do
       end
 
       it 'displays the help text' do
-        expect(results[:std_out]).to include(['Usage: cuke_linter [options]',
-                                              '    -h, --help           Display the help that you are reading now.',
-                                              '    -v, --version        Display the version of the gem being used.'].join("\n"))
+        expect(results[:std_out]).to include(expected_help_text)
       end
 
       it 'exits with an error' do

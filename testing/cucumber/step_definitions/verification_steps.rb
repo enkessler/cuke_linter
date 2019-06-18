@@ -3,7 +3,9 @@ Then(/^a linting report will be made for all features$/) do
 end
 
 Then(/^the resulting output is the following:$/) do |text|
-  expect(@results).to eq(text)
+  text.gsub!('<path_to>', @root_test_directory)
+
+  expect(@results.chomp).to eq(text)
 end
 
 Then(/^an error is reported$/) do |table|

@@ -77,6 +77,7 @@ module CukeLinter
 
     model_trees      = [CukeModeler::Directory.new(Dir.pwd)] if model_trees.empty? && file_paths.empty?
     file_path_models = file_paths.collect do |file_path|
+      # TODO: raise exception unless path exists
       case
         when File.directory?(file_path)
           CukeModeler::Directory.new(file_path)
