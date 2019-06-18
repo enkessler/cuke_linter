@@ -25,3 +25,16 @@ end
 Then(/^the linter "([^"]*)" is no longer registered$/) do |linter_name|
   expect(CukeLinter.registered_linters).to_not have_key(linter_name)
 end
+
+Then(/^the following help is displayed:$/) do |text|
+  expect(@output.chomp).to eq(text)
+end
+
+Then(/^the version of the tool is displayed:$/) do |text|
+  major_number, minor_number, patch_number = CukeLinter::VERSION.split('.')
+  text.sub!('<major>', major_number)
+  text.sub!('<minor>', minor_number)
+  text.sub!('<patch>', patch_number)
+
+  expect(@output.chomp).to eq(text)
+end
