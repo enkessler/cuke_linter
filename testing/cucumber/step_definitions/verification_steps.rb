@@ -8,6 +8,12 @@ Then(/^the resulting output is the following:$/) do |text|
   expect(@results.chomp).to eq(text)
 end
 
+Then(/^the resulting output will include the following:$/) do |text|
+  text.gsub!('<path_to>', @root_test_directory)
+
+  expect(@results.chomp).to include(text)
+end
+
 Then(/^an error is reported$/) do |table|
   table.hashes.each do |error_record|
     expect(@results).to include({ linter:   error_record['linter'],

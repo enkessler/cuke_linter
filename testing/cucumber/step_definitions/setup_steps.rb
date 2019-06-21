@@ -118,7 +118,7 @@ Given(/^the following custom linter class:$/) do |code|
   eval(code)
 end
 
-Given(/^the following feature file "([^"]*)":$/) do |file_path, text|
+Given(/^the following(?: feature)? file "([^"]*)":$/) do |file_path, text|
   path, extension = file_path.split('.')
 
   @created_files ||= []

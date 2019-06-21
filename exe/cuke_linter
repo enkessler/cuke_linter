@@ -3,18 +3,27 @@
 require "cuke_linter"
 require 'optparse'
 
-params         = {}
-params[:paths] = []
+params            = {}
+params[:paths]    = []
+params[:requires] = []
 
 parser = OptionParser.new do |options|
 
-  options.set_summary_width(20)
+  options.set_summary_width(30)
 
   options.on('-p', '--path PATH', String,
              'The file path that should be linted. Can be a file or directory.',
              'This option can be specified multiple times in order to lint',
              'multiple, unconnected locations.') do |path|
     params[:paths] << path
+  end
+
+  options.on('-r', '--require FILEPATH', String,
+             'A file that will be required before further processing. Likely',
+             'needed when using custom linters or formatters in order to ensure',
+             'that the specified classes have been read into memory. This option',
+             'can be specified multiple times in order to load more than one file.') do |format|
+    params[:requires] << format
   end
 
   options.on('-h', '--help', 'Display the help that you are reading now.') do
@@ -38,7 +47,12 @@ rescue OptionParser::InvalidOption, OptionParser::MissingArgument => e
   exit(1)
 end
 
-file_paths = params[:paths]
+file_paths    = params[:paths]
+require_files = params[:requires]
+
+require_files.each do |file|
+  require file
+end
 
 options              = {}
 options[:file_paths] = file_paths
