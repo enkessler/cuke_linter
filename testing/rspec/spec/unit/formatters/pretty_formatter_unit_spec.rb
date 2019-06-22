@@ -50,7 +50,29 @@ RSpec.describe CukeLinter::PrettyFormatter do
                            '3 issues found'].join("\n"))
   end
 
-  it 'orders violations by line number' do
+  it 'orders violations within the same category by file path' do
+    linting_data = [{ linter:   'SomeLinter',
+                      problem:  'Some problem',
+                      location: 'path/to/the_file:1' },
+                    { linter:   'SomeLinter',
+                      problem:  'Some problem',
+                      location: 'path/to/the_file:3' },
+                    { linter:   'SomeLinter',
+                      problem:  'Some problem',
+                      location: 'path/to/a_different_file:2' }]
+
+    results = subject.format(linting_data)
+
+    expect(results).to eq(['SomeLinter',
+                           '  Some problem',
+                           '    path/to/a_different_file:2',
+                           '    path/to/the_file:1',
+                           '    path/to/the_file:3',
+                           '',
+                           '3 issues found'].join("\n"))
+  end
+
+  it 'orders violations in the same file by line number' do
     linting_data = [{ linter:   'SomeLinter',
                       problem:  'Some problem',
                       location: 'path/to/the_file:2' },
@@ -59,7 +81,10 @@ RSpec.describe CukeLinter::PrettyFormatter do
                       location: 'path/to/the_file:3' },
                     { linter:   'SomeLinter',
                       problem:  'Some problem',
-                      location: 'path/to/the_file:3' },
+                      location: 'path/to/the_file:11' }, # larger number that is alphabetically lower
+                    { linter:   'SomeLinter',
+                      problem:  'Some problem',
+                      location: 'path/to/the_file:3' }, # duplicate number
                     { linter:   'SomeLinter',
                       problem:  'Some problem',
                       location: 'path/to/the_file:1' }]
@@ -72,8 +97,9 @@ RSpec.describe CukeLinter::PrettyFormatter do
                            '    path/to/the_file:2',
                            '    path/to/the_file:3',
                            '    path/to/the_file:3',
+                           '    path/to/the_file:11',
                            '',
-                           '4 issues found'].join("\n"))
+                           '5 issues found'].join("\n"))
   end
 
 end
