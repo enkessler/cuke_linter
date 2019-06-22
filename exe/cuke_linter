@@ -3,9 +3,10 @@
 require "cuke_linter"
 require 'optparse'
 
-params            = {}
-params[:paths]    = []
-params[:requires] = []
+params              = {}
+params[:paths]      = []
+params[:formatters] = []
+params[:requires]   = []
 
 parser = OptionParser.new do |options|
 
@@ -16,6 +17,15 @@ parser = OptionParser.new do |options|
              'This option can be specified multiple times in order to lint',
              'multiple, unconnected locations.') do |path|
     params[:paths] << path
+  end
+
+  options.on('-f', '--formatter FORMATTER', String,
+             'The formatter used for generating linting output. This option',
+             'can be specified multiple times in order to use more than one',
+             'formatter. Formatters must be specified using their fully',
+             'qualified class name (e.g CukeLinter::PrettyFormatter). Uses',
+             'the default formatter if none are specified.') do |format|
+    params[:formatters] << format
   end
 
   options.on('-r', '--require FILEPATH', String,
@@ -47,14 +57,18 @@ rescue OptionParser::InvalidOption, OptionParser::MissingArgument => e
   exit(1)
 end
 
-file_paths    = params[:paths]
+
 require_files = params[:requires]
 
 require_files.each do |file|
   require file
 end
 
+file_paths = params[:paths]
+formatters = params[:formatters].map { |formatter| [Kernel.const_get(formatter).new] }
+
 options              = {}
+options[:formatters] = formatters unless formatters.empty?
 options[:file_paths] = file_paths
 
 CukeLinter.lint(options)

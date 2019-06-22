@@ -5,7 +5,7 @@ end
 Then(/^the resulting output is the following:$/) do |text|
   text.gsub!('<path_to>', @root_test_directory)
 
-  expect(@results.chomp).to eq(text)
+  expect(@results.strip).to eq(text)
 end
 
 Then(/^the resulting output will include the following:$/) do |text|

@@ -19,6 +19,11 @@ RSpec.describe 'the Command Line Interface' do
                               '    -p, --path PATH                The file path that should be linted. Can be a file or directory.',
                               '                                   This option can be specified multiple times in order to lint',
                               '                                   multiple, unconnected locations.',
+                              '    -f, --formatter FORMATTER      The formatter used for generating linting output. This option',
+                              '                                   can be specified multiple times in order to use more than one',
+                              '                                   formatter. Formatters must be specified using their fully',
+                              '                                   qualified class name (e.g CukeLinter::PrettyFormatter). Uses',
+                              '                                   the default formatter if none are specified.',
                               '    -r, --require FILEPATH         A file that will be required before further processing. Likely',
                               '                                   needed when using custom linters or formatters in order to ensure',
                               '                                   that the specified classes have been read into memory. This option',
@@ -72,6 +77,66 @@ RSpec.describe 'the Command Line Interface' do
         end
 
         context 'without path arguments' do
+
+          let(:command) { "bundle exec ruby ./#{executable_name} #{flag}" }
+
+
+          it 'complains about the missing argument' do
+            expect(results[:std_out]).to include("missing argument: #{flag}")
+          end
+
+          it 'displays the help text' do
+            expect(results[:std_out]).to include(expected_help_text)
+          end
+
+          it 'exits with an error' do
+            expect(results[:status].exitstatus).to eq(1)
+          end
+
+        end
+
+      end
+    end
+
+    context 'with a formatter flag' do
+      ['-f', '--formatter'].each do |formatter_flag|
+
+        let(:flag) { formatter_flag }
+
+        context 'with formatter arguments' do
+          let(:linted_file) { CukeLinter::FileHelper.create_file(name:      'some',
+                                                                 extension: '.feature',
+                                                                 text:      'Feature:
+                                                                               Scenario: A scenario
+                                                                                 * a step') }
+          let(:formatter_class) { 'AFakeFormatter' }
+          let(:formatter_class_in_module) { 'CukeLinter::AnotherFakeFormatter' }
+          let(:formatter_class_file) { CukeLinter::FileHelper.create_file(extension: '.rb',
+                                                                          text:      'class AFakeFormatter
+                                                                                        def format(data)
+                                                                                          data.reduce("#{self.class}: ") { |final, lint_error| final << "#{lint_error[:problem]}: #{lint_error[:location]}\n" }
+                                                                                        end
+                                                                                      end') }
+          let(:formatter_class_in_module_file) { CukeLinter::FileHelper.create_file(extension: '.rb',
+                                                                                    text:      'module CukeLinter
+                                                                                                  class AnotherFakeFormatter
+                                                                                                    def format(data)
+                                                                                                      data.reduce("#{self.class}: ") { |final, lint_error| final << "#{lint_error[:problem]}: #{lint_error[:location]}\n" }
+                                                                                                    end
+                                                                                                  end
+                                                                                                end') }
+          let(:command) { "bundle exec ruby ./#{executable_name} #{flag} #{formatter_class} #{flag} #{formatter_class_in_module} -p #{linted_file} -r #{formatter_class_file} -r #{formatter_class_in_module_file}" }
+
+
+          it "uses the formatters specified by ' #{formatter_flag}'" do
+            expect(results[:std_out]).to eq(['AFakeFormatter: Feature has no description: <path_to_file>:1',
+                                             'CukeLinter::AnotherFakeFormatter: Feature has no description: <path_to_file>:1',
+                                             ''].join("\n").gsub('<path_to_file>', linted_file))
+          end
+
+        end
+
+        context 'without formatter arguments' do
 
           let(:command) { "bundle exec ruby ./#{executable_name} #{flag}" }
 

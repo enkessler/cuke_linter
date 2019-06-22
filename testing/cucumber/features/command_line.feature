@@ -26,6 +26,11 @@ Feature: Using cuke_linter on the command line
           -p, --path PATH                The file path that should be linted. Can be a file or directory.
                                          This option can be specified multiple times in order to lint
                                          multiple, unconnected locations.
+          -f, --formatter FORMATTER      The formatter used for generating linting output. This option
+                                         can be specified multiple times in order to use more than one
+                                         formatter. Formatters must be specified using their fully
+                                         qualified class name (e.g CukeLinter::PrettyFormatter). Uses
+                                         the default formatter if none are specified.
           -r, --require FILEPATH         A file that will be required before further processing. Likely
                                          needed when using custom linters or formatters in order to ensure
                                          that the specified classes have been read into memory. This option
@@ -84,4 +89,29 @@ Feature: Using cuke_linter on the command line
     Then the resulting output will include the following:
       """
       I got loaded!
+      """
+
+  Scenario: Specifying a formatter to use
+
+  Note: The file containing the formatter class will have to be explicitly loaded if not using one of the built in formatters
+
+    Given the following feature file "some.feature":
+      """
+      Feature: This feature will have linted problems
+      """
+    And the following file "my_custom_formatter.rb":
+      """
+      class MyCustomFormatter
+        def format(data)
+          puts "Formatting done by #{self.class}"
+        end
+      end
+      """
+    When the following command is executed:
+      """
+      cuke_linter -p <path_to>/some.feature -f MyCustomFormatter -r <path_to>/my_custom_formatter.rb
+      """
+    Then the resulting output is the following:
+      """
+      Formatting done by MyCustomFormatter
       """
