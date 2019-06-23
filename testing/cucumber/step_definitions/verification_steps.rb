@@ -46,3 +46,15 @@ Then(/^the version of the tool is displayed:$/) do |text|
 
   expect(@output.chomp).to eq(text)
 end
+
+Then(/^the linting report will be output to "([^"]*)"$/) do |file_path|
+  file_path.gsub!('<path_to>', @root_test_directory)
+
+  expect(File.read(file_path)).to match(/\d+ issues found/)
+end
+
+And(/^the file "([^"]*)" contains:$/) do |file_path, text|
+  file_path.gsub!('<path_to>', @root_test_directory)
+
+  expect(File.read(file_path)).to eq(text)
+end

@@ -24,6 +24,10 @@ RSpec.describe 'the Command Line Interface' do
                               '                                   formatter. Formatters must be specified using their fully',
                               '                                   qualified class name (e.g CukeLinter::PrettyFormatter). Uses',
                               '                                   the default formatter if none are specified.',
+                              '    -o, --out OUT                  The file path to which linting results are output. Can be specified',
+                              '                                   multiple times. Specified files are matched to formatters in the',
+                              '                                   same order that the formatters are specified. Any formatter without',
+                              '                                   a corresponding file path will output to STDOUT instead.',
                               '    -r, --require FILEPATH         A file that will be required before further processing. Likely',
                               '                                   needed when using custom linters or formatters in order to ensure',
                               '                                   that the specified classes have been read into memory. This option',
@@ -128,7 +132,7 @@ RSpec.describe 'the Command Line Interface' do
           let(:command) { "bundle exec ruby ./#{executable_name} #{flag} #{formatter_class} #{flag} #{formatter_class_in_module} -p #{linted_file} -r #{formatter_class_file} -r #{formatter_class_in_module_file}" }
 
 
-          it "uses the formatters specified by ' #{formatter_flag}'" do
+          it "uses the formatters specified by '#{formatter_flag}'" do
             expect(results[:std_out]).to eq(['AFakeFormatter: Feature has no description: <path_to_file>:1',
                                              'CukeLinter::AnotherFakeFormatter: Feature has no description: <path_to_file>:1',
                                              ''].join("\n").gsub('<path_to_file>', linted_file))
@@ -137,6 +141,119 @@ RSpec.describe 'the Command Line Interface' do
         end
 
         context 'without formatter arguments' do
+
+          let(:command) { "bundle exec ruby ./#{executable_name} #{flag}" }
+
+
+          it 'complains about the missing argument' do
+            expect(results[:std_out]).to include("missing argument: #{flag}")
+          end
+
+          it 'displays the help text' do
+            expect(results[:std_out]).to include(expected_help_text)
+          end
+
+          it 'exits with an error' do
+            expect(results[:status].exitstatus).to eq(1)
+          end
+
+        end
+
+      end
+    end
+
+    context 'with an output flag' do
+      ['-o', '--out'].each do |output_flag|
+
+        let(:flag) { output_flag }
+
+        context 'with output arguments' do
+          let(:output_location) { "#{CukeLinter::FileHelper.create_directory}/output.txt" }
+          let(:other_output_location) { "#{CukeLinter::FileHelper.create_directory}/other_output.txt" }
+          let(:linted_file) { CukeLinter::FileHelper.create_file(name:      'some',
+                                                                 extension: '.feature',
+                                                                 text:      'Feature:
+                                                                               Scenario: A scenario
+                                                                                 * a step') }
+          let(:formatter_class_1) { 'AFakeFormatter' }
+          let(:formatter_class_2) { 'AnotherFakeFormatter' }
+          let(:formatter_class_file) { CukeLinter::FileHelper.create_file(extension: '.rb',
+                                                                          text:      'class AFakeFormatter
+                                                                                        def format(data)
+                                                                                          "Formatting done by #{self.class}"
+                                                                                        end
+                                                                                      end
+
+                                                                                      class AnotherFakeFormatter
+                                                                                        def format(data)
+                                                                                          "Formatting done by #{self.class}"
+                                                                                        end
+                                                                                      end') }
+          let(:command) { "bundle exec ruby ./#{executable_name} -f #{formatter_class_1} -f #{formatter_class_2} #{flag} #{output_location} #{flag} #{other_output_location} -p #{linted_file} -r #{formatter_class_file}" }
+
+
+          it 'matches output locations to formatters in the same order that they are specified' do
+            # Have to trigger the command
+            results
+
+            expect(File.read(output_location)).to eq('Formatting done by AFakeFormatter')
+            expect(File.read(other_output_location)).to eq('Formatting done by AnotherFakeFormatter')
+          end
+
+
+          context 'with unmatched output arguments' do
+            let(:command) { "bundle exec ruby ./#{executable_name} #{flag} #{output_location} -p #{linted_file}" }
+
+
+            it "outputs to the location specified by '#{output_flag}'" do
+              # Have to trigger the command
+              results
+
+              expect(File.read(output_location)).to eq(['FeatureWithoutDescriptionLinter',
+                                                        '  Feature has no description',
+                                                        '    <path_to_file>:1',
+                                                        '',
+                                                        '1 issues found'].join("\n").gsub('<path_to_file>', linted_file))
+            end
+
+            it 'does not output to STDOUT' do
+              expect(results[:std_out]).to eq('')
+            end
+
+            it 'uses the default formatter' do
+              # Have to trigger the command
+              results
+
+              expect(File.read(output_location)).to eq(['FeatureWithoutDescriptionLinter',
+                                                        '  Feature has no description',
+                                                        '    <path_to_file>:1',
+                                                        '',
+                                                        '1 issues found'].join("\n").gsub('<path_to_file>', linted_file))
+            end
+
+          end
+
+          context 'with unmatched formatter arguments' do
+            let(:command) { "bundle exec ruby ./#{executable_name} #{flag} #{output_location} -f #{formatter_class_1} -f #{formatter_class_2} -p #{linted_file} -r #{formatter_class_file}" }
+
+
+            it "outputs to the location specified by '#{output_flag}' for the matched formatters" do
+              # Have to trigger the command
+              results
+
+              expect(File.read(output_location)).to eq("Formatting done by #{formatter_class_1}")
+            end
+
+            it 'outputs to STDOUT for the unmatched formatters' do
+              expect(results[:std_out]).to eq("Formatting done by #{formatter_class_2}\n")
+            end
+
+          end
+
+        end
+
+
+        context 'without output arguments' do
 
           let(:command) { "bundle exec ruby ./#{executable_name} #{flag}" }
 

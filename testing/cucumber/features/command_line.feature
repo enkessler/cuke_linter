@@ -31,6 +31,10 @@ Feature: Using cuke_linter on the command line
                                          formatter. Formatters must be specified using their fully
                                          qualified class name (e.g CukeLinter::PrettyFormatter). Uses
                                          the default formatter if none are specified.
+          -o, --out OUT                  The file path to which linting results are output. Can be specified
+                                         multiple times. Specified files are matched to formatters in the
+                                         same order that the formatters are specified. Any formatter without
+                                         a corresponding file path will output to STDOUT instead.
           -r, --require FILEPATH         A file that will be required before further processing. Likely
                                          needed when using custom linters or formatters in order to ensure
                                          that the specified classes have been read into memory. This option
@@ -112,6 +116,49 @@ Feature: Using cuke_linter on the command line
       cuke_linter -p <path_to>/some.feature -f MyCustomFormatter -r <path_to>/my_custom_formatter.rb
       """
     Then the resulting output is the following:
+      """
+      Formatting done by MyCustomFormatter
+      """
+
+  Scenario: Redirecting output
+    Given the cuke_linter executable is available
+    When the following command is executed:
+      """
+      cuke_linter -o <path_to>/my_report.txt
+      """
+    Then the linting report will be output to "<path_to>/my_report.txt"
+
+  Scenario: Redirecting output for specific formatters
+
+  Note: Formatters match to output locations in the same order that they are specified. Formatters that do not have their output location specified will output to STDOUT. Output locations that are not matched to a formatter will use the default formatter.
+
+    Given the following feature file "some.feature":
+      """
+      Feature: This feature will have linted problems
+      """
+    And the following file "my_custom_formatters.rb":
+      """
+      class MyCustomFormatter
+        def format(data)
+          "Formatting done by #{self.class}"
+        end
+      end
+
+      class MyOtherCustomFormatter
+        def format(data)
+          "Formatting done by #{self.class}"
+        end
+      end
+      """
+    When the following command is executed:
+      """
+      cuke_linter -p <path_to>/some.feature -f MyCustomFormatter -f MyOtherCustomFormatter -o <path_to>/my_report.txt  -r <path_to>/my_custom_formatters.rb
+      """
+    Then the resulting output is the following:
+      """
+      Formatting done by MyOtherCustomFormatter
+      """
+    And the file "<path_to>/my_report.txt" contains:
       """
       Formatting done by MyCustomFormatter
       """

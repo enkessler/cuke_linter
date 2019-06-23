@@ -6,6 +6,7 @@ require 'optparse'
 params              = {}
 params[:paths]      = []
 params[:formatters] = []
+params[:outs]       = []
 params[:requires]   = []
 
 parser = OptionParser.new do |options|
@@ -26,6 +27,14 @@ parser = OptionParser.new do |options|
              'qualified class name (e.g CukeLinter::PrettyFormatter). Uses',
              'the default formatter if none are specified.') do |format|
     params[:formatters] << format
+  end
+
+  options.on('-o', '--out OUT', String,
+             'The file path to which linting results are output. Can be specified',
+             'multiple times. Specified files are matched to formatters in the',
+             'same order that the formatters are specified. Any formatter without',
+             'a corresponding file path will output to STDOUT instead.') do |out|
+    params[:outs] << out
   end
 
   options.on('-r', '--require FILEPATH', String,
@@ -64,11 +73,18 @@ require_files.each do |file|
   require file
 end
 
-file_paths = params[:paths]
-formatters = params[:formatters].map { |formatter| [Kernel.const_get(formatter).new] }
+file_paths   = params[:paths]
+formatters   = params[:formatters].map { |formatter| Kernel.const_get(formatter).new }
+output_paths = params[:outs]
+
+bundled_formatters = [].tap do |formatter_output_pairs|
+  [formatters.count, output_paths.count].max.times do |count|
+    formatter_output_pairs << [formatters[count] || CukeLinter::PrettyFormatter.new, output_paths[count]]
+  end
+end
 
 options              = {}
-options[:formatters] = formatters unless formatters.empty?
+options[:formatters] = bundled_formatters unless bundled_formatters.empty?
 options[:file_paths] = file_paths
 
 CukeLinter.lint(options)
