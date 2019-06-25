@@ -14,7 +14,7 @@ RSpec.describe CukeLinter do
     expect(results).to eq([{ linter: 'FakeLinter', location: 'path_to_file:1', problem: 'FakeLinter problem' }])
   end
 
-  it 'uses evey formatter provided' do
+  it 'uses every formatter provided' do
     linting_options[:formatters] = [[CukeLinter::FormatterFactory.generate_fake_formatter(name: 'Formatter1')],
                                     [CukeLinter::FormatterFactory.generate_fake_formatter(name: 'Formatter2')]]
 
@@ -236,6 +236,20 @@ RSpec.describe CukeLinter do
       expect(subject.registered_linters['FakeLinter1']).to be nil
     end
 
+    it 'even unregisters non-configurable disabled linters' do
+      config                  = { 'FakeLinter' => { 'Enabled' => false } }
+      configuration_file      = CukeLinter::FileHelper.create_file(name: '.cuke_linter', extension: '', text: config.to_yaml)
+      non_configurable_linter = CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter')
+      non_configurable_linter.instance_eval('undef :configure')
+
+      CukeLinter.register_linter(linter: non_configurable_linter, name: 'FakeLinter')
+      expect(subject.registered_linters['FakeLinter']).to_not be nil
+
+      subject.load_configuration(config_file_path: configuration_file)
+
+      expect(subject.registered_linters['FakeLinter']).to be nil
+    end
+
     it 'uses the default configuration file in the current directory if no configuration file is provided' do
       config             = { 'FakeLinter1' => { 'Enabled' => false } }
       configuration_file = CukeLinter::FileHelper.create_file(name: '.cuke_linter', extension: '', text: config.to_yaml)
@@ -271,6 +285,21 @@ RSpec.describe CukeLinter do
 
       expect(results).to match_array([{ linter: 'FakeLinter1', location: 'path_to_file:1', problem: 'My custom message for FakeLinter1' },
                                       { linter: 'FakeLinter2', location: 'path_to_file:1', problem: 'My custom message for FakeLinter2' }])
+    end
+
+    it "does not try to configure linters that don't know how to be configured" do
+      config                  = { 'FakeLinter' => { 'Problem' => 'My custom message for FakeLinter' } }
+      non_configurable_linter = CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter')
+      non_configurable_linter.instance_eval('undef :configure')
+
+      CukeLinter.clear_registered_linters
+      CukeLinter.register_linter(linter: non_configurable_linter, name: 'FakeLinter')
+      linting_options.delete(:linters)
+
+      subject.load_configuration(config: config)
+      results = subject.lint(linting_options)
+
+      expect(results).to match_array([{ linter: 'FakeLinter', location: 'path_to_file:1', problem: 'FakeLinter problem' }])
     end
 
   end
