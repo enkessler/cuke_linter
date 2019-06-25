@@ -39,6 +39,8 @@ Feature: Using cuke_linter on the command line
                                          needed when using custom linters or formatters in order to ensure
                                          that the specified classes have been read into memory. This option
                                          can be specified multiple times in order to load more than one file.
+          -c, --config FILEPATH          The configuration file that will be used. Will use the default
+                                         configuration file (if present) if this option is not specified.
           -h, --help                     Display the help that you are reading now.
           -v, --version                  Display the version of the gem being used.
       """
@@ -161,4 +163,27 @@ Feature: Using cuke_linter on the command line
     And the file "<path_to>/my_report.txt" contains:
       """
       Formatting done by MyCustomFormatter
+      """
+
+  Scenario: Specifying a configuration file
+
+  Note: If not specified, the default configuration file, if present, will be used
+
+    Given the following feature file "has_no_scenarios.feature":
+      """
+      Feature: This feature
+        has no scenarios
+     """
+    And the following configuration file "my_config.file":
+      """
+      FeatureWithoutScenariosLinter:
+        Enabled: false
+      """
+    When the following command is executed:
+      """
+      cuke_linter -p <path_to>/has_no_scenarios.feature -c <path_to>/my_config.file
+      """
+    Then the resulting output is the following:
+      """
+      0 issues found
       """
