@@ -29,6 +29,7 @@ module CukeLinter
         options[:directory] ||= create_directory
 
         file_path = "#{options[:directory]}/#{options[:name]}#{options[:extension]}"
+        FileUtils.mkdir_p(File.dirname(file_path)) # Ensuring that the target directory already exists
         File.write(file_path, options[:text])
 
         file_path

@@ -8,6 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Nothing yet...
 
+## [0.6.0] - 2019-06-25
+
+### Added
+ - File paths can now be provided for linting without the user first having to turn them into models themselves.
+ - Option flags have been added to the command line interface. This will allow more flexibility when running from the command line and thereby reduce the need for writing a Ruby script for even basic usages of the gem.
+ 
+### Changed
+ - Linting is now done using a collection of model trees instead of taking only a single model tree. 
+
+### Fixed
+ - Fixed a bug in the 'pretty' formatter that was causing problems to be ordered by line number instead of being ordered by file (and then by line number within those files).
+ - Added a missing `require` statement that is needed if no other code in the runtime environment has loaded the needed library already.
+ - Fixed a bug where enabling/disabling a linter would trigger additional configuration of the linter, even for linters that could not be configured.
+ 
 ## [0.5.0] - 2019-05-25
 
 ### Added
@@ -51,7 +65,8 @@ Nothing yet...
 - Custom linters, formatters, and command line usability
 
 
-[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/enkessler/cuke_linter/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/enkessler/cuke_linter/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/enkessler/cuke_linter/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/enkessler/cuke_linter/compare/v0.3.0...v0.3.1

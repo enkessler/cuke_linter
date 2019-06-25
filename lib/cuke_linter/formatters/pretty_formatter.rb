@@ -21,13 +21,17 @@ module CukeLinter
           formatted_data << "  #{problem}" + "\n"
 
           sorted_locations = locations.sort do |a, b|
-            location_1 = a.match(/:(\d+)/)[1].to_i
-            location_2 = b.match(/:(\d+)/)[1].to_i
+            file_name_1   = a.match(/(.*):\d+$/)[1]
+            line_number_1 = a.match(/:(\d+)$/)[1].to_i
+            file_name_2   = b.match(/(.*):\d+$/)[1]
+            line_number_2 = b.match(/:(\d+)$/)[1].to_i
 
             case
-              when location_1 < location_2
+              when (file_name_1 < file_name_2) ||
+                  (file_name_1 == file_name_2) && (line_number_1 < line_number_2)
                 -1
-              when location_1 > location_2
+              when (file_name_1 > file_name_2) ||
+                  (file_name_1 == file_name_2) && (line_number_1 > line_number_2)
                 1
               else
                 0

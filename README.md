@@ -9,7 +9,7 @@ User stuff:
 
 Developer stuff:
 [![Build Status](https://travis-ci.org/enkessler/cuke_linter.svg?branch=dev)](https://travis-ci.org/enkessler/cuke_linter)
-[![Build Status](https://ci.appveyor.com/api/projects/status/g5o70u747x073evy?svg=true)](https://ci.appveyor.com/project/enkessler/cuke-linter)
+[![Build Status](https://ci.appveyor.com/api/projects/status/g5o70u747x073evy/branch/dev?svg=true)](https://ci.appveyor.com/project/enkessler/cuke-linter/branch/dev)
 [![Coverage Status](https://coveralls.io/repos/github/enkessler/cuke_linter/badge.svg?branch=dev)](https://coveralls.io/github/enkessler/cuke_linter?branch=dev)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d1b86760e59a457c8e73/maintainability)](https://codeclimate.com/github/enkessler/cuke_linter/maintainability)
 [![Inline docs](http://inch-ci.org/github/enkessler/cuke_linter.svg?branch=dev)](https://inch-ci.org/github/enkessler/cuke_linter?branch=dev)
@@ -40,11 +40,17 @@ Or install it yourself as:
 
 ## Usage
 
+#### From the command line
+
 The easiest way to use the gem is to use all of the defaults by invoking it from the command line directly.
 
 ```
 $ cuke_linter
 ```
+
+Additional command line options can be provided that can adjust the default behavior. See [documentation](#documentation) for specifics.
+
+#### From a Ruby script
 
 The linter can also be used inside of a Ruby script, like so:
 
@@ -54,20 +60,20 @@ require 'cuke_linter'
 CukeLinter.lint
 ```
 
-The linting will happen against a tree of `CukeModeler` models that is generated based on the current directory. You can generate your own model tree and use that instead, if desired.
+The linting will happen against a tree of `CukeModeler` models that is generated based on the current directory. You can generate your own model trees and use them instead, if desired, or even provide specific file paths that will be modeled and linted.
 
-Custom linters can be any object that responds to `#lint` and returns a detected issue (or `nil`) in the format of
+`cuke_linter` comes with a set of pre-made linters and will use them by default but custom linters can be used instead. Custom linters can be any object that responds to `#lint` and returns a detected issue (or `nil`) in the format of
 
 ```
 { problem: 'some linting issue',
   location: 'path/to/file:line_number' }
 ```
 
-Note that a linter will receive, in turn, *every model* in the model tree in order for it to have the chance to detect problems with it. Checking the model's class before attempting to lint it is recommended.
+Note that a linter will receive, in turn, *every model* in a model tree in order for it to have the chance to detect problems with it. Checking the model's class before attempting to lint it is recommended.
 
 **In order to simplify the process of creating custom linters a base class is provided (see [documentation](#documentation)).**
 
-Custom formatters can be any object that responds to `#format` and takes input data in the following format:
+`cuke_linter` comes with a set of pre-made formatters and will use them by default but custom formatters can be used instead. Custom formatters can be any object that responds to `#format` and takes input data in the following format:
 
 ```
 [
@@ -122,13 +128,14 @@ class MyCustomFormatter
 
 end
 
-linter          = MyCustomLinter.new
-formatter       = MyCustomFormatter.new
-output_path     = "#{__dir__}/my_report.txt"
-model_tree_root = CukeModeler::Directory.new(Dir.pwd)
+linter               = MyCustomLinter.new
+formatter            = MyCustomFormatter.new
+output_path          = "#{__dir__}/my_report.txt"
+model_tree_root      = CukeModeler::Directory.new(Dir.pwd)
+additional_file_path = 'path/to/some.feature'
 
 # Providing the formatter twice so that it also is printed to the console
-CukeLinter.lint(linters: [linter], formatters: [[formatter], [formatter, output_path]], model_tree: model_tree_root)
+CukeLinter.lint(linters: [linter], formatters: [[formatter], [formatter, output_path]], model_trees: [model_tree_root], file_paths: [additional_file_path])
 ```
 
 ### Configuration

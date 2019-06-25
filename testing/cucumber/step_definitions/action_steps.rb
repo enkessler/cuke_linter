@@ -1,7 +1,8 @@
 When(/^the following command is executed:$/) do |command|
-  command = "bundle exec ruby #{@executable_directory}/#{command}"
+  command = "bundle exec ruby #{@executable_directory || "#{PROJECT_ROOT}/exe"}/#{command}"
+  command.gsub!('<path_to>', @root_test_directory)
 
-  @output = `#{command}`
+  @results = @output = `#{command}`
 end
 
 When(/^it is formatted by the "([^"]*)" formatter$/) do |linter_name|
@@ -9,8 +10,8 @@ When(/^it is formatted by the "([^"]*)" formatter$/) do |linter_name|
 end
 
 When(/^(?:the feature|the model|it) is linted$/) do
-  options           = { model_tree: @model,
-                        formatters: [[CukeLinter::FormatterFactory.generate_fake_formatter, "#{CukeLinter::FileHelper::create_directory}/junk_output_file.txt"]] }
+  options           = { model_trees: [@model],
+                        formatters:  [[CukeLinter::FormatterFactory.generate_fake_formatter, "#{CukeLinter::FileHelper::create_directory}/junk_output_file.txt"]] }
   options[:linters] = [@linter] if @linter
 
   @results = CukeLinter.lint(options)
