@@ -117,3 +117,10 @@ end
 Given(/^the following custom linter class:$/) do |code|
   eval(code)
 end
+
+Given(/^the following(?: feature)? file "([^"]*)":$/) do |file_path, text|
+  path, extension = file_path.split('.')
+
+  @created_files ||= []
+  @created_files << CukeLinter::FileHelper.create_file(directory: @root_test_directory, name: path, extension: ".#{extension}", text: text)
+end

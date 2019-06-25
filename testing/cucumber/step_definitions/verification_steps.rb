@@ -3,7 +3,15 @@ Then(/^a linting report will be made for all features$/) do
 end
 
 Then(/^the resulting output is the following:$/) do |text|
-  expect(@results).to eq(text)
+  text.gsub!('<path_to>', @root_test_directory)
+
+  expect(@results.strip).to eq(text)
+end
+
+Then(/^the resulting output will include the following:$/) do |text|
+  text.gsub!('<path_to>', @root_test_directory)
+
+  expect(@results.chomp).to include(text)
 end
 
 Then(/^an error is reported$/) do |table|
@@ -24,4 +32,29 @@ end
 
 Then(/^the linter "([^"]*)" is no longer registered$/) do |linter_name|
   expect(CukeLinter.registered_linters).to_not have_key(linter_name)
+end
+
+Then(/^the following help is displayed:$/) do |text|
+  expect(@output.chomp).to eq(text)
+end
+
+Then(/^the version of the tool is displayed:$/) do |text|
+  major_number, minor_number, patch_number = CukeLinter::VERSION.split('.')
+  text.sub!('<major>', major_number)
+  text.sub!('<minor>', minor_number)
+  text.sub!('<patch>', patch_number)
+
+  expect(@output.chomp).to eq(text)
+end
+
+Then(/^the linting report will be output to "([^"]*)"$/) do |file_path|
+  file_path.gsub!('<path_to>', @root_test_directory)
+
+  expect(File.read(file_path)).to match(/\d+ issues found/)
+end
+
+And(/^the file "([^"]*)" contains:$/) do |file_path, text|
+  file_path.gsub!('<path_to>', @root_test_directory)
+
+  expect(File.read(file_path)).to eq(text)
 end

@@ -38,9 +38,3 @@ Feature: Using a configuration
       CukeLinter.load_configuration
       """
     Then the linter "SomeLinter" is no longer registered
-
-  @wip
-  Scenario: Configuring from the command line
-
-  @wip
-  Scenario: Using the default configuration file from the command line

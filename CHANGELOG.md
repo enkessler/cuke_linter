@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet...
+### Added
+ - File paths can now be provided for linting without the user first having to turn them into models themselves.
+
+### Changed
+ - Linting is now done using a collection of model trees instead of taking only a single model tree. 
 
 ## [0.5.0] - 2019-05-25
 

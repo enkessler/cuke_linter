@@ -29,11 +29,12 @@ RSpec.describe CukeLinter do
     expect(CukeLinter).to respond_to(:lint)
   end
 
-  it 'lints the (optionally) given model tree using the (optionally) provided set of linters and formats the output with the (optionally) provided formatters' do
+  it 'lints the (optionally) given model trees and (optionally) file paths using the (optionally) provided set of linters and formats the output with the (optionally) provided formatters' do
     expect(CukeLinter.method(:lint).arity).to eq(-1)
-    expect(CukeLinter.method(:lint).parameters).to match_array([[:key, :model_tree],
+    expect(CukeLinter.method(:lint).parameters).to match_array([[:key, :model_trees],
                                                                 [:key, :linters],
-                                                                [:key, :formatters]])
+                                                                [:key, :formatters],
+                                                                [:key, :file_paths]])
   end
 
   it 'can register a linter' do
