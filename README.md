@@ -40,11 +40,17 @@ Or install it yourself as:
 
 ## Usage
 
+#### From the command line
+
 The easiest way to use the gem is to use all of the defaults by invoking it from the command line directly.
 
 ```
 $ cuke_linter
 ```
+
+Additional command line options can be provided that can adjust the default behavior. See [documentation](#documentation) for specifics.
+
+#### From a Ruby script
 
 The linter can also be used inside of a Ruby script, like so:
 
