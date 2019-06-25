@@ -1,3 +1,4 @@
+require 'yaml'
 require 'cuke_modeler'
 
 require "cuke_linter/version"
