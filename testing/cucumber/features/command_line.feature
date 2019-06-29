@@ -61,13 +61,13 @@ Feature: Using cuke_linter on the command line
       """
       Feature:
         Scenario: A scenario
-          * a step
+          Then a step
       """
     And the following feature file "a_directory/with_a.feature":
       """
       Feature:
         Scenario: A scenario
-          * a step
+          Then a step
       """
     When the following command is executed:
       """

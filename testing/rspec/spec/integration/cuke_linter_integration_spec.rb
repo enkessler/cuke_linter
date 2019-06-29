@@ -190,6 +190,8 @@ RSpec.describe CukeLinter do
     expect(subject.registered_linters['StepWithEndPeriodLinter']).to be_a(CukeLinter::StepWithEndPeriodLinter)
     expect(subject.registered_linters.keys).to include('StepWithTooManyCharactersLinter')
     expect(subject.registered_linters['StepWithTooManyCharactersLinter']).to be_a(CukeLinter::StepWithTooManyCharactersLinter)
+    expect(subject.registered_linters.keys).to include('TestWithNoVerificationStepLinter')
+    expect(subject.registered_linters['TestWithNoVerificationStepLinter']).to be_a(CukeLinter::TestWithNoVerificationStepLinter)
     expect(subject.registered_linters.keys).to include('TestWithTooManyStepsLinter')
     expect(subject.registered_linters['TestWithTooManyStepsLinter']).to be_a(CukeLinter::TestWithTooManyStepsLinter)
   end

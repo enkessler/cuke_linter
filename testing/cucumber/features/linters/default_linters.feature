@@ -16,8 +16,8 @@ Feature: Default Linters
       | SingleTestBackgroundLinter        |
       | StepWithEndPeriodLinter           |
       | StepWithTooManyCharactersLinter   |
+      | TestWithNoVerificationStepLinter  |
       | TestWithTooManyStepsLinter        |
-
 
 
   Scenario: Registering new linters

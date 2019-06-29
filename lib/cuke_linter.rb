@@ -12,6 +12,7 @@ require 'cuke_linter/linters/outline_with_single_example_row_linter'
 require 'cuke_linter/linters/single_test_background_linter'
 require 'cuke_linter/linters/step_with_end_period_linter'
 require 'cuke_linter/linters/step_with_too_many_characters_linter'
+require 'cuke_linter/linters/test_with_no_verification_step_linter'
 require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 
@@ -26,6 +27,7 @@ module CukeLinter
                         'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
                         'SingleTestBackgroundLinter'        => SingleTestBackgroundLinter.new,
                         'StepWithEndPeriodLinter'           => StepWithEndPeriodLinter.new,
+                        'TestWithNoVerificationStepLinter'  => TestWithNoVerificationStepLinter.new,
                         'StepWithTooManyCharactersLinter'   => StepWithTooManyCharactersLinter.new,
                         'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
 
