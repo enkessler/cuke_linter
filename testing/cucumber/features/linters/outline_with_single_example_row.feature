@@ -18,6 +18,6 @@ Feature: Outline with single example row linter
           | value |
       """
     When it is linted
-    Then an error is reported
+    Then an error is reported:
       | linter                            | problem                          | location         |
       | OutlineWithSingleExampleRowLinter | Outline has only one example row | <path_to_file>:3 |

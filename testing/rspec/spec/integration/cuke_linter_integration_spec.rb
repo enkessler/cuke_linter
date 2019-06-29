@@ -236,6 +236,33 @@ RSpec.describe CukeLinter do
       expect(subject.registered_linters['FakeLinter1']).to be nil
     end
 
+    it 'can apply a property to all linters' do
+      configuration = { 'AllLinters' => { 'Enabled' => false } }
+
+      # Restore the default linters
+      CukeLinter.reset_linters
+
+      # Also add some custom ones
+      CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter, name: 'Foo')
+
+
+      subject.load_configuration(config: configuration)
+
+      expect(subject.registered_linters).to be_empty
+    end
+
+    it 'uses linter specific properties over general properties' do
+      configuration = { 'AllLinters'  => { 'Enabled' => false },
+                        'FakeLinter1' => { 'Enabled' => true } }
+
+      CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter, name: 'FakeLinter1')
+      expect(subject.registered_linters['FakeLinter1']).to_not be nil
+
+      subject.load_configuration(config: configuration)
+
+      expect(subject.registered_linters['FakeLinter1']).to_not be nil
+    end
+
     it 'even unregisters non-configurable disabled linters' do
       config                  = { 'FakeLinter' => { 'Enabled' => false } }
       configuration_file      = CukeLinter::FileHelper.create_file(name: '.cuke_linter', extension: '', text: config.to_yaml)

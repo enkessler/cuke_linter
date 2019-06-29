@@ -19,7 +19,7 @@ Feature: Custom linters
       """
     And a model to lint
     When the model is linted
-    Then an error is reported
+    Then an error is reported:
       | linter         | problem           | location                           |
       | MyCustomLinter | My custom message | <path_to_file>:<model_line_number> |
 
@@ -49,6 +49,6 @@ Feature: Custom linters
       """
     And a model to lint
     When the model is linted
-    Then an error is reported
+    Then an error is reported:
       | linter         | problem           | location                           |
       | MyCustomLinter | My custom message | <path_to_file>:<model_line_number> |

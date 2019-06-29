@@ -16,6 +16,6 @@ Feature: Step that ends with a period linter
           * a bad step.
       """
     When it is linted
-    Then an error is reported
+    Then an error is reported:
       | linter                  | problem                 | location         |
       | StepWithEndPeriodLinter | Step ends with a period | <path_to_file>:5 |

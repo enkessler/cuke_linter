@@ -41,11 +41,22 @@ module CukeLinter
 
     config = config || YAML.load_file(config_file_path)
 
-    config.each_pair do |linter_name, options|
-      unregister_linter(linter_name) if options.key?('Enabled') && !options['Enabled']
+    common_config = config['AllLinters'] || {}
+    to_delete     = []
 
-      registered_linters[linter_name].configure(options) if registered_linters[linter_name] && registered_linters[linter_name].respond_to?(:configure)
+    registered_linters.each_pair do |name, linter|
+      linter_config = config[name] || {}
+      final_config  = common_config.merge(linter_config)
+
+      disabled = (final_config.key?('Enabled') && !final_config['Enabled'])
+
+      # Just save it for afterwards because modifying a collection while iterating through it is not a good idea
+      to_delete << name if disabled
+
+      linter.configure(final_config) if linter.respond_to?(:configure)
     end
+
+    to_delete.each { |linter_name| unregister_linter(linter_name) }
   end
 
   # Returns the registered linters to their default state

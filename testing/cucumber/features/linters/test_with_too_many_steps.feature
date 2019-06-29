@@ -28,7 +28,7 @@ Feature: Test with too many steps linter
           * step one too many...
       """
     When it is linted
-    Then an error is reported
+    Then an error is reported:
       | linter                     | problem                                          | location         |
       | TestWithTooManyStepsLinter | Test has too many steps. 11 steps found (max 10) | <path_to_file>:3 |
 
@@ -51,6 +51,6 @@ Feature: Test with too many steps linter
       """
     When the configuration file is loaded
     And the feature is linted
-    Then an error is reported
+    Then an error is reported:
       | linter                     | problem                                        | location         |
       | TestWithTooManyStepsLinter | Test has too many steps. 4 steps found (max 3) | <path_to_file>:3 |

@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet...
+### Added
+ - Linters can now be configured en masse instead of having to configure the same property for all of them individually.
+
 
 ## [0.6.0] - 2019-06-25
 

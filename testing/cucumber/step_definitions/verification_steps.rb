@@ -14,7 +14,7 @@ Then(/^the resulting output will include the following:$/) do |text|
   expect(@results.chomp).to include(text)
 end
 
-Then(/^an error is reported$/) do |table|
+Then(/^an error is reported:$/) do |table|
   table.hashes.each do |error_record|
     expect(@results).to include({ linter:   error_record['linter'],
                                   problem:  error_record['problem'],
@@ -24,6 +24,10 @@ end
 
 Then(/^the following linters are registered(?: by default)?$/) do |linter_names|
   expect(CukeLinter.registered_linters.keys).to match_array(linter_names.raw.flatten)
+end
+
+Then(/^an error is reported$/) do
+  expect(@results).to_not be_empty
 end
 
 Then(/^no error is reported$/) do

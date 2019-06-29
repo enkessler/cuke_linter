@@ -12,6 +12,6 @@ Feature: Feature without description linter
       Feature: Features must have a description
       """
     When it is linted
-    Then an error is reported
+    Then an error is reported:
       | linter                          | problem                    | location         |
       | FeatureWithoutDescriptionLinter | Feature has no description | <path_to_file>:1 |
