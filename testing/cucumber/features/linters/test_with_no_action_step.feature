@@ -7,7 +7,7 @@ Feature: Test with no action step linter
 
   Scenario: Linting
 
-  Note: Also works on outlines
+  Note: Also works on outlines. Also includes steps inherited from backgrounds.
 
     Given a linter for tests with no action step
     And the following feature:

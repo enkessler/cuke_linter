@@ -9,7 +9,10 @@ module CukeLinter
     def rule(model)
       return false unless model.is_a?(CukeModeler::Scenario) || model.is_a?(CukeModeler::Outline)
 
-      model.steps.nil? || model.steps.none? { |step| step.keyword == 'When' }
+      model_steps      = model.steps || []
+      background_steps = model.parent_model.has_background? ? model.parent_model.background.steps || [] : []
+      all_steps        = model_steps + background_steps
+      all_steps.none? { |step| step.keyword == 'When' }
     end
 
     # The message used to describe the problem that has been found

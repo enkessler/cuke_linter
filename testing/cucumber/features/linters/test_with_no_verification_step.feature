@@ -7,7 +7,7 @@ Feature: Test with no verification step linter
 
   Scenario: Linting
 
-  Note: Also works on outlines
+  Note: Also works on outlines. Also includes steps inherited from backgrounds.
 
     Given a linter for tests with no verification step
     And the following feature:

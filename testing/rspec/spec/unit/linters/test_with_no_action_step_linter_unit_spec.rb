@@ -116,15 +116,85 @@ RSpec.describe CukeLinter::TestWithNoActionStepLinter do
 
       context "with a #{model_type} that does have an action step" do
 
+        context 'that comes from its background' do
+
+          let(:test_model) do
+            model                         = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            model.steps                   = []
+            background_model              = CukeModeler::Background.new
+            background_model.steps        = [CukeModeler::Step.new('When an action step')]
+            model.parent_model.background = background_model
+
+            model
+          end
+
+          it 'does not record a problem' do
+            expect(subject.lint(test_model)).to eq(nil)
+          end
+
+        end
+
+        context 'that is part of itself' do
+
+          let(:test_model) do
+            model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            model.steps = [CukeModeler::Step.new('When an action step')]
+
+            model
+          end
+
+          it 'does not record a problem' do
+            expect(subject.lint(test_model)).to eq(nil)
+          end
+
+        end
+
+      end
+
+    end
+
+    ['scenario', 'outline'].each do |model_type|
+
+      context "with a #{model_type} that has a related background" do
+
         let(:test_model) do
-          model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
-          model.steps = [CukeModeler::Step.new('When an action step')]
+          model                         = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+          model.parent_model.background = background_model
 
           model
         end
 
-        it 'does not record a problem' do
-          expect(subject.lint(test_model)).to eq(nil)
+        context 'that has no background steps' do
+          context 'because its steps are empty' do
+
+            let(:background_model) do
+              model       = CukeModeler::Background.new
+              model.steps = []
+
+              model
+            end
+
+            it 'can handle it' do
+              expect { subject.lint(test_model) }.to_not raise_error
+            end
+
+          end
+
+          context 'because its steps are nil' do
+
+            let(:background_model) do
+              model       = CukeModeler::Background.new
+              model.steps = nil
+
+              model
+            end
+
+            it 'can handle it' do
+              expect { subject.lint(test_model) }.to_not raise_error
+            end
+
+          end
+
         end
 
       end
