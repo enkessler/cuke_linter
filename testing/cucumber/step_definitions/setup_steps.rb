@@ -57,6 +57,10 @@ Given("a linter for test steps with too many characters") do
   @linter = CukeLinter::StepWithTooManyCharactersLinter.new
 end
 
+Given(/^a linter for tests with no action step$/) do
+  @linter = CukeLinter::TestWithNoActionStepLinter.new
+end
+
 Given(/^a linter for tests with no verification step$/) do
   @linter = CukeLinter::TestWithNoVerificationStepLinter.new
 end
