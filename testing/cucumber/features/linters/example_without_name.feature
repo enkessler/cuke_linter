@@ -25,3 +25,8 @@ Feature: Example without name linter
       | linter                   | problem             | location         |
       | ExampleWithoutNameLinter | Example has no name | <path_to_file>:5 |
       | ExampleWithoutNameLinter | Example has no name | <path_to_file>:8 |
+
+  @wip
+  Scenario: Configuration
+
+  Ideas: Configure whether or not the linter triggers on outline with only one Example set?
