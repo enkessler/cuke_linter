@@ -2,7 +2,6 @@ module CukeLinter
 
   # A linter that detects scenarios and outlines that do not have an action (i.e. 'When') step
 
-  # class TestWithNoVerificationStepLinter
   class TestWithNoActionStepLinter < Linter
 
     # The rule used to determine if a model has a problem

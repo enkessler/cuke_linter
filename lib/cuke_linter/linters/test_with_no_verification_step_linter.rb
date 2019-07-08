@@ -2,7 +2,6 @@ module CukeLinter
 
   # A linter that detects scenarios and outlines that do not have a verification (i.e. 'Then') step
 
-  # class TestWithNoVerificationStepLinter
   class TestWithNoVerificationStepLinter < Linter
 
     # The rule used to determine if a model has a problem
