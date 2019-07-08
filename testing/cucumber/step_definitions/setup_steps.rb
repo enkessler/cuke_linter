@@ -73,6 +73,10 @@ Given("a linter for features without a description") do
   @linter = CukeLinter::FeatureWithoutDescriptionLinter.new
 end
 
+Given(/^a linter for tests with no name$/) do
+  @linter = CukeLinter::TestWithNoNameLinter.new
+end
+
 Given(/^a linter for test steps with too many characters has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::StepWithTooManyCharactersLinter.new, name: 'StepWithTooManyCharactersLinter')
 end

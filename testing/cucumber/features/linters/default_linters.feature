@@ -17,6 +17,7 @@ Feature: Default Linters
       | StepWithEndPeriodLinter           |
       | StepWithTooManyCharactersLinter   |
       | TestWithNoActionStepLinter        |
+      | TestWithNoNameLinter              |
       | TestWithNoVerificationStepLinter  |
       | TestWithTooManyStepsLinter        |
 
