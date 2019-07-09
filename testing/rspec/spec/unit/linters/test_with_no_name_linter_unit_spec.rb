@@ -98,17 +98,18 @@ RSpec.describe CukeLinter::TestWithNoNameLinter do
 
     end
 
-  end
+    context 'a non-test model' do
 
-  context 'a non-test model' do
+      let(:test_model) { CukeModeler::Model.new }
 
-    let(:test_model) { CukeModeler::Model.new }
+      it 'returns no result' do
+        result = subject.lint(test_model)
 
-    it 'returns no result' do
-      result = subject.lint(test_model)
+        expect(result).to eq(nil)
+      end
 
-      expect(result).to eq(nil)
     end
 
   end
+
 end
