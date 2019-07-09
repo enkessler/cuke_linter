@@ -101,14 +101,14 @@ RSpec.describe 'the Command Line Interface' do
             let(:file_1) { CukeLinter::FileHelper.create_file(directory: test_directory,
                                                               name:      'some',
                                                               extension: '.feature',
-                                                              text:      'Feature:
+                                                              text:      'Feature: Some feature
                                                                           Scenario: A scenario
                                                                             When a step
                                                                             Then a step') }
             let(:file_2) { CukeLinter::FileHelper.create_file(directory: test_directory,
                                                               name:      'a_directory/with_a',
                                                               extension: '.feature',
-                                                              text:      'Feature:
+                                                              text:      'Feature: Some feature
                                                                           Scenario: A scenario
                                                                             When a step
                                                                             Then a step') }
@@ -162,7 +162,7 @@ RSpec.describe 'the Command Line Interface' do
           context 'with formatter arguments' do
             let(:linted_file) { CukeLinter::FileHelper.create_file(name:      'some',
                                                                    extension: '.feature',
-                                                                   text:      'Feature:
+                                                                   text:      'Feature: Some feature
                                                                                Scenario: A scenario
                                                                                  When a step
                                                                                  Then a step') }
@@ -228,7 +228,7 @@ RSpec.describe 'the Command Line Interface' do
             let(:other_output_location) { "#{CukeLinter::FileHelper.create_directory}/other_output.txt" }
             let(:linted_file) { CukeLinter::FileHelper.create_file(name:      'some',
                                                                    extension: '.feature',
-                                                                   text:      'Feature:
+                                                                   text:      'Feature: Some feature
                                                                                Scenario: A scenario
                                                                                  When a step
                                                                                  Then a step') }

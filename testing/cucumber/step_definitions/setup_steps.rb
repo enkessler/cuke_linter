@@ -65,6 +65,10 @@ Given(/^a linter for tests with no verification step$/) do
   @linter = CukeLinter::TestWithNoVerificationStepLinter.new
 end
 
+Given(/^a linter for features without a name$/) do
+  @linter = CukeLinter::FeatureWithoutNameLinter.new
+end
+
 Given(/^a linter for tests with too many steps has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::TestWithTooManyStepsLinter.new, name: 'TestWithTooManyStepsLinter')
 end

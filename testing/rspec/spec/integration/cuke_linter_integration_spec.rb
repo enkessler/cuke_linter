@@ -180,6 +180,8 @@ RSpec.describe CukeLinter do
     expect(subject.registered_linters['ExampleWithoutNameLinter']).to be_a(CukeLinter::ExampleWithoutNameLinter)
     expect(subject.registered_linters.keys).to include('FeatureWithoutDescriptionLinter')
     expect(subject.registered_linters['FeatureWithoutDescriptionLinter']).to be_a(CukeLinter::FeatureWithoutDescriptionLinter)
+    expect(subject.registered_linters.keys).to include('FeatureWithoutNameLinter')
+    expect(subject.registered_linters['FeatureWithoutNameLinter']).to be_a(CukeLinter::FeatureWithoutNameLinter)
     expect(subject.registered_linters.keys).to include('FeatureWithoutScenariosLinter')
     expect(subject.registered_linters['FeatureWithoutScenariosLinter']).to be_a(CukeLinter::FeatureWithoutScenariosLinter)
     expect(subject.registered_linters.keys).to include('OutlineWithSingleExampleRowLinter')

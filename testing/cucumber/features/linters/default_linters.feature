@@ -11,6 +11,7 @@ Feature: Default Linters
       | BackgroundDoesMoreThanSetupLinter |
       | ExampleWithoutNameLinter          |
       | FeatureWithoutDescriptionLinter   |
+      | FeatureWithoutNameLinter          |
       | FeatureWithoutScenariosLinter     |
       | OutlineWithSingleExampleRowLinter |
       | SingleTestBackgroundLinter        |
