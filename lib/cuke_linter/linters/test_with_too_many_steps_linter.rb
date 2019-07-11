@@ -21,7 +21,7 @@ module CukeLinter
 
     # The message used to describe the problem that has been found
     def message
-      "Test has too many steps. #{@linted_step_count} steps found (max #{@linted_step_threshold})"
+      "Test has too many steps. #{@linted_step_count} steps found (max #{@linted_step_threshold})."
     end
 
   end

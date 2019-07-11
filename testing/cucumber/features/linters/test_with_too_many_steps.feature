@@ -29,8 +29,8 @@ Feature: Test with too many steps linter
       """
     When it is linted
     Then an error is reported:
-      | linter                     | problem                                          | location         |
-      | TestWithTooManyStepsLinter | Test has too many steps. 11 steps found (max 10) | <path_to_file>:3 |
+      | linter                     | problem                                           | location         |
+      | TestWithTooManyStepsLinter | Test has too many steps. 11 steps found (max 10). | <path_to_file>:3 |
 
   Scenario: Configuration of step count threshold
     Given a linter for tests with too many steps has been registered
@@ -52,5 +52,5 @@ Feature: Test with too many steps linter
     When the configuration file is loaded
     And the feature is linted
     Then an error is reported:
-      | linter                     | problem                                        | location         |
-      | TestWithTooManyStepsLinter | Test has too many steps. 4 steps found (max 3) | <path_to_file>:3 |
+      | linter                     | problem                                         | location         |
+      | TestWithTooManyStepsLinter | Test has too many steps. 4 steps found (max 3). | <path_to_file>:3 |
