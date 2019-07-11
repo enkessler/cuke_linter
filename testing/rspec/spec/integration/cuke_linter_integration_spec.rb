@@ -176,6 +176,8 @@ RSpec.describe CukeLinter do
   it 'has a default set of registered linters' do
     expect(subject.registered_linters.keys).to include('BackgroundDoesMoreThanSetupLinter')
     expect(subject.registered_linters['BackgroundDoesMoreThanSetupLinter']).to be_a(CukeLinter::BackgroundDoesMoreThanSetupLinter)
+    expect(subject.registered_linters.keys).to include('ElementWithTooManyTagsLinter')
+    expect(subject.registered_linters['ElementWithTooManyTagsLinter']).to be_a(CukeLinter::ElementWithTooManyTagsLinter)
     expect(subject.registered_linters.keys).to include('ExampleWithoutNameLinter')
     expect(subject.registered_linters['ExampleWithoutNameLinter']).to be_a(CukeLinter::ExampleWithoutNameLinter)
     expect(subject.registered_linters.keys).to include('FeatureWithoutDescriptionLinter')

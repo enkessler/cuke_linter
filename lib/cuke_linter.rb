@@ -5,6 +5,7 @@ require "cuke_linter/version"
 require 'cuke_linter/formatters/pretty_formatter'
 require 'cuke_linter/linters/linter'
 require 'cuke_linter/linters/background_does_more_than_setup_linter'
+require 'cuke_linter/linters/element_with_too_many_tags_linter'
 require 'cuke_linter/linters/example_without_name_linter'
 require 'cuke_linter/linters/feature_without_name_linter'
 require 'cuke_linter/linters/feature_without_description_linter'
@@ -24,6 +25,7 @@ require 'cuke_linter/linters/test_with_too_many_steps_linter'
 module CukeLinter
 
   @original_linters = { 'BackgroundDoesMoreThanSetupLinter' => BackgroundDoesMoreThanSetupLinter.new,
+                        'ElementWithTooManyTagsLinter'      => ElementWithTooManyTagsLinter.new,
                         'ExampleWithoutNameLinter'          => ExampleWithoutNameLinter.new,
                         'FeatureWithoutDescriptionLinter'   => FeatureWithoutDescriptionLinter.new,
                         'FeatureWithoutNameLinter'          => FeatureWithoutNameLinter.new,

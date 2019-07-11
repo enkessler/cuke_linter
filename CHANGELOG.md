@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - Linters can now be configured en masse instead of having to configure the same property for all of them individually.
 
  - New linters
+   - ElementWithTooManyTagsLinter
    - FeatureWithoutNameLinter
    - TestWithNoActionStepLinter
    - TestWithNoNameLinter
