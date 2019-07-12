@@ -78,11 +78,11 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
         it 'includes the number of steps found in the problem record' do
           step_count = test_model.steps.count
           result     = subject.lint(test_model)
-          expect(result[:problem]).to eq("Test has too many steps. #{step_count} steps found (max 10)")
+          expect(result[:problem]).to eq("Test has too many steps. #{step_count} steps found (max 10).")
 
           test_model.steps << :another_step
           result = subject.lint(test_model)
-          expect(result[:problem]).to eq("Test has too many steps. #{step_count + 1} steps found (max 10)")
+          expect(result[:problem]).to eq("Test has too many steps. #{step_count + 1} steps found (max 10).")
         end
 
       end

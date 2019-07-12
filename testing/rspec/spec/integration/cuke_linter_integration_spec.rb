@@ -176,10 +176,14 @@ RSpec.describe CukeLinter do
   it 'has a default set of registered linters' do
     expect(subject.registered_linters.keys).to include('BackgroundDoesMoreThanSetupLinter')
     expect(subject.registered_linters['BackgroundDoesMoreThanSetupLinter']).to be_a(CukeLinter::BackgroundDoesMoreThanSetupLinter)
+    expect(subject.registered_linters.keys).to include('ElementWithTooManyTagsLinter')
+    expect(subject.registered_linters['ElementWithTooManyTagsLinter']).to be_a(CukeLinter::ElementWithTooManyTagsLinter)
     expect(subject.registered_linters.keys).to include('ExampleWithoutNameLinter')
     expect(subject.registered_linters['ExampleWithoutNameLinter']).to be_a(CukeLinter::ExampleWithoutNameLinter)
     expect(subject.registered_linters.keys).to include('FeatureWithoutDescriptionLinter')
     expect(subject.registered_linters['FeatureWithoutDescriptionLinter']).to be_a(CukeLinter::FeatureWithoutDescriptionLinter)
+    expect(subject.registered_linters.keys).to include('FeatureWithoutNameLinter')
+    expect(subject.registered_linters['FeatureWithoutNameLinter']).to be_a(CukeLinter::FeatureWithoutNameLinter)
     expect(subject.registered_linters.keys).to include('FeatureWithoutScenariosLinter')
     expect(subject.registered_linters['FeatureWithoutScenariosLinter']).to be_a(CukeLinter::FeatureWithoutScenariosLinter)
     expect(subject.registered_linters.keys).to include('OutlineWithSingleExampleRowLinter')
@@ -190,6 +194,12 @@ RSpec.describe CukeLinter do
     expect(subject.registered_linters['StepWithEndPeriodLinter']).to be_a(CukeLinter::StepWithEndPeriodLinter)
     expect(subject.registered_linters.keys).to include('StepWithTooManyCharactersLinter')
     expect(subject.registered_linters['StepWithTooManyCharactersLinter']).to be_a(CukeLinter::StepWithTooManyCharactersLinter)
+    expect(subject.registered_linters.keys).to include('TestWithNoActionStepLinter')
+    expect(subject.registered_linters['TestWithNoActionStepLinter']).to be_a(CukeLinter::TestWithNoActionStepLinter)
+    expect(subject.registered_linters.keys).to include('TestWithNoNameLinter')
+    expect(subject.registered_linters['TestWithNoNameLinter']).to be_a(CukeLinter::TestWithNoNameLinter)
+    expect(subject.registered_linters.keys).to include('TestWithNoVerificationStepLinter')
+    expect(subject.registered_linters['TestWithNoVerificationStepLinter']).to be_a(CukeLinter::TestWithNoVerificationStepLinter)
     expect(subject.registered_linters.keys).to include('TestWithTooManyStepsLinter')
     expect(subject.registered_linters['TestWithTooManyStepsLinter']).to be_a(CukeLinter::TestWithTooManyStepsLinter)
   end
@@ -234,6 +244,33 @@ RSpec.describe CukeLinter do
       subject.load_configuration(config_file_path: configuration_file)
 
       expect(subject.registered_linters['FakeLinter1']).to be nil
+    end
+
+    it 'can apply a property to all linters' do
+      configuration = { 'AllLinters' => { 'Enabled' => false } }
+
+      # Restore the default linters
+      CukeLinter.reset_linters
+
+      # Also add some custom ones
+      CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter, name: 'Foo')
+
+
+      subject.load_configuration(config: configuration)
+
+      expect(subject.registered_linters).to be_empty
+    end
+
+    it 'uses linter specific properties over general properties' do
+      configuration = { 'AllLinters'  => { 'Enabled' => false },
+                        'FakeLinter1' => { 'Enabled' => true } }
+
+      CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter, name: 'FakeLinter1')
+      expect(subject.registered_linters['FakeLinter1']).to_not be nil
+
+      subject.load_configuration(config: configuration)
+
+      expect(subject.registered_linters['FakeLinter1']).to_not be nil
     end
 
     it 'even unregisters non-configurable disabled linters' do

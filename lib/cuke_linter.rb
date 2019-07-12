@@ -5,13 +5,18 @@ require "cuke_linter/version"
 require 'cuke_linter/formatters/pretty_formatter'
 require 'cuke_linter/linters/linter'
 require 'cuke_linter/linters/background_does_more_than_setup_linter'
+require 'cuke_linter/linters/element_with_too_many_tags_linter'
 require 'cuke_linter/linters/example_without_name_linter'
+require 'cuke_linter/linters/feature_without_name_linter'
 require 'cuke_linter/linters/feature_without_description_linter'
 require 'cuke_linter/linters/feature_without_scenarios_linter'
 require 'cuke_linter/linters/outline_with_single_example_row_linter'
 require 'cuke_linter/linters/single_test_background_linter'
 require 'cuke_linter/linters/step_with_end_period_linter'
 require 'cuke_linter/linters/step_with_too_many_characters_linter'
+require 'cuke_linter/linters/test_with_no_action_step_linter'
+require 'cuke_linter/linters/test_with_no_name_linter'
+require 'cuke_linter/linters/test_with_no_verification_step_linter'
 require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 
@@ -20,12 +25,17 @@ require 'cuke_linter/linters/test_with_too_many_steps_linter'
 module CukeLinter
 
   @original_linters = { 'BackgroundDoesMoreThanSetupLinter' => BackgroundDoesMoreThanSetupLinter.new,
+                        'ElementWithTooManyTagsLinter'      => ElementWithTooManyTagsLinter.new,
                         'ExampleWithoutNameLinter'          => ExampleWithoutNameLinter.new,
                         'FeatureWithoutDescriptionLinter'   => FeatureWithoutDescriptionLinter.new,
+                        'FeatureWithoutNameLinter'          => FeatureWithoutNameLinter.new,
                         'FeatureWithoutScenariosLinter'     => FeatureWithoutScenariosLinter.new,
                         'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
                         'SingleTestBackgroundLinter'        => SingleTestBackgroundLinter.new,
                         'StepWithEndPeriodLinter'           => StepWithEndPeriodLinter.new,
+                        'TestWithNoActionStepLinter'        => TestWithNoActionStepLinter.new,
+                        'TestWithNoNameLinter'              => TestWithNoNameLinter.new,
+                        'TestWithNoVerificationStepLinter'  => TestWithNoVerificationStepLinter.new,
                         'StepWithTooManyCharactersLinter'   => StepWithTooManyCharactersLinter.new,
                         'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
 
@@ -41,11 +51,22 @@ module CukeLinter
 
     config = config || YAML.load_file(config_file_path)
 
-    config.each_pair do |linter_name, options|
-      unregister_linter(linter_name) if options.key?('Enabled') && !options['Enabled']
+    common_config = config['AllLinters'] || {}
+    to_delete     = []
 
-      registered_linters[linter_name].configure(options) if registered_linters[linter_name] && registered_linters[linter_name].respond_to?(:configure)
+    registered_linters.each_pair do |name, linter|
+      linter_config = config[name] || {}
+      final_config  = common_config.merge(linter_config)
+
+      disabled = (final_config.key?('Enabled') && !final_config['Enabled'])
+
+      # Just save it for afterwards because modifying a collection while iterating through it is not a good idea
+      to_delete << name if disabled
+
+      linter.configure(final_config) if linter.respond_to?(:configure)
     end
+
+    to_delete.each { |linter_name| unregister_linter(linter_name) }
   end
 
   # Returns the registered linters to their default state

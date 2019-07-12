@@ -16,7 +16,7 @@ Feature: Background does more than setup linter
           When some action
       """
     When it is linted
-    Then an error is reported
+    Then an error is reported:
       | linter                            | problem                        | location         |
       | BackgroundDoesMoreThanSetupLinter | Background has non-setup steps | <path_to_file>:3 |
 
@@ -31,7 +31,7 @@ Feature: Background does more than setup linter
           Then some verification
       """
     When it is linted
-    Then an error is reported
+    Then an error is reported:
       | linter                            | problem                        | location         |
       | BackgroundDoesMoreThanSetupLinter | Background has non-setup steps | <path_to_file>:3 |
 

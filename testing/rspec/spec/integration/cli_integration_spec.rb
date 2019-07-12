@@ -11,7 +11,8 @@ RSpec.describe 'the Command Line Interface' do
                                                           extension: '.feature',
                                                           text:      'Feature:
                                                                         Scenario: A scenario
-                                                                          * a step') }
+                                                                          When a step
+                                                                          Then a step') }
 
   # Stuff that is not always needed and so can be lazy instantiated
   let(:executable_directory) { "#{PROJECT_ROOT}/exe" }
@@ -61,7 +62,7 @@ RSpec.describe 'the Command Line Interface' do
         CukeLinter::FileHelper.create_file(directory: test_directory,
                                            name:      '.cuke_linter',
                                            extension: '',
-                                           text:      'FeatureWithoutDescriptionLinter:
+                                           text:      'AllLinters:
                                                          Enabled: false')
       end
 
@@ -100,15 +101,17 @@ RSpec.describe 'the Command Line Interface' do
             let(:file_1) { CukeLinter::FileHelper.create_file(directory: test_directory,
                                                               name:      'some',
                                                               extension: '.feature',
-                                                              text:      'Feature:
+                                                              text:      'Feature: Some feature
                                                                           Scenario: A scenario
-                                                                            * a step') }
+                                                                            When a step
+                                                                            Then a step') }
             let(:file_2) { CukeLinter::FileHelper.create_file(directory: test_directory,
                                                               name:      'a_directory/with_a',
                                                               extension: '.feature',
-                                                              text:      'Feature:
+                                                              text:      'Feature: Some feature
                                                                           Scenario: A scenario
-                                                                            * a step') }
+                                                                            When a step
+                                                                            Then a step') }
             let(:file_1_path) { file_1 }
             let(:file_2_directory) { File.dirname(file_2) }
             let(:command) { "bundle exec ruby #{executable_path} #{flag} #{file_1_path} #{flag} #{file_2_directory}" }
@@ -159,9 +162,10 @@ RSpec.describe 'the Command Line Interface' do
           context 'with formatter arguments' do
             let(:linted_file) { CukeLinter::FileHelper.create_file(name:      'some',
                                                                    extension: '.feature',
-                                                                   text:      'Feature:
+                                                                   text:      'Feature: Some feature
                                                                                Scenario: A scenario
-                                                                                 * a step') }
+                                                                                 When a step
+                                                                                 Then a step') }
             let(:formatter_class) { 'AFakeFormatter' }
             let(:formatter_class_in_module) { 'CukeLinter::AnotherFakeFormatter' }
             let(:formatter_class_file) { CukeLinter::FileHelper.create_file(extension: '.rb',
@@ -224,9 +228,10 @@ RSpec.describe 'the Command Line Interface' do
             let(:other_output_location) { "#{CukeLinter::FileHelper.create_directory}/other_output.txt" }
             let(:linted_file) { CukeLinter::FileHelper.create_file(name:      'some',
                                                                    extension: '.feature',
-                                                                   text:      'Feature:
+                                                                   text:      'Feature: Some feature
                                                                                Scenario: A scenario
-                                                                                 * a step') }
+                                                                                 When a step
+                                                                                 Then a step') }
             let(:formatter_class_1) { 'AFakeFormatter' }
             let(:formatter_class_2) { 'AnotherFakeFormatter' }
             let(:formatter_class_file) { CukeLinter::FileHelper.create_file(extension: '.rb',
@@ -386,7 +391,7 @@ RSpec.describe 'the Command Line Interface' do
 
             let(:config_file) { CukeLinter::FileHelper.create_file(name:      'my_config_file',
                                                                    extension: '.yml',
-                                                                   text:      'FeatureWithoutDescriptionLinter:
+                                                                   text:      'AllLinters:
                                                                                  Enabled: false') }
             let(:command) { "bundle exec ruby #{executable_path} #{flag} #{config_file}" }
 

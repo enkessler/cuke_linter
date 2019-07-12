@@ -19,6 +19,6 @@ Feature: Single test background linter
           * a step
       """
     When it is linted
-    Then an error is reported
+    Then an error is reported:
       | linter                     | problem                            | location         |
       | SingleTestBackgroundLinter | Background used with only one test | <path_to_file>:3 |

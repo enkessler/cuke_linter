@@ -59,15 +59,17 @@ Feature: Using cuke_linter on the command line
   Scenario: Specifying directories and files to lint
     Given the following feature file "some.feature":
       """
-      Feature:
+      Feature: Some feature
         Scenario: A scenario
-          * a step
+          When a step
+          Then a step
       """
     And the following feature file "a_directory/with_a.feature":
       """
-      Feature:
+      Feature: Some feature
         Scenario: A scenario
-          * a step
+          When a step
+          Then a step
       """
     When the following command is executed:
       """

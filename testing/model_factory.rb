@@ -5,6 +5,7 @@ module CukeLinter
   class TestModel < CukeModeler::Model
 
     include CukeModeler::Sourceable
+    include CukeModeler::Taggable
 
   end
 end

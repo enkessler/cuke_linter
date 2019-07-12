@@ -9,15 +9,19 @@ Feature: Default Linters
     Given no other linters have been registered or unregistered
     Then the following linters are registered by default
       | BackgroundDoesMoreThanSetupLinter |
+      | ElementWithTooManyTagsLinter      |
       | ExampleWithoutNameLinter          |
       | FeatureWithoutDescriptionLinter   |
+      | FeatureWithoutNameLinter          |
       | FeatureWithoutScenariosLinter     |
       | OutlineWithSingleExampleRowLinter |
       | SingleTestBackgroundLinter        |
       | StepWithEndPeriodLinter           |
       | StepWithTooManyCharactersLinter   |
+      | TestWithNoActionStepLinter        |
+      | TestWithNoNameLinter              |
+      | TestWithNoVerificationStepLinter  |
       | TestWithTooManyStepsLinter        |
-
 
 
   Scenario: Registering new linters

@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Nothing yet...
 
+
+## [0.7.0] - 2019-07-12
+
+### Added
+ - Linters can now be configured en masse instead of having to configure the same property for all of them individually.
+
+ - New linters
+   - ElementWithTooManyTagsLinter
+   - FeatureWithoutNameLinter
+   - TestWithNoActionStepLinter
+   - TestWithNoNameLinter
+   - TestWithNoVerificationStepLinter
+
 ## [0.6.0] - 2019-06-25
 
 ### Added
@@ -65,7 +78,8 @@ Nothing yet...
 - Custom linters, formatters, and command line usability
 
 
-[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.7.0...HEAD
+[0.6.0]: https://github.com/enkessler/cuke_linter/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/enkessler/cuke_linter/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/enkessler/cuke_linter/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/enkessler/cuke_linter/compare/v0.3.1...v0.4.0
