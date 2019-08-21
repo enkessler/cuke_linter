@@ -115,7 +115,8 @@ module CukeLinter
 
     model_sets.each do |model_tree|
       model_tree.each_model do |model|
-        linters.each do |linter|
+        applicable_linters = relevant_linters_for_model(linters, model)
+        applicable_linters.each do |linter|
           # TODO: have linters lint only certain types of models
           #         linting_data.concat(linter.lint(model)) if relevant_model?(linter, model)
 
@@ -145,6 +146,75 @@ module CukeLinter
     # TODO: keep this or always format data?
     linting_data
   end
+
+
+  def self.relevant_linters_for_model(base_linters, model)
+    feature_file_model = model.get_ancestor(:feature_file)
+
+    # Linter directives are not applicable for directory and feature file models. Every other model type should have a feature file ancestor from which to grab linter directive comments.
+    return base_linters if feature_file_model.nil?
+
+    linter_modifications_for_model = {}
+
+    linter_directives_for_feature_file(feature_file_model).each do |directive|
+      # Assuming that the directives are in the same order that they appear in the file
+      break if directive[:source_line] > model.source_line
+
+      linter_modifications_for_model[directive[:linter_name]] = directive[:enabled_status]
+    end
+
+    disabled_linter_names = linter_modifications_for_model.reject { |_name, status| status }.keys
+    enabled_linter_names  = linter_modifications_for_model.select { |_name, status| status }.keys
+
+    final_linters = base_linters.reject { |linter| disabled_linter_names.include?(linter.name) }
+    enabled_linter_names.each do |name|
+      final_linters << dynamic_linters[name] unless final_linters.map(&:name).include?(name)
+    end
+
+    final_linters
+  end
+
+  private_class_method(:relevant_linters_for_model)
+
+
+  def self.linter_directives_for_feature_file(feature_file_model)
+    # IMPORTANT ASSUMPTION: Models never change during the life of the program, so data only has to be gathered once
+    @directives_for_feature_file ||= {}
+    return @directives_for_feature_file[feature_file_model.object_id] if @directives_for_feature_file[feature_file_model.object_id]
+
+
+    @directives_for_feature_file[feature_file_model.object_id] = []
+
+    feature_file_model.comments.each do |comment|
+      pieces = comment.text.match(/#\s*cuke_linter:(disable)\s+(.*)/)
+      next unless pieces # Skipping non-directive file comments
+
+      linter_names = pieces[2].gsub(',', ' ').split(' ')
+      linter_names.each do |name|
+        @directives_for_feature_file[feature_file_model.object_id] << { linter_name:    name,
+                                                                        enabled_status: pieces[1] != 'disable',
+                                                                        source_line:    comment.source_line }
+      end
+    end
+
+    # Make sure that the directives are in the same order as they appear in the source file
+    @directives_for_feature_file[feature_file_model.object_id] = @directives_for_feature_file[feature_file_model.object_id].sort { |a, b| a[:source_line] <=> b[:source_line] }
+
+
+    @directives_for_feature_file[feature_file_model.object_id]
+  end
+
+  private_class_method(:linter_directives_for_feature_file)
+
+  def self.dynamic_linters
+    # No need to keep making new ones over and over...
+    @dynamic_linters ||= Hash.new { |hash, key| hash[key] = Kernel.const_get(key).new }
+    # return @dynamic_linters if @dynamic_linters
+    #
+    # @dynamic_linters = {}
+  end
+
+  private_class_method(:dynamic_linters)
 
 
 # #   def self.relevant_model?(linter, model)
