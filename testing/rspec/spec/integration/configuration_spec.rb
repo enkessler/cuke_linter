@@ -131,6 +131,7 @@ RSpec.describe CukeLinter do
       let(:test_linters) { [targeted_linter] }
       let(:test_linter_names) { [linter_name] }
       let(:test_formatters) { [[CukeLinter::FormatterFactory.generate_fake_formatter, "#{CukeLinter::FileHelper::create_directory}/junk_output_file.txt"]] }
+      let(:test_model_trees) { [CukeModeler::FeatureFile.new(linted_file)] }
 
       let(:test_directory) { CukeLinter::FileHelper.create_directory }
       let(:linted_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
@@ -205,39 +206,55 @@ RSpec.describe CukeLinter do
 
           end
 
+          context 'with multiple files' do
 
-          it 'does not use targeted linting changes outside of the file in which they occur' do
-            skip('finish me')
+            let(:modified_text) { "Feature:
+
+                                     # cuke_linter:disable #{linter_name}
+                                     Scenario:" }
+            let(:modified_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
+                                                                     extension: '.feature',
+                                                                     text:      modified_text) }
+            let(:unmodified_text) { "Feature:
+
+                                       Scenario:" }
+            let(:unmodified_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
+                                                                       extension: '.feature',
+                                                                       text:      unmodified_text) }
+
+            let(:test_model_trees) { [CukeModeler::FeatureFile.new(modified_file),
+                                      CukeModeler::FeatureFile.new(unmodified_file)] }
+
+            it 'does not use targeted linting changes outside of the file in which they occur' do
+              results = subject.lint(linting_options)
+
+              expect(results).to match_array([{ linter: linter_name, location: modified_file, problem: "#{linter_name} problem" },
+                                              { linter: linter_name, location: "#{modified_file}:1", problem: "#{linter_name} problem" },
+                                              { linter: linter_name, location: unmodified_file, problem: "#{linter_name} problem" },
+                                              { linter: linter_name, location: "#{unmodified_file}:1", problem: "#{linter_name} problem" },
+                                              { linter: linter_name, location: "#{unmodified_file}:3", problem: "#{linter_name} problem" }])
+            end
+
           end
 
           context 'with other comments in the file' do
 
-            let(:comments_text) { "# I'm just a comment
+            let(:file_text) { "# I'm just a comment
                                    Feature:
 
                                      # cuke_linter:disable #{linter_name}
                                      #Me too
                                      Scenario:" }
-            let(:comments_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
-                                                                     extension: '.feature',
-                                                                     text:      comments_text,
-                                                                     name:      'comments_text') }
-
-            let(:test_model_trees) { [CukeModeler::FeatureFile.new(comments_file)] }
-
-            let(:test_linters) { [targeted_linter] }
-            let(:test_linter_names) { [linter_name] }
 
 
             it 'handles the directive correctly' do
               results = subject.lint(linting_options)
 
-              expect(results).to match_array([{ linter: linter_name, location: comments_file, problem: "#{linter_name} problem" },
-                                              { linter: linter_name, location: "#{comments_file}:2", problem: "#{linter_name} problem" }])
+              expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
+                                              { linter: linter_name, location: "#{linted_file}:2", problem: "#{linter_name} problem" }])
             end
 
           end
-
 
           context 'with varying whitespace' do
 
@@ -353,7 +370,7 @@ RSpec.describe CukeLinter do
 
           end
 
-          context 'with a disabled/not provided linter' do
+          context 'with a disabled(i.e. unregistered)/not provided linter' do
 
             if linter_type == :provided
               before(:each) do
@@ -380,7 +397,6 @@ RSpec.describe CukeLinter do
 
                                    # cuke_linter:disable #{linter_name}
                                    Scenario:" }
-              let(:test_model_trees) { [CukeModeler::FeatureFile.new(linted_file)] }
 
               let(:baseline_linter_results) { [{ linter: baseline_linter_name, location: linted_file, problem: "#{baseline_linter_name} problem" },
                                                { linter: baseline_linter_name, location: "#{linted_file}:1", problem: "#{baseline_linter_name} problem" },
@@ -398,16 +414,31 @@ RSpec.describe CukeLinter do
 
                 context 'with separate targetings' do
 
+                  let(:file_text) { "Feature:
+                                       # cuke_linter:disable #{linter_name}
+                                       # cuke_linter:disable #{linter_name}
+                                       Scenario:" }
+
+
                   it 'does not use the linter' do
-                    skip('finish me')
+                    results = subject.lint(linting_options)
+
+                    expect(results).to match_array(baseline_linter_results + [])
                   end
 
                 end
 
                 context 'with the same targeting' do
 
+                  let(:file_text) { "Feature:
+
+                                       # cuke_linter:disable #{linter_name}, #{linter_name}
+                                       Scenario:" }
+
                   it 'does not use the linter' do
-                    skip('finish me')
+                    results = subject.lint(linting_options)
+
+                    expect(results).to match_array(baseline_linter_results + [])
                   end
 
                 end
@@ -464,30 +495,66 @@ RSpec.describe CukeLinter do
 
           end
 
-          context 'with an enabled linter' do
+          context 'with an enabled(i.e. registered)/provided linter' do
+
+            if linter_type == :provided
+              before(:each) do
+                test_linters << targeted_linter unless test_linters.include?(targeted_linter)
+              end
+            else
+              before(:each) do
+                subject.register_linter(linter: targeted_linter, name: linter_name)
+              end
+            end
+
 
             context 'that is explicitly disabled' do
 
+              let(:file_text) { "Feature:
+
+                                   # cuke_linter:disable #{linter_name}
+                                   Scenario:" }
+
+
               it 'does not use the linter' do
-                skip('finish me')
+                results = subject.lint(linting_options)
+
+                expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
+                                                { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" }])
               end
 
               context 'multiple times' do
 
                 context 'with separate targetings' do
 
+                  let(:file_text) { "Feature:
+                                       # cuke_linter:disable #{linter_name}
+                                       # cuke_linter:disable #{linter_name}
+                                       Scenario:" }
+
+
                   it 'does not use the linter' do
-                    skip('finish me')
+                    results = subject.lint(linting_options)
+
+                    expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
+                                                    { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" }])
                   end
 
                 end
 
                 context 'with the same targeting' do
 
-                  it 'does not use the linter' do
-                    skip('finish me')
-                  end
+                  let(:file_text) { "Feature:
 
+                                       # cuke_linter:disable #{linter_name}, #{linter_name}
+                                       Scenario:" }
+
+                  it 'does not use the linter' do
+                    results = subject.lint(linting_options)
+
+                    expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
+                                                    { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" }])
+                  end
                 end
 
               end
