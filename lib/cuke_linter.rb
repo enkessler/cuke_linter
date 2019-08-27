@@ -165,7 +165,8 @@ module CukeLinter
 
     disabled_linter_names = linter_modifications_for_model.reject { |_name, status| status }.keys
     enabled_linter_names  = linter_modifications_for_model.select { |_name, status| status }.keys
-
+    puts "disabled linter names: #{disabled_linter_names}"
+    puts "enabled linter names: #{enabled_linter_names}"
     final_linters = base_linters.reject { |linter| disabled_linter_names.include?(linter.name) }
     enabled_linter_names.each do |name|
       final_linters << dynamic_linters[name] unless final_linters.map(&:name).include?(name)
@@ -186,7 +187,7 @@ module CukeLinter
     @directives_for_feature_file[feature_file_model.object_id] = []
 
     feature_file_model.comments.each do |comment|
-      pieces = comment.text.match(/#\s*cuke_linter:(disable)\s+(.*)/)
+      pieces = comment.text.match(/#\s*cuke_linter:(disable|enable)\s+(.*)/)
       next unless pieces # Skipping non-directive file comments
 
       linter_names = pieces[2].gsub(',', ' ').split(' ')

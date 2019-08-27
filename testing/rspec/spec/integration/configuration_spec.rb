@@ -155,10 +155,6 @@ RSpec.describe CukeLinter do
             end
           end
 
-          it 'prefers a provided (or registered) linter over having to make a new one' do
-            skip('finish me')
-          end
-
           context 'with multiple linters in the directive' do
 
             let(:commas_text) { "Feature:
@@ -449,7 +445,21 @@ RSpec.describe CukeLinter do
 
             context 'that is explicitly enabled' do
 
+              # Has to be enabled by class because it's not provided
+
+              let(:file_text) { "Feature:
+
+                                   # cuke_linter:enable #{linter_name}
+                                   Scenario:" }
+
               it 'uses the linter' do
+                results = subject.lint(linting_options)
+
+                expect(results).to match_array([{ linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
+              end
+
+              it 'can handle qualified class names' do
+                # check nested and non-nested class names
                 skip('finish me')
               end
 
@@ -461,7 +471,6 @@ RSpec.describe CukeLinter do
                     skip('finish me')
                   end
 
-                  # Note: only works if the name of the provided/registered linter matches the class name of the dynamic file-scoped linter
                   it 'does not include redundant linting results' do
                     skip('finish me')
                   end
@@ -474,7 +483,6 @@ RSpec.describe CukeLinter do
                     skip('finish me')
                   end
 
-                  # Note: only works if the name of the provided/registered linter matches the class name of the dynamic file-scoped linter
                   it 'does not include redundant linting results' do
                     skip('finish me')
                   end
@@ -580,10 +588,47 @@ RSpec.describe CukeLinter do
                 skip('finish me')
               end
 
-              # Note: only works if the name of the provided/registered linter matches the class name of the dynamic file-scoped linter
-              it 'does not include redundant linting results' do
-                skip('finish me')
+              context 'by name' do
+
+                it 'does not include redundant linting results' do
+                  skip('finish me')
+                end
+
+                it 'prefers the provided (or registered) linter over having to make a new one' do
+                  skip('finish me')
+                end
+
               end
+
+              context 'by class' do
+
+                # Note: only works if the class of the provided/registered linter matches the class of the dynamic file-scoped linter
+                it 'does not include redundant linting results' do
+                  skip('finish me')
+                end
+
+                it 'prefers the provided (or registered) linter over having to make a new one' do
+                  skip('finish me')
+                end
+
+                context 'with a non-nested class name' do
+
+                  it 'uses the linter' do
+                    skip('finish me')
+                  end
+
+                end
+
+                context 'with a nested class name' do
+
+                  it 'uses the linter' do
+                    skip('finish me')
+                  end
+
+                end
+
+              end
+
 
               context 'multiple times' do
 
@@ -593,7 +638,6 @@ RSpec.describe CukeLinter do
                     skip('finish me')
                   end
 
-                  # Note: only works if the name of the provided/registered linter matches the class name of the dynamic file-scoped linter
                   it 'does not include redundant linting results' do
                     skip('finish me')
                   end
@@ -606,7 +650,6 @@ RSpec.describe CukeLinter do
                     skip('finish me')
                   end
 
-                  # Note: only works if the name of the provided/registered linter matches the class name of the dynamic file-scoped linter
                   it 'does not include redundant linting results' do
                     skip('finish me')
                   end
