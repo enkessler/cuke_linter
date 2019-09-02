@@ -28,9 +28,9 @@ module CukeLinter
       linter
     end
 
-    def self.generate_fake_linter_class(name: 'FakeLinter', finds_problems: true)
+    def self.generate_fake_linter_class(class_name: 'FakeLinter', name: 'Some Name', finds_problems: true)
 
-      Kernel.const_set(name, Class.new do
+      Kernel.const_set(class_name, Class.new do
 
         define_method('lint') do |model|
           location = model.respond_to?(:source_line) ? "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" : model.path

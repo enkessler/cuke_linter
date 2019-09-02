@@ -121,12 +121,24 @@ RSpec.describe CukeLinter do
 
     describe 'targeted linters' do
 
+      before(:all) do
+        @targeted_linter_class             = CukeLinter::LinterFactory.generate_fake_linter_class(class_name: 'ATargetedLinterClass', name: 'ATargetedLinter')
+        @another_targeted_linter_class     = CukeLinter::LinterFactory.generate_fake_linter_class(class_name: 'AnotherTargetedLinterClass', name: 'AnotherTargetedLinter')
+        @yet_another_targeted_linter_class = CukeLinter::LinterFactory.generate_fake_linter_class(class_name: 'YetAnotherTargetedLinterClass', name: 'YetAnotherTargetedLinter')
+      end
+
+
       let(:linter_name) { 'ATargetedLinter' }
       let(:another_linter_name) { 'AnotherTargetedLinter' }
       let(:yet_another_linter_name) { 'YetAnotherTargetedLinter' }
-      let(:targeted_linter) { CukeLinter::LinterFactory.generate_fake_linter(name: linter_name) }
-      let(:another_targeted_linter) { CukeLinter::LinterFactory.generate_fake_linter(name: another_linter_name) }
-      let(:yet_another_targeted_linter) { CukeLinter::LinterFactory.generate_fake_linter(name: yet_another_linter_name) }
+
+      let(:linter_class_name) { 'ATargetedLinterClass' }
+      let(:another_linter_class_name) { 'AnotherTargetedLinterClass' }
+      let(:yet_another_linter_class_name) { 'YetAnotherTargetedLinterClass' }
+
+      let(:targeted_linter) { @targeted_linter_class.new }
+      let(:another_targeted_linter) { @another_targeted_linter_class.new }
+      let(:yet_another_targeted_linter) { @yet_another_targeted_linter_class.new }
 
       let(:test_linters) { [targeted_linter] }
       let(:test_linter_names) { [linter_name] }
@@ -155,11 +167,16 @@ RSpec.describe CukeLinter do
             end
           end
 
+          it 'can handle qualified class names' do
+            # check nested and non-nested class names
+            skip('finish me')
+          end
+
           context 'with multiple linters in the directive' do
 
             let(:commas_text) { "Feature:
 
-                                   # cuke_linter:disable #{linter_name}, #{another_linter_name}, #{yet_another_linter_name}
+                                   # cuke_linter:disable #{linter_class_name}, #{another_linter_class_name}, #{yet_another_linter_class_name}
                                    Scenario:" }
             let(:commas_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
                                                                    extension: '.feature',
@@ -168,7 +185,7 @@ RSpec.describe CukeLinter do
 
             let(:spaces_text) { "Feature:
 
-                                   # cuke_linter:disable #{linter_name} #{another_linter_name} #{yet_another_linter_name}
+                                   # cuke_linter:disable #{linter_class_name} #{another_linter_class_name} #{yet_another_linter_class_name}
                                    Scenario:" }
             let(:spaces_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
                                                                    extension: '.feature',
@@ -206,7 +223,7 @@ RSpec.describe CukeLinter do
 
             let(:modified_text) { "Feature:
 
-                                     # cuke_linter:disable #{linter_name}
+                                     # cuke_linter:disable #{linter_class_name}
                                      Scenario:" }
             let(:modified_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
                                                                      extension: '.feature',
@@ -238,7 +255,7 @@ RSpec.describe CukeLinter do
             let(:file_text) { "# I'm just a comment
                                    Feature:
 
-                                     # cuke_linter:disable #{linter_name}
+                                     # cuke_linter:disable #{linter_class_name}
                                      #Me too
                                      Scenario:" }
 
@@ -256,14 +273,14 @@ RSpec.describe CukeLinter do
 
             let(:extra_whitespace_text) { "Feature:
 
-                                             #      cuke_linter:disable       #{linter_name}
+                                             #      cuke_linter:disable       #{linter_class_name}
                                              Scenario:" }
             let(:extra_whitespace_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
                                                                              extension: '.feature',
                                                                              text:      extra_whitespace_text) }
             let(:minimal_whitespace_text) { "Feature:
 
-                                               #cuke_linter:disable #{linter_name}
+                                               #cuke_linter:disable #{linter_class_name}
                                                Scenario:" }
             let(:minimal_whitespace_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
                                                                                extension: '.feature',
@@ -287,7 +304,7 @@ RSpec.describe CukeLinter do
 
               let(:spaced_commas_text) { "Feature:
 
-                                            # cuke_linter:disable #{linter_name}    ,    #{another_linter_name} , #{yet_another_linter_name}
+                                            # cuke_linter:disable #{linter_class_name}    ,    #{another_linter_class_name} , #{yet_another_linter_class_name}
                                             Scenario:" }
               let(:spaced_commas_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
                                                                             extension: '.feature',
@@ -296,7 +313,7 @@ RSpec.describe CukeLinter do
 
               let(:compact_commas_text) { "Feature:
 
-                                             # cuke_linter:disable #{linter_name},#{another_linter_name},#{yet_another_linter_name}
+                                             # cuke_linter:disable #{linter_class_name},#{another_linter_class_name},#{yet_another_linter_class_name}
                                              Scenario:" }
               let(:compact_commas_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
                                                                              extension: '.feature',
@@ -305,7 +322,7 @@ RSpec.describe CukeLinter do
 
               let(:spaced_space_text) { "Feature:
 
-                                           # cuke_linter:disable #{linter_name}        #{another_linter_name}  #{yet_another_linter_name}
+                                           # cuke_linter:disable #{linter_class_name}        #{another_linter_class_name}  #{yet_another_linter_class_name}
                                            Scenario:" }
               let(:spaced_space_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
                                                                            extension: '.feature',
@@ -314,7 +331,7 @@ RSpec.describe CukeLinter do
 
               let(:compact_space_text) { "Feature:
 
-                                            # cuke_linter:disable #{linter_name} #{another_linter_name} #{yet_another_linter_name}
+                                            # cuke_linter:disable #{linter_class_name} #{another_linter_class_name} #{yet_another_linter_class_name}
                                             Scenario:" }
               let(:compact_space_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
                                                                             extension: '.feature',
@@ -391,7 +408,7 @@ RSpec.describe CukeLinter do
 
               let(:file_text) { "Feature:
 
-                                   # cuke_linter:disable #{linter_name}
+                                   # cuke_linter:disable #{linter_class_name}
                                    Scenario:" }
 
               let(:baseline_linter_results) { [{ linter: baseline_linter_name, location: linted_file, problem: "#{baseline_linter_name} problem" },
@@ -411,8 +428,8 @@ RSpec.describe CukeLinter do
                 context 'with separate targetings' do
 
                   let(:file_text) { "Feature:
-                                       # cuke_linter:disable #{linter_name}
-                                       # cuke_linter:disable #{linter_name}
+                                       # cuke_linter:disable #{linter_class_name}
+                                       # cuke_linter:disable #{linter_class_name}
                                        Scenario:" }
 
 
@@ -428,7 +445,7 @@ RSpec.describe CukeLinter do
 
                   let(:file_text) { "Feature:
 
-                                       # cuke_linter:disable #{linter_name}, #{linter_name}
+                                       # cuke_linter:disable #{linter_class_name}, #{linter_class_name}
                                        Scenario:" }
 
                   it 'does not use the linter' do
@@ -445,22 +462,15 @@ RSpec.describe CukeLinter do
 
             context 'that is explicitly enabled' do
 
-              # Has to be enabled by class because it's not provided
-
               let(:file_text) { "Feature:
 
-                                   # cuke_linter:enable #{linter_name}
+                                   # cuke_linter:enable #{linter_class_name}
                                    Scenario:" }
 
               it 'uses the linter' do
                 results = subject.lint(linting_options)
 
                 expect(results).to match_array([{ linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
-              end
-
-              it 'can handle qualified class names' do
-                # check nested and non-nested class names
-                skip('finish me')
               end
 
               context 'multiple times' do
@@ -520,7 +530,7 @@ RSpec.describe CukeLinter do
 
               let(:file_text) { "Feature:
 
-                                   # cuke_linter:disable #{linter_name}
+                                   # cuke_linter:disable #{linter_class_name}
                                    Scenario:" }
 
 
@@ -536,8 +546,8 @@ RSpec.describe CukeLinter do
                 context 'with separate targetings' do
 
                   let(:file_text) { "Feature:
-                                       # cuke_linter:disable #{linter_name}
-                                       # cuke_linter:disable #{linter_name}
+                                       # cuke_linter:disable #{linter_class_name}
+                                       # cuke_linter:disable #{linter_class_name}
                                        Scenario:" }
 
 
@@ -554,7 +564,7 @@ RSpec.describe CukeLinter do
 
                   let(:file_text) { "Feature:
 
-                                       # cuke_linter:disable #{linter_name}, #{linter_name}
+                                       # cuke_linter:disable #{linter_class_name}, #{linter_class_name}
                                        Scenario:" }
 
                   it 'does not use the linter' do

@@ -160,16 +160,15 @@ module CukeLinter
       # Assuming that the directives are in the same order that they appear in the file
       break if directive[:source_line] > model.source_line
 
-      linter_modifications_for_model[directive[:linter_name]] = directive[:enabled_status]
+      linter_modifications_for_model[directive[:linter_class]] = directive[:enabled_status]
     end
 
-    disabled_linter_names = linter_modifications_for_model.reject { |_name, status| status }.keys
-    enabled_linter_names  = linter_modifications_for_model.select { |_name, status| status }.keys
-    puts "disabled linter names: #{disabled_linter_names}"
-    puts "enabled linter names: #{enabled_linter_names}"
-    final_linters = base_linters.reject { |linter| disabled_linter_names.include?(linter.name) }
-    enabled_linter_names.each do |name|
-      final_linters << dynamic_linters[name] unless final_linters.map(&:name).include?(name)
+    disabled_linter_classes = linter_modifications_for_model.reject { |_name, status| status }.keys
+    enabled_linter_classes  = linter_modifications_for_model.select { |_name, status| status }.keys
+
+    final_linters = base_linters.reject { |linter| disabled_linter_classes.include?(linter.class) }
+    enabled_linter_classes.each do |clazz|
+      final_linters << dynamic_linters[clazz] unless final_linters.map(&:class).include?(clazz)
     end
 
     final_linters
@@ -190,9 +189,9 @@ module CukeLinter
       pieces = comment.text.match(/#\s*cuke_linter:(disable|enable)\s+(.*)/)
       next unless pieces # Skipping non-directive file comments
 
-      linter_names = pieces[2].gsub(',', ' ').split(' ')
-      linter_names.each do |name|
-        @directives_for_feature_file[feature_file_model.object_id] << { linter_name:    name,
+      linter_classes = pieces[2].gsub(',', ' ').split(' ')
+      linter_classes.each do |clazz|
+        @directives_for_feature_file[feature_file_model.object_id] << { linter_class:   Kernel.const_get(clazz),
                                                                         enabled_status: pieces[1] != 'disable',
                                                                         source_line:    comment.source_line }
       end
@@ -209,7 +208,7 @@ module CukeLinter
 
   def self.dynamic_linters
     # No need to keep making new ones over and over...
-    @dynamic_linters ||= Hash.new { |hash, key| hash[key] = Kernel.const_get(key).new }
+    @dynamic_linters ||= Hash.new { |hash, key| hash[key] = key.new }
     # return @dynamic_linters if @dynamic_linters
     #
     # @dynamic_linters = {}

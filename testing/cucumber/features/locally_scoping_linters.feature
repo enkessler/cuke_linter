@@ -15,12 +15,12 @@ Feature: Locally scoping linters
     Given the following feature:
       """
       # The comma is optional when listing linters. The following two lines are equivalent (although the second line is redundant in this case).
-      # cuke_linter:disable TestWithNoNameLinter, FeatureWithoutDescriptionLinter
-      # cuke_linter:disable TestWithNoNameLinter FeatureWithoutDescriptionLinter
+      # cuke_linter:disable CukeLinter::TestWithNoNameLinter, CukeLinter::FeatureWithoutDescriptionLinter
+      # cuke_linter:disable CukeLinter::TestWithNoNameLinter CukeLinter::FeatureWithoutDescriptionLinter
 
       Feature: Feature with no description
 
-        # cuke_linter:disable ElementWithTooManyTagsLinter
+        # cuke_linter:disable CukeLinter::ElementWithTooManyTagsLinter
         @tag_1 @tag_2 @tag_3 @tag_4 @tag_5 @tag_one_too_many
         Scenario:
           This scenario has no name and too many tags
@@ -28,7 +28,7 @@ Feature: Locally scoping linters
           Given a step
           When a step
           Then a step
-        # cuke_linter:enable ElementWithTooManyTagsLinter
+        # cuke_linter:enable CukeLinter::ElementWithTooManyTagsLinter
 
         @tag_1 @tag_2 @tag_3 @tag_4 @tag_5 @tag_one_too_many
         Scenario:
