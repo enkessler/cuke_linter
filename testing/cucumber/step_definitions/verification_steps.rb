@@ -62,3 +62,7 @@ And(/^the file "([^"]*)" contains:$/) do |file_path, text|
 
   expect(File.read(file_path)).to eq(text)
 end
+
+Then(/^the exit code is "([^"]*)"$/) do |exit_code|
+  expect(@results[:status].exitstatus).to eq(exit_code.to_i)
+end
