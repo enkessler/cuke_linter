@@ -51,7 +51,7 @@ parser = OptionParser.new do |options|
 
     if params[:config]
       puts 'Cannot specify more than one configuration file!'
-      exit(1)
+      exit(2)
     end
 
     params[:config] = file_path
@@ -75,7 +75,7 @@ rescue OptionParser::InvalidOption, OptionParser::MissingArgument => e
   puts e.message
   puts parser.help
 
-  exit(1)
+  exit(2)
 end
 
 
@@ -105,4 +105,6 @@ elsif File.exist?("#{Dir.pwd}/.cuke_linter")
   CukeLinter.load_configuration
 end
 
-CukeLinter.lint(options)
+results = CukeLinter.lint(options)
+
+exit(1) unless results.empty?

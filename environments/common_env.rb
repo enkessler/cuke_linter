@@ -1,6 +1,7 @@
 require 'require_all'
 
 require 'cuke_linter'
+require 'open3'
 
 
 require_relative '../testing/model_factory'

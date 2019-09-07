@@ -189,3 +189,11 @@ Feature: Using cuke_linter on the command line
       """
       0 issues found
       """
+
+  Scenario: Interpreting exit codes
+    When the executable finds no linting problems
+    Then the exit code is "0"
+    When the executable finds linting problems
+    Then the exit code is "1"
+    When the executable has a problem
+    Then the exit code is "2"
