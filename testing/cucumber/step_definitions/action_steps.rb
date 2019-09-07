@@ -37,3 +37,48 @@ end
 When(/^"([^"]*)" is the current directory$/) do |directory|
   @working_directory = "#{@root_test_directory}/#{directory}"
 end
+
+When(/^the executable finds no linting problems$/) do
+  # Linting an empty directory doesn't (currently) find and problems
+  command = "bundle exec ruby #{PROJECT_ROOT}/exe/cuke_linter"
+
+  std_out, std_err, status = [nil, nil, nil]
+
+  Dir.chdir(@root_test_directory) do
+    std_out, std_err, status = Open3.capture3(command)
+  end
+
+  @results = { std_out: std_out, std_err: std_err, status: status }
+end
+
+When(/^the executable finds linting problems$/) do
+  # This should be a problematic feature file
+  CukeLinter::FileHelper.create_file(directory: @root_test_directory,
+                                     name:      'pretty_empty',
+                                     extension: '.feature',
+                                     text:      'Feature: ')
+
+
+  command = "bundle exec ruby #{PROJECT_ROOT}/exe/cuke_linter"
+
+  std_out, std_err, status = [nil, nil, nil]
+
+  Dir.chdir(@root_test_directory) do
+    std_out, std_err, status = Open3.capture3(command)
+  end
+
+  @results = { std_out: std_out, std_err: std_err, status: status }
+end
+
+When(/^the executable has a problem$/) do
+  # Missing a required argument for a flag should be a problem
+  command = "bundle exec ruby #{PROJECT_ROOT}/exe/cuke_linter -r"
+
+  std_out, std_err, status = [nil, nil, nil]
+
+  Dir.chdir(@root_test_directory) do
+    std_out, std_err, status = Open3.capture3(command)
+  end
+
+  @results = { std_out: std_out, std_err: std_err, status: status }
+end

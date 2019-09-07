@@ -4,6 +4,9 @@ require 'open3'
 
 RSpec.describe 'the Command Line Interface' do
 
+  # Exit codes that are expected during normal use of the CLI
+  let(:normal_exit_codes) { [0, 1] }
+
   # A minimal fake test suite that should be available for every spec
   let!(:test_directory) { CukeLinter::FileHelper.create_directory }
   let!(:linted_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
@@ -18,6 +21,7 @@ RSpec.describe 'the Command Line Interface' do
   let(:executable_directory) { "#{PROJECT_ROOT}/exe" }
   let(:executable_name) { 'cuke_linter' }
   let(:executable_path) { "#{executable_directory}/#{executable_name}" }
+  let(:command) { "bundle exec ruby #{executable_path}" }
   let(:results) { std_out, std_err, status = [nil, nil, nil]
 
                   Dir.chdir(test_directory) do
@@ -53,7 +57,7 @@ RSpec.describe 'the Command Line Interface' do
     let(:command) { "bundle exec ruby #{executable_path}" }
 
     it 'can run cleanly by default' do
-      expect(results[:status].exitstatus).to eq(0)
+      expect(normal_exit_codes).to include(results[:status].exitstatus)
     end
 
     context 'when the default configuration file exists' do
@@ -81,12 +85,57 @@ RSpec.describe 'the Command Line Interface' do
       end
 
       it 'can still run cleanly' do
-        expect(results[:status].exitstatus).to eq(0)
+        expect(normal_exit_codes).to include(results[:status].exitstatus)
       end
 
     end
 
   end
+
+  describe 'exit codes' do
+
+    context 'when no problems are found' do
+      # This file does not have any problems with the current linter set
+      let!(:linted_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
+                                                              name:      'nothing_wrong',
+                                                              extension: '.feature',
+                                                              text:      'Feature: A name
+                                                                            A description
+                                                                            Scenario: A scenario
+                                                                              When a step
+                                                                              Then a step') }
+
+      it 'returns a zero exit code' do
+        expect(results[:status].exitstatus).to eq(0)
+      end
+
+    end
+
+    context 'when linting problems are found' do
+      # This should be a problematic feature file
+      let!(:linted_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
+                                                              name:      'pretty_empty',
+                                                              extension: '.feature',
+                                                              text:      'Feature: ') }
+
+      it 'returns a non-zero exit code' do
+        expect(results[:status].exitstatus).to eq(1)
+      end
+
+    end
+
+    context 'when something else goes wrong' do
+
+      # Bad CLI usage due to missing required flag arguments
+      let(:command) { "bundle exec ruby #{executable_path} -r" }
+
+      it 'returns a different non-zero exit code' do
+        expect(results[:status].exitstatus).to eq(2)
+      end
+
+    end
+  end
+
 
   describe 'option flags' do
 
@@ -143,7 +192,7 @@ RSpec.describe 'the Command Line Interface' do
             end
 
             it 'exits with an error' do
-              expect(results[:status].exitstatus).to eq(1)
+              expect(results[:status].exitstatus).to eq(2)
             end
 
           end
@@ -207,7 +256,7 @@ RSpec.describe 'the Command Line Interface' do
             end
 
             it 'exits with an error' do
-              expect(results[:status].exitstatus).to eq(1)
+              expect(results[:status].exitstatus).to eq(2)
             end
 
           end
@@ -324,7 +373,7 @@ RSpec.describe 'the Command Line Interface' do
             end
 
             it 'exits with an error' do
-              expect(results[:status].exitstatus).to eq(1)
+              expect(results[:status].exitstatus).to eq(2)
             end
 
           end
@@ -371,7 +420,7 @@ RSpec.describe 'the Command Line Interface' do
             end
 
             it 'exits with an error' do
-              expect(results[:status].exitstatus).to eq(1)
+              expect(results[:status].exitstatus).to eq(2)
             end
 
           end
@@ -410,7 +459,7 @@ RSpec.describe 'the Command Line Interface' do
             end
 
             it 'exits with an error' do
-              expect(results[:status].exitstatus).to eq(1)
+              expect(results[:status].exitstatus).to eq(2)
             end
 
           end
@@ -429,7 +478,7 @@ RSpec.describe 'the Command Line Interface' do
             end
 
             it 'exits with an error' do
-              expect(results[:status].exitstatus).to eq(1)
+              expect(results[:status].exitstatus).to eq(2)
             end
 
           end
@@ -496,7 +545,7 @@ RSpec.describe 'the Command Line Interface' do
       end
 
       it 'exits with an error' do
-        expect(results[:status].exitstatus).to eq(1)
+        expect(results[:status].exitstatus).to eq(2)
       end
 
     end

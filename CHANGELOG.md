@@ -6,8 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet...
-
+### Changed
+ - The exit codes used by the CLI have been changed in order to better facilitate taking additional actions based on them. 
+   - 0 - No linting problems found
+   - 1 - Linting problems found
+   - 2 - Some other problem (e.g. incorrect CLI usage)
 
 ## [0.7.0] - 2019-07-12
 
