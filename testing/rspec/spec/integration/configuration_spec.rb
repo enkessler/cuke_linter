@@ -125,6 +125,12 @@ RSpec.describe CukeLinter do
         @targeted_linter_class             = CukeLinter::LinterFactory.generate_fake_linter_class(class_name: 'ATargetedLinterClass', name: 'ATargetedLinter')
         @another_targeted_linter_class     = CukeLinter::LinterFactory.generate_fake_linter_class(class_name: 'AnotherTargetedLinterClass', name: 'AnotherTargetedLinter')
         @yet_another_targeted_linter_class = CukeLinter::LinterFactory.generate_fake_linter_class(class_name: 'YetAnotherTargetedLinterClass', name: 'YetAnotherTargetedLinter')
+
+        @a_non_nested_targeted_linter_class       = CukeLinter::LinterFactory.generate_fake_linter_class(module_name: nil, class_name: 'ANonNestedTargetedLinterClass', name: 'ANonNestedTargetedLinter')
+        @another_non_nested_targeted_linter_class = CukeLinter::LinterFactory.generate_fake_linter_class(module_name: nil, class_name: 'AnotherNonNestedTargetedLinterClass', name: 'AnotherNonNestedTargetedLinter')
+
+        @a_nested_targeted_linter_class       = CukeLinter::LinterFactory.generate_fake_linter_class(module_name: 'Foo', class_name: 'ANestedTargetedLinterClass', name: 'ANestedTargetedLinter')
+        @another_nested_targeted_linter_class = CukeLinter::LinterFactory.generate_fake_linter_class(module_name: 'Foo', class_name: 'AnotherNestedTargetedLinterClass', name: 'AnotherNestedTargetedLinter')
       end
 
 
@@ -132,13 +138,24 @@ RSpec.describe CukeLinter do
       let(:another_linter_name) { 'AnotherTargetedLinter' }
       let(:yet_another_linter_name) { 'YetAnotherTargetedLinter' }
 
+      let(:non_nested_linter_name) { 'ANonNestedTargetedLinter' }
+      let(:another_non_nested_linter_name) { 'AnotherNonNestedTargetedLinter' }
+      let(:nested_linter_name) { 'ANestedTargetedLinter' }
+      let(:another_nested_linter_name) { 'AnotherNestedTargetedLinter' }
+
       let(:linter_class_name) { 'ATargetedLinterClass' }
       let(:another_linter_class_name) { 'AnotherTargetedLinterClass' }
       let(:yet_another_linter_class_name) { 'YetAnotherTargetedLinterClass' }
+      let(:non_nested_linter_class_name) { 'ANonNestedTargetedLinterClass' }
+      let(:another_non_nested_linter_class_name) { 'AnotherNonNestedTargetedLinterClass' }
+      let(:nested_linter_class_name) { 'Foo::ANestedTargetedLinterClass' }
+      let(:another_nested_linter_class_name) { 'Foo::AnotherNestedTargetedLinterClass' }
 
       let(:targeted_linter) { @targeted_linter_class.new }
       let(:another_targeted_linter) { @another_targeted_linter_class.new }
       let(:yet_another_targeted_linter) { @yet_another_targeted_linter_class.new }
+      let(:non_nested_targeted_linter) { @a_non_nested_targeted_linter_class.new }
+      let(:nested_targeted_linter) { @a_nested_targeted_linter_class.new }
 
       let(:test_linters) { [targeted_linter] }
       let(:test_linter_names) { [linter_name] }
@@ -167,9 +184,49 @@ RSpec.describe CukeLinter do
             end
           end
 
-          it 'can handle qualified class names' do
-            # check nested and non-nested class names
-            skip('finish me')
+
+          context 'with non-nested class names' do
+
+            let(:test_linters) { [non_nested_targeted_linter] }
+            let(:test_linter_names) { [non_nested_linter_name] }
+
+            let(:file_text) { "Feature:
+
+                                 # cuke_linter:disable #{non_nested_linter_class_name}
+                                 # cuke_linter:enable #{another_non_nested_linter_class_name}
+                                 Scenario:" }
+
+
+            it 'handles the directives correctly' do
+              results = subject.lint(linting_options)
+
+              expect(results).to match_array([{ linter: non_nested_linter_name, location: linted_file, problem: "#{non_nested_linter_name} problem" },
+                                              { linter: non_nested_linter_name, location: "#{linted_file}:1", problem: "#{non_nested_linter_name} problem" },
+                                              { linter: another_non_nested_linter_name, location: "#{linted_file}:5", problem: "#{another_non_nested_linter_name} problem" }])
+            end
+
+          end
+
+          context 'with nested class names' do
+
+            let(:test_linters) { [nested_targeted_linter] }
+            let(:test_linter_names) { [nested_linter_name] }
+
+            let(:file_text) { "Feature:
+
+                                 # cuke_linter:disable #{nested_linter_class_name}
+                                 # cuke_linter:enable #{another_nested_linter_class_name}
+                                 Scenario:" }
+
+
+            it 'handles the directives correctly' do
+              results = subject.lint(linting_options)
+
+              expect(results).to match_array([{ linter: nested_linter_name, location: linted_file, problem: "#{nested_linter_name} problem" },
+                                              { linter: nested_linter_name, location: "#{linted_file}:1", problem: "#{nested_linter_name} problem" },
+                                              { linter: another_nested_linter_name, location: "#{linted_file}:5", problem: "#{another_nested_linter_name} problem" }])
+            end
+
           end
 
           context 'with multiple linters in the directive' do
@@ -598,45 +655,12 @@ RSpec.describe CukeLinter do
                 skip('finish me')
               end
 
-              context 'by name' do
-
-                it 'does not include redundant linting results' do
-                  skip('finish me')
-                end
-
-                it 'prefers the provided (or registered) linter over having to make a new one' do
-                  skip('finish me')
-                end
-
+              it 'does not include redundant linting results' do
+                skip('finish me')
               end
 
-              context 'by class' do
-
-                # Note: only works if the class of the provided/registered linter matches the class of the dynamic file-scoped linter
-                it 'does not include redundant linting results' do
-                  skip('finish me')
-                end
-
-                it 'prefers the provided (or registered) linter over having to make a new one' do
-                  skip('finish me')
-                end
-
-                context 'with a non-nested class name' do
-
-                  it 'uses the linter' do
-                    skip('finish me')
-                  end
-
-                end
-
-                context 'with a nested class name' do
-
-                  it 'uses the linter' do
-                    skip('finish me')
-                  end
-
-                end
-
+              it 'prefers the provided (or registered) linter over having to make a new one' do
+                skip('finish me')
               end
 
 
