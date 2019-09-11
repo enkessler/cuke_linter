@@ -22,7 +22,9 @@ Then(/^an error is reported:$/) do |table|
   end
 end
 
-Then(/^the following problems are reported:$/) do |table|
+Then(/^the following problems are( not)? reported:$/) do |exclude, table|
+  assertion_method = exclude ? :to_not : :to
+
   if @model.is_a?(CukeModeler::FeatureFile)
     feature_file_model = @model
     source_line        = ''
@@ -32,27 +34,9 @@ Then(/^the following problems are reported:$/) do |table|
   end
 
   table.hashes.each do |error_record|
-    expect(@results).to include({ linter:   error_record['linter'],
-                                  problem:  error_record['problem'],
-                                  location: error_record['location'].sub('<path_to_file>', feature_file_model.path).sub('<model_line_number>', source_line) })
-  end
-end
-
-# TODO: Combine these two almost completely the same steps
-
-Then(/^the following problems are not reported:$/) do |table|
-  if @model.is_a?(CukeModeler::FeatureFile)
-    feature_file_model = @model
-    source_line        = ''
-  else
-    feature_file_model = @model.get_ancestor(:feature_file)
-    source_line        = @model.source_line.to_s
-  end
-
-  table.hashes.each do |error_record|
-    expect(@results).to_not include({ linter:   error_record['linter'],
-                                      problem:  error_record['problem'],
-                                      location: error_record['location'].sub('<path_to_file>', feature_file_model.path).sub('<model_line_number>', source_line) })
+    expect(@results).send(assertion_method, include({ linter:   error_record['linter'],
+                                                      problem:  error_record['problem'],
+                                                      location: error_record['location'].sub('<path_to_file>', feature_file_model.path).sub('<model_line_number>', source_line) }))
   end
 end
 
