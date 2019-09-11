@@ -1,4 +1,3 @@
-@wip
 Feature: Locally scoping linters
 
   As a writer of documentation
@@ -12,7 +11,8 @@ Feature: Locally scoping linters
 
   Note: This example disables linters that are enabled by default but enabling a linter that is disabled by default works in the same manner
 
-    Given the following feature:
+    Given the default linters are being used
+    And a feature file model based on the following text:
       """
       # The comma is optional when listing linters. The following two lines are equivalent (although the second line is redundant in this case).
       # cuke_linter:disable CukeLinter::TestWithNoNameLinter, CukeLinter::FeatureWithoutDescriptionLinter
@@ -40,11 +40,11 @@ Feature: Locally scoping linters
       """
     When the feature is linted
     Then the following problems are reported:
-      | linter                       | problem                                           | location        |
-      | ElementWithTooManyTagsLinter | Scenario has too many tags. 6 tags found (max 5). | path_to_file:18 |
+      | linter                       | problem                                           | location          |
+      | ElementWithTooManyTagsLinter | Scenario has too many tags. 6 tags found (max 5). | <path_to_file>:18 |
     And the following problems are not reported:
-      | linter                          | problem                                           | location        |
-      | FeatureWithoutDescriptionLinter | Feature has no description                        | path_to_file:5  |
-      | TestWithNoNameLinter            | Test does not have a name.                        | path_to_file:9  |
-      | TestWithNoNameLinter            | Test does not have a name.                        | path_to_file:18 |
-      | ElementWithTooManyTagsLinter    | Scenario has too many tags. 6 tags found (max 5). | path_to_file:9  |
+      | linter                          | problem                                           | location          |
+      | FeatureWithoutDescriptionLinter | Feature has no description                        | <path_to_file>:5  |
+      | TestWithNoNameLinter            | Test does not have a name.                        | <path_to_file>:9  |
+      | TestWithNoNameLinter            | Test does not have a name.                        | <path_to_file>:18 |
+      | ElementWithTooManyTagsLinter    | Scenario has too many tags. 6 tags found (max 5). | <path_to_file>:9  |

@@ -716,7 +716,29 @@ RSpec.describe CukeLinter do
               end
 
               it 'prefers the provided (or registered) linter over having to make a new one' do
-                skip('finish me')
+
+                # Tweaking the linter objects that will already exist so that any linter created from the same class will be noticeably different
+                provided_linter   = test_linters.find { |linter| linter.is_a?(Kernel.const_get(linter_class_name)) }
+                registered_linter = CukeLinter.registered_linters.values.find { |linter| linter.is_a?(Kernel.const_get(linter_class_name)) }
+
+                if provided_linter
+                  def provided_linter.name
+                    'Pre-existing Linter'
+                  end
+                end
+
+                if registered_linter
+                  def registered_linter.name
+                    'Pre-existing Linter'
+                  end
+                end
+
+
+                results = subject.lint(linting_options)
+
+                expect(results).to match_array([{ linter: 'Pre-existing Linter', location: linted_file, problem: "#{linter_name} problem" },
+                                                { linter: 'Pre-existing Linter', location: "#{linted_file}:1", problem: "#{linter_name} problem" },
+                                                { linter: 'Pre-existing Linter', location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
               end
 
 
