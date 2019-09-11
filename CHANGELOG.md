@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet...
+### Added
+ - Linters can now be temporarily enabled/disabled within arbitrary portions of a feature file, in order to allow for exceptions to the otherwise blanket set of linting rules. 
 
 ## [0.8.0] - 2019-09-07
 
