@@ -534,24 +534,42 @@ RSpec.describe CukeLinter do
 
                 context 'with separate targetings' do
 
+                  let(:file_text) { "Feature:
+                                       # cuke_linter:enable #{linter_class_name}
+                                       # cuke_linter:enable #{linter_class_name}
+                                       Scenario:" }
+
                   it 'uses the linter' do
-                    skip('finish me')
+                    results = subject.lint(linting_options)
+
+                    expect(results).to match_array([{ linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
                   end
 
                   it 'does not include redundant linting results' do
-                    skip('finish me')
+                    results = subject.lint(linting_options)
+
+                    expect(results).to match_array([{ linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
                   end
 
                 end
 
                 context 'with the same targeting' do
 
+                  let(:file_text) { "Feature:
+
+                                       # cuke_linter:enable #{linter_class_name}, #{linter_class_name}
+                                       Scenario:" }
+
                   it 'uses the linter' do
-                    skip('finish me')
+                    results = subject.lint(linting_options)
+
+                    expect(results).to match_array([{ linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
                   end
 
                   it 'does not include redundant linting results' do
-                    skip('finish me')
+                    results = subject.lint(linting_options)
+
+                    expect(results).to match_array([{ linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
                   end
 
                 end
@@ -560,8 +578,17 @@ RSpec.describe CukeLinter do
 
               context 'and then re-disabled' do
 
+                let(:file_text) { "Feature:
+
+                                     # cuke_linter:enable #{linter_class_name}
+                                     Scenario:
+                                     # cuke_linter:disable #{linter_class_name}
+                                     Scenario:" }
+
                 it 'ceases using the linter' do
-                  skip('finish me')
+                  results = subject.lint(linting_options)
+
+                  expect(results).to match_array([{ linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
                 end
 
               end
@@ -636,13 +663,28 @@ RSpec.describe CukeLinter do
 
               context 'and then re-enabled' do
 
+                let(:file_text) { "Feature:
+
+                                     # cuke_linter:disable #{linter_class_name}
+                                     Scenario:
+                                     # cuke_linter:enable #{linter_class_name}
+                                     Scenario:" }
+
+
                 it 'resumes using the linter' do
-                  skip('finish me')
+                  results = subject.lint(linting_options)
+
+                  expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
+                                                  { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
+                                                  { linter: linter_name, location: "#{linted_file}:6", problem: "#{linter_name} problem" }])
                 end
 
-                # Note: only works if the name of the provided/registered linter matches the class name of the dynamic file-scoped linter
                 it 'does not include redundant linting results' do
-                  skip('finish me')
+                  results = subject.lint(linting_options)
+
+                  expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
+                                                  { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
+                                                  { linter: linter_name, location: "#{linted_file}:6", problem: "#{linter_name} problem" }])
                 end
 
               end
@@ -651,12 +693,26 @@ RSpec.describe CukeLinter do
 
             context 'that is explicitly enabled' do
 
+              let(:file_text) { "Feature:
+
+                                   # cuke_linter:enable #{linter_class_name}
+                                   Scenario:" }
+
+
               it 'uses the linter' do
-                skip('finish me')
+                results = subject.lint(linting_options)
+
+                expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
+                                                { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
+                                                { linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
               end
 
               it 'does not include redundant linting results' do
-                skip('finish me')
+                results = subject.lint(linting_options)
+
+                expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
+                                                { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
+                                                { linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
               end
 
               it 'prefers the provided (or registered) linter over having to make a new one' do
@@ -668,24 +724,50 @@ RSpec.describe CukeLinter do
 
                 context 'with separate targetings' do
 
+                  let(:file_text) { "Feature:
+                                       # cuke_linter:enable #{linter_class_name}
+                                       # cuke_linter:enable #{linter_class_name}
+                                       Scenario:" }
+
                   it 'uses the linter' do
-                    skip('finish me')
+                    results = subject.lint(linting_options)
+
+                    expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
+                                                    { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
+                                                    { linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
                   end
 
                   it 'does not include redundant linting results' do
-                    skip('finish me')
+                    results = subject.lint(linting_options)
+
+                    expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
+                                                    { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
+                                                    { linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
                   end
 
                 end
 
                 context 'with the same targeting' do
 
+                  let(:file_text) { "Feature:
+
+                                       # cuke_linter:enable #{linter_class_name}, #{linter_class_name}
+                                       Scenario:" }
+
                   it 'uses the linter' do
-                    skip('finish me')
+                    results = subject.lint(linting_options)
+
+                    expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
+                                                    { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
+                                                    { linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
                   end
 
                   it 'does not include redundant linting results' do
-                    skip('finish me')
+                    results = subject.lint(linting_options)
+
+                    expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
+                                                    { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
+                                                    { linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
                   end
 
                 end
