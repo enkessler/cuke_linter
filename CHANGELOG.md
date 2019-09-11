@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Nothing yet...
 
+## [0.9.0] - 2019-09-11
+
+### Added
+ - Linters can now be temporarily enabled/disabled within arbitrary portions of a feature file, in order to allow for exceptions to the otherwise blanket set of linting rules. 
+
 ## [0.8.0] - 2019-09-07
 
 ### Changed
@@ -85,7 +90,8 @@ Nothing yet...
 - Custom linters, formatters, and command line usability
 
 
-[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/enkessler/cuke_linter/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/enkessler/cuke_linter/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/enkessler/cuke_linter/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/enkessler/cuke_linter/compare/v0.5.0...v0.6.0

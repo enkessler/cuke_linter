@@ -148,3 +148,16 @@ Given(/^the following(?: feature)? file "([^"]*)":$/) do |file_path, text|
   @created_files ||= []
   @created_files << CukeLinter::FileHelper.create_file(directory: @root_test_directory, name: path, extension: ".#{extension}", text: text)
 end
+
+Given(/^the default linters are being used$/) do
+  CukeLinter.reset_linters
+end
+
+And(/^a feature file model based on the following text:$/) do |text|
+  file_path = CukeLinter::FileHelper.create_file(directory: @root_test_directory, extension: '.feature', text: text)
+
+  @created_files ||= []
+  @created_files << file_path
+
+  @model = CukeModeler::FeatureFile.new(file_path)
+end
