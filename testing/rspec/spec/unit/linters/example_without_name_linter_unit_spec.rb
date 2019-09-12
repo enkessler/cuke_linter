@@ -46,11 +46,11 @@ RSpec.describe CukeLinter::ExampleWithoutNameLinter do
       it 'records a problem' do
         result = subject.lint(test_model_with_nil_name)
 
-        expect(result[:problem]).to eq('Example has no name')
+        expect(result[:problem]).to eq('Example grouping has no name')
 
         result = subject.lint(test_model_with_blank_name)
 
-        expect(result[:problem]).to eq('Example has no name')
+        expect(result[:problem]).to eq('Example grouping has no name')
       end
 
       it 'records the location of the problem' do
