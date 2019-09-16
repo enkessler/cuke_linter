@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-###Changed
+### Added
+ - New linters
+   - TestShouldUseBackgroundLinter
+
+### Changed
  - Improved some fo the documentation and linting messages so that it is more clear what the problem is.
 
 ## [0.9.0] - 2019-09-11

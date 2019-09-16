@@ -89,6 +89,10 @@ Given(/^a linter for tests with no name$/) do
   @linter = CukeLinter::TestWithNoNameLinter.new
 end
 
+Given(/^a linter for tests that should use a background$/) do
+  @linter = CukeLinter::TestShouldUseBackgroundLinter.new
+end
+
 Given(/^a linter for test steps with too many characters has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::StepWithTooManyCharactersLinter.new, name: 'StepWithTooManyCharactersLinter')
 end

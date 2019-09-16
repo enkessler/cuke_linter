@@ -194,6 +194,8 @@ RSpec.describe CukeLinter do
     expect(subject.registered_linters['StepWithEndPeriodLinter']).to be_a(CukeLinter::StepWithEndPeriodLinter)
     expect(subject.registered_linters.keys).to include('StepWithTooManyCharactersLinter')
     expect(subject.registered_linters['StepWithTooManyCharactersLinter']).to be_a(CukeLinter::StepWithTooManyCharactersLinter)
+    expect(subject.registered_linters.keys).to include('TestShouldUseBackgroundLinter')
+    expect(subject.registered_linters['TestShouldUseBackgroundLinter']).to be_a(CukeLinter::TestShouldUseBackgroundLinter)
     expect(subject.registered_linters.keys).to include('TestWithNoActionStepLinter')
     expect(subject.registered_linters['TestWithNoActionStepLinter']).to be_a(CukeLinter::TestWithNoActionStepLinter)
     expect(subject.registered_linters.keys).to include('TestWithNoNameLinter')
