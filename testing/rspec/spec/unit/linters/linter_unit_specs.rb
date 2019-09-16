@@ -31,6 +31,7 @@ shared_examples_for 'a linter at the unit level' do
     it 'includes the problem and its locations in its result' do
       result = subject.lint(bad_data)
 
+      expect(result).to_not be_nil
       expect(result.keys).to match_array([:problem, :location])
     end
 
