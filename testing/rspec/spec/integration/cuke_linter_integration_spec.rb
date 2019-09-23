@@ -180,6 +180,8 @@ RSpec.describe CukeLinter do
     expect(subject.registered_linters['ElementWithTooManyTagsLinter']).to be_a(CukeLinter::ElementWithTooManyTagsLinter)
     expect(subject.registered_linters.keys).to include('ExampleWithoutNameLinter')
     expect(subject.registered_linters['ExampleWithoutNameLinter']).to be_a(CukeLinter::ExampleWithoutNameLinter)
+    expect(subject.registered_linters.keys).to include('FeatureWithTooManyDifferentTagsLinter')
+    expect(subject.registered_linters['FeatureWithTooManyDifferentTagsLinter']).to be_a(CukeLinter::FeatureWithTooManyDifferentTagsLinter)
     expect(subject.registered_linters.keys).to include('FeatureWithoutDescriptionLinter')
     expect(subject.registered_linters['FeatureWithoutDescriptionLinter']).to be_a(CukeLinter::FeatureWithoutDescriptionLinter)
     expect(subject.registered_linters.keys).to include('FeatureWithoutNameLinter')

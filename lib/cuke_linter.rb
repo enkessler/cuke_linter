@@ -7,6 +7,7 @@ require 'cuke_linter/linters/linter'
 require 'cuke_linter/linters/background_does_more_than_setup_linter'
 require 'cuke_linter/linters/element_with_too_many_tags_linter'
 require 'cuke_linter/linters/example_without_name_linter'
+require 'cuke_linter/linters/feature_with_too_many_different_tags_linter'
 require 'cuke_linter/linters/feature_without_name_linter'
 require 'cuke_linter/linters/feature_without_description_linter'
 require 'cuke_linter/linters/feature_without_scenarios_linter'
@@ -25,21 +26,22 @@ require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 module CukeLinter
 
-  @original_linters = { 'BackgroundDoesMoreThanSetupLinter' => BackgroundDoesMoreThanSetupLinter.new,
-                        'ElementWithTooManyTagsLinter'      => ElementWithTooManyTagsLinter.new,
-                        'ExampleWithoutNameLinter'          => ExampleWithoutNameLinter.new,
-                        'FeatureWithoutDescriptionLinter'   => FeatureWithoutDescriptionLinter.new,
-                        'FeatureWithoutNameLinter'          => FeatureWithoutNameLinter.new,
-                        'FeatureWithoutScenariosLinter'     => FeatureWithoutScenariosLinter.new,
-                        'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
-                        'SingleTestBackgroundLinter'        => SingleTestBackgroundLinter.new,
-                        'StepWithEndPeriodLinter'           => StepWithEndPeriodLinter.new,
-                        'TestShouldUseBackgroundLinter'     => TestShouldUseBackgroundLinter.new,
-                        'TestWithNoActionStepLinter'        => TestWithNoActionStepLinter.new,
-                        'TestWithNoNameLinter'              => TestWithNoNameLinter.new,
-                        'TestWithNoVerificationStepLinter'  => TestWithNoVerificationStepLinter.new,
-                        'StepWithTooManyCharactersLinter'   => StepWithTooManyCharactersLinter.new,
-                        'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
+  @original_linters = { 'BackgroundDoesMoreThanSetupLinter'     => BackgroundDoesMoreThanSetupLinter.new,
+                        'ElementWithTooManyTagsLinter'          => ElementWithTooManyTagsLinter.new,
+                        'ExampleWithoutNameLinter'              => ExampleWithoutNameLinter.new,
+                        'FeatureWithTooManyDifferentTagsLinter' => FeatureWithTooManyDifferentTagsLinter.new,
+                        'FeatureWithoutDescriptionLinter'       => FeatureWithoutDescriptionLinter.new,
+                        'FeatureWithoutNameLinter'              => FeatureWithoutNameLinter.new,
+                        'FeatureWithoutScenariosLinter'         => FeatureWithoutScenariosLinter.new,
+                        'OutlineWithSingleExampleRowLinter'     => OutlineWithSingleExampleRowLinter.new,
+                        'SingleTestBackgroundLinter'            => SingleTestBackgroundLinter.new,
+                        'StepWithEndPeriodLinter'               => StepWithEndPeriodLinter.new,
+                        'TestShouldUseBackgroundLinter'         => TestShouldUseBackgroundLinter.new,
+                        'TestWithNoActionStepLinter'            => TestWithNoActionStepLinter.new,
+                        'TestWithNoNameLinter'                  => TestWithNoNameLinter.new,
+                        'TestWithNoVerificationStepLinter'      => TestWithNoVerificationStepLinter.new,
+                        'StepWithTooManyCharactersLinter'       => StepWithTooManyCharactersLinter.new,
+                        'TestWithTooManyStepsLinter'            => TestWithTooManyStepsLinter.new }
 
 
   # Configures linters based on the given options

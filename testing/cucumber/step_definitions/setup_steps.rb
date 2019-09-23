@@ -73,6 +73,10 @@ Given(/^a linter for elements with too many tags$/) do
   @linter = CukeLinter::ElementWithTooManyTagsLinter.new
 end
 
+Given(/^a linter for features with too many different tags$/) do
+  @linter = CukeLinter::FeatureWithTooManyDifferentTagsLinter.new
+end
+
 Given(/^a linter for elements with too many tags has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::ElementWithTooManyTagsLinter.new, name: 'ElementWithTooManyTagsLinter')
 end
@@ -95,6 +99,10 @@ end
 
 Given(/^a linter for test steps with too many characters has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::StepWithTooManyCharactersLinter.new, name: 'StepWithTooManyCharactersLinter')
+end
+
+Given(/^a linter for features with too many different tags has been registered$/) do
+  CukeLinter.register_linter(linter: CukeLinter::FeatureWithTooManyDifferentTagsLinter.new, name: 'FeatureWithTooManyDifferentTagsLinter')
 end
 
 Given(/^the following configuration file(?: "([^"]*)")?:$/) do |file_name, text|

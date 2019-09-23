@@ -8,21 +8,22 @@ Feature: Default Linters
   Scenario: Using the default linters
     Given no other linters have been registered or unregistered
     Then the following linters are registered by default
-      | BackgroundDoesMoreThanSetupLinter |
-      | ElementWithTooManyTagsLinter      |
-      | ExampleWithoutNameLinter          |
-      | FeatureWithoutDescriptionLinter   |
-      | FeatureWithoutNameLinter          |
-      | FeatureWithoutScenariosLinter     |
-      | OutlineWithSingleExampleRowLinter |
-      | SingleTestBackgroundLinter        |
-      | StepWithEndPeriodLinter           |
-      | StepWithTooManyCharactersLinter   |
-      | TestShouldUseBackgroundLinter     |
-      | TestWithNoActionStepLinter        |
-      | TestWithNoNameLinter              |
-      | TestWithNoVerificationStepLinter  |
-      | TestWithTooManyStepsLinter        |
+      | BackgroundDoesMoreThanSetupLinter     |
+      | ElementWithTooManyTagsLinter          |
+      | ExampleWithoutNameLinter              |
+      | FeatureWithTooManyDifferentTagsLinter |
+      | FeatureWithoutDescriptionLinter       |
+      | FeatureWithoutNameLinter              |
+      | FeatureWithoutScenariosLinter         |
+      | OutlineWithSingleExampleRowLinter     |
+      | SingleTestBackgroundLinter            |
+      | StepWithEndPeriodLinter               |
+      | StepWithTooManyCharactersLinter       |
+      | TestShouldUseBackgroundLinter         |
+      | TestWithNoActionStepLinter            |
+      | TestWithNoNameLinter                  |
+      | TestWithNoVerificationStepLinter      |
+      | TestWithTooManyStepsLinter            |
 
 
   Scenario: Registering new linters

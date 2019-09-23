@@ -1,0 +1,327 @@
+require_relative '../../../../../environments/rspec_env'
+
+
+RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
+
+  let(:good_data) do
+    model      = CukeLinter::ModelFactory.generate_feature_model
+    model.tags = [CukeModeler::Tag.new('@1')]
+
+    model
+  end
+
+  let(:bad_data) do
+    model      = CukeLinter::ModelFactory.generate_feature_model
+    model.tags = [CukeModeler::Tag.new('@1'),
+                  CukeModeler::Tag.new('@2'),
+                  CukeModeler::Tag.new('@3'),
+                  CukeModeler::Tag.new('@4'),
+                  CukeModeler::Tag.new('@5'),
+                  CukeModeler::Tag.new('@6'),
+                  CukeModeler::Tag.new('@7'),
+                  CukeModeler::Tag.new('@8'),
+                  CukeModeler::Tag.new('@9'),
+                  CukeModeler::Tag.new('@10'),
+                  CukeModeler::Tag.new('@11')]
+
+    model
+  end
+
+
+  it_should_behave_like 'a linter at the unit level'
+  it_should_behave_like 'a configurable linter at the unit level'
+
+
+  it 'has a name' do
+    expect(subject.name).to eq('FeatureWithTooManyDifferentTagsLinter')
+  end
+
+  describe 'linting' do
+
+    context 'with a feature that contains too many different tags' do
+
+      let(:test_model) do
+        model      = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
+        model.tags = [CukeModeler::Tag.new('@1'),
+                      CukeModeler::Tag.new('@2'),
+                      CukeModeler::Tag.new('@3'),
+                      CukeModeler::Tag.new('@4'),
+                      CukeModeler::Tag.new('@5'),
+                      CukeModeler::Tag.new('@6'),
+                      CukeModeler::Tag.new('@7'),
+                      CukeModeler::Tag.new('@8'),
+                      CukeModeler::Tag.new('@9'),
+                      CukeModeler::Tag.new('@10'),
+                      CukeModeler::Tag.new('@11')]
+
+        model
+      end
+
+      it 'records a problem' do
+        result = subject.lint(test_model)
+
+        expect(result[:problem]).to match(/^Feature contains too many different tags. \d+ tags found \(max 10\)\.$/)
+      end
+
+      # TODO: figure out how to have this be a common spec, because it is the same for almost everything
+      it 'records the location of the problem' do
+        test_model.source_line = 1
+        result                 = subject.lint(test_model)
+        expect(result[:location]).to eq('path_to_file:1')
+
+        test_model.source_line = 3
+        result                 = subject.lint(test_model)
+        expect(result[:location]).to eq('path_to_file:3')
+      end
+
+      it 'includes the number of different tags found in the problem record' do
+        unique_tag_count = test_model.tags.count
+        result           = subject.lint(test_model)
+        expect(result[:problem]).to eq("Feature contains too many different tags. #{unique_tag_count} tags found (max 10).")
+
+        test_model.tags << CukeModeler::Tag.new('@had_better_be_unique')
+        result = subject.lint(test_model)
+        expect(result[:problem]).to eq("Feature contains too many different tags. #{unique_tag_count + 1} tags found (max 10).")
+      end
+
+      it 'only counts unique tags' do
+        model      = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
+        model.tags = []
+        100.times { model.tags << CukeModeler::Tag.new('@A') }
+
+        result = subject.lint(model)
+
+        expect(result).to eq(nil)
+      end
+
+      context 'with child models' do
+
+        let(:test_model) do
+          model      = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
+          model.tags = [CukeModeler::Tag.new('@1'),
+                        CukeModeler::Tag.new('@2'),
+                        CukeModeler::Tag.new('@3'),
+                        CukeModeler::Tag.new('@4'),
+                        CukeModeler::Tag.new('@5'),
+                        CukeModeler::Tag.new('@6'),
+                        CukeModeler::Tag.new('@7'),
+                        CukeModeler::Tag.new('@8'),
+                        CukeModeler::Tag.new('@9'),
+                        CukeModeler::Tag.new('@10'),
+                        CukeModeler::Tag.new('@11')]
+
+          # Not all model types are a test but the models dont care and it's good enough for the test
+          model.tests = [child_model]
+
+          model
+        end
+
+        # Descriptive variable name, just in case what kinds of elements are taggable ever changes
+        taggable_elements = ['feature', 'scenario', 'outline', 'example']
+
+        taggable_elements.each do |model_type|
+
+          context 'that have tags' do
+
+            let(:child_model) do
+              model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model.tags = [CukeModeler::Tag.new('@12'),
+                            CukeModeler::Tag.new('@13'),
+                            CukeModeler::Tag.new('@14')]
+
+              model
+            end
+
+            it "considers tags from a #{model_type}" do
+              result = subject.lint(test_model)
+              expect(result[:problem]).to eq('Feature contains too many different tags. 14 tags found (max 10).')
+            end
+
+          end
+
+          context 'that do not have tags' do
+
+            context 'because their tags are empty' do
+
+              let(:child_model) do
+                model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+                model.tags = []
+
+                model
+              end
+
+              it 'can handle the child model without problem' do
+                expect { subject.lint(test_model) }.to_not raise_error
+              end
+
+            end
+
+          end
+
+        end
+
+      end
+
+    end
+
+
+    context 'with a feature that does not contain too many different tags' do
+
+      context 'because it contains 10 different tags' do
+
+        let(:test_model) do
+          model      = CukeLinter::ModelFactory.generate_feature_model
+          model.tags = [CukeModeler::Tag.new('@1'),
+                        CukeModeler::Tag.new('@2'),
+                        CukeModeler::Tag.new('@3'),
+                        CukeModeler::Tag.new('@4'),
+                        CukeModeler::Tag.new('@5'),
+                        CukeModeler::Tag.new('@6'),
+                        CukeModeler::Tag.new('@7'),
+                        CukeModeler::Tag.new('@8'),
+                        CukeModeler::Tag.new('@9'),
+                        CukeModeler::Tag.new('@10')]
+
+          model
+        end
+
+        it 'does not record a problem' do
+          expect(subject.lint(test_model)).to eq(nil)
+        end
+
+      end
+
+      context 'because it contains fewer than 10 different tags' do
+
+        let(:test_model) do
+          model      = CukeLinter::ModelFactory.generate_feature_model
+          model.tags = [CukeModeler::Tag.new('@1')]
+
+          model
+        end
+
+        it 'does not record a problem' do
+          expect(subject.lint(test_model)).to eq(nil)
+        end
+
+      end
+
+      context 'because it contains no tags' do
+
+        context 'because its tags are empty' do
+
+          let(:test_model) do
+            model      = CukeLinter::ModelFactory.generate_feature_model
+            model.tags = []
+
+            model
+          end
+
+          it 'does not record a problem' do
+            expect(subject.lint(test_model)).to eq(nil)
+          end
+
+        end
+
+      end
+
+    end
+
+
+    describe 'configuration' do
+
+      let(:default_tag_threshold) { 10 }
+
+
+      describe 'tag threshold configuration' do
+
+        context 'with no configuration' do
+
+          context 'because configuration never happened' do
+
+            let(:unconfigured_test_model) do
+              model      = CukeLinter::ModelFactory.generate_feature_model
+              model.tags = []
+              (default_tag_threshold + 1).times { |count| model.tags << CukeModeler::Tag.new("@#{count}") }
+
+              model
+            end
+
+            it 'defaults to a tag threshold of 10 tags' do
+              result = subject.lint(unconfigured_test_model)
+
+              expect(result[:problem]).to eq("Feature contains too many different tags. #{unconfigured_test_model.tags.count} tags found (max 10).")
+            end
+
+          end
+
+          context 'because configuration did not set a tag threshold' do
+
+            let(:configuration) { {} }
+            let(:test_model) do
+              model      = CukeLinter::ModelFactory.generate_feature_model
+              model.tags = []
+              (default_tag_threshold + 1).times { |count| model.tags << CukeModeler::Tag.new("@#{count}") }
+
+              model
+            end
+
+            before(:each) do
+              subject.configure(configuration)
+            end
+
+            it 'defaults to a tag threshold of 10 tags' do
+              result = subject.lint(test_model)
+
+              expect(result[:problem]).to eq("Feature contains too many different tags. #{test_model.tags.count} tags found (max 10).")
+            end
+
+          end
+
+        end
+
+        context 'with configuration' do
+
+          let(:tag_threshold) { 3 }
+          let(:configuration) { { 'TagCountThreshold' => tag_threshold } }
+
+          before(:each) do
+            subject.configure(configuration)
+          end
+
+          let(:test_model) do
+            model      = CukeLinter::ModelFactory.generate_feature_model
+            model.tags = []
+            (tag_threshold + 1).times { |count| model.tags << CukeModeler::Tag.new("@#{count}") }
+
+            model
+          end
+
+          it 'the tag threshold used is the configured value' do
+            result = subject.lint(test_model)
+
+            expect(result[:problem]).to eq("Feature contains too many different tags. #{test_model.tags.count} tags found (max #{tag_threshold}).")
+          end
+
+        end
+
+      end
+
+    end
+
+
+    context 'a non-feature model' do
+
+      let(:test_model) { CukeModeler::Model.new }
+
+      it 'returns no result' do
+        result = subject.lint(test_model)
+
+        expect(result).to eq(nil)
+      end
+
+    end
+
+  end
+
+end
