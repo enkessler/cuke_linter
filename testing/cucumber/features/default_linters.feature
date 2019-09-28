@@ -20,6 +20,7 @@ Feature: Default Linters
       | StepWithEndPeriodLinter                      |
       | StepWithTooManyCharactersLinter              |
       | TestShouldUseBackgroundLinter                |
+      | TestWithActionStepAsFinalStepLinter          |
       | TestWithNoActionStepLinter                   |
       | TestWithNoNameLinter                         |
       | TestWithNoVerificationStepLinter             |

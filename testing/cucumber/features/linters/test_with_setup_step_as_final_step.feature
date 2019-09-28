@@ -26,4 +26,3 @@ Feature: Test with setup step as final step linter
   Scenario: Configuration
 
   Configure the keyword(s) that count as setup steps?
-  Configure whether or not to include background steps?
