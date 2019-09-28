@@ -21,6 +21,7 @@ require 'cuke_linter/linters/test_with_no_name_linter'
 require 'cuke_linter/linters/test_with_no_verification_step_linter'
 require 'cuke_linter/linters/test_with_setup_step_after_action_step_linter'
 require 'cuke_linter/linters/test_with_setup_step_after_verification_step_linter'
+require 'cuke_linter/linters/test_with_setup_step_as_final_step_linter'
 require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 
@@ -45,6 +46,7 @@ module CukeLinter
                         'TestWithNoVerificationStepLinter'             => TestWithNoVerificationStepLinter.new,
                         'TestWithSetupStepAfterActionStepLinter'       => TestWithSetupStepAfterActionStepLinter.new,
                         'TestWithSetupStepAfterVerificationStepLinter' => TestWithSetupStepAfterVerificationStepLinter.new,
+                        'TestWithSetupStepAsFinalStepLinter'           => TestWithSetupStepAsFinalStepLinter.new,
                         'TestWithTooManyStepsLinter'                   => TestWithTooManyStepsLinter.new }
 
 

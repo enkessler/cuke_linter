@@ -105,6 +105,10 @@ Given(/^a linter for tests with a setup step after a verification step$/) do
   @linter = CukeLinter::TestWithSetupStepAfterVerificationStepLinter.new
 end
 
+Given(/^a linter for tests with a setup step as the final step$/) do
+  @linter = CukeLinter::TestWithSetupStepAsFinalStepLinter.new
+end
+
 Given(/^a linter for test steps with too many characters has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::StepWithTooManyCharactersLinter.new, name: 'StepWithTooManyCharactersLinter')
 end

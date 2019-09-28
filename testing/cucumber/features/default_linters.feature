@@ -25,6 +25,7 @@ Feature: Default Linters
       | TestWithNoVerificationStepLinter             |
       | TestWithSetupStepAfterActionStepLinter       |
       | TestWithSetupStepAfterVerificationStepLinter |
+      | TestWithSetupStepAsFinalStepLinter           |
       | TestWithTooManyStepsLinter                   |
 
 
