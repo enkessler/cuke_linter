@@ -75,7 +75,7 @@ RSpec.describe CukeLinter::TestWithSetupStepAfterVerificationStepLinter do
           end
 
           context 'because its steps are nil' do
-#
+
             let(:test_model) do
               model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
               model.steps = nil
