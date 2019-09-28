@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
    - FeatureWithTooManyDifferentTagsLinter
    - TestShouldUseBackgroundLinter
    - TestWithSetupStepAfterActionStepLinter
-   
+   - TestWithSetupStepAfterVerificationStepLinter
+
 ### Changed
  - Improved some fo the documentation and linting messages so that it is more clear what the problem is.
 

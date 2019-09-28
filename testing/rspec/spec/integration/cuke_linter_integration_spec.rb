@@ -206,6 +206,8 @@ RSpec.describe CukeLinter do
     expect(subject.registered_linters['TestWithNoVerificationStepLinter']).to be_a(CukeLinter::TestWithNoVerificationStepLinter)
     expect(subject.registered_linters.keys).to include('TestWithSetupStepAfterActionStepLinter')
     expect(subject.registered_linters['TestWithSetupStepAfterActionStepLinter']).to be_a(CukeLinter::TestWithSetupStepAfterActionStepLinter)
+    expect(subject.registered_linters.keys).to include('TestWithSetupStepAfterVerificationStepLinter')
+    expect(subject.registered_linters['TestWithSetupStepAfterVerificationStepLinter']).to be_a(CukeLinter::TestWithSetupStepAfterVerificationStepLinter)
     expect(subject.registered_linters.keys).to include('TestWithTooManyStepsLinter')
     expect(subject.registered_linters['TestWithTooManyStepsLinter']).to be_a(CukeLinter::TestWithTooManyStepsLinter)
   end

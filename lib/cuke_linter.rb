@@ -20,6 +20,7 @@ require 'cuke_linter/linters/test_with_no_action_step_linter'
 require 'cuke_linter/linters/test_with_no_name_linter'
 require 'cuke_linter/linters/test_with_no_verification_step_linter'
 require 'cuke_linter/linters/test_with_setup_step_after_action_step_linter'
+require 'cuke_linter/linters/test_with_setup_step_after_verification_step_linter'
 require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 
@@ -27,23 +28,24 @@ require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 module CukeLinter
 
-  @original_linters = { 'BackgroundDoesMoreThanSetupLinter'      => BackgroundDoesMoreThanSetupLinter.new,
-                        'ElementWithTooManyTagsLinter'           => ElementWithTooManyTagsLinter.new,
-                        'ExampleWithoutNameLinter'               => ExampleWithoutNameLinter.new,
-                        'FeatureWithTooManyDifferentTagsLinter'  => FeatureWithTooManyDifferentTagsLinter.new,
-                        'FeatureWithoutDescriptionLinter'        => FeatureWithoutDescriptionLinter.new,
-                        'FeatureWithoutNameLinter'               => FeatureWithoutNameLinter.new,
-                        'FeatureWithoutScenariosLinter'          => FeatureWithoutScenariosLinter.new,
-                        'OutlineWithSingleExampleRowLinter'      => OutlineWithSingleExampleRowLinter.new,
-                        'SingleTestBackgroundLinter'             => SingleTestBackgroundLinter.new,
-                        'StepWithEndPeriodLinter'                => StepWithEndPeriodLinter.new,
-                        'StepWithTooManyCharactersLinter'        => StepWithTooManyCharactersLinter.new,
-                        'TestShouldUseBackgroundLinter'          => TestShouldUseBackgroundLinter.new,
-                        'TestWithNoActionStepLinter'             => TestWithNoActionStepLinter.new,
-                        'TestWithNoNameLinter'                   => TestWithNoNameLinter.new,
-                        'TestWithNoVerificationStepLinter'       => TestWithNoVerificationStepLinter.new,
-                        'TestWithSetupStepAfterActionStepLinter' => TestWithSetupStepAfterActionStepLinter.new,
-                        'TestWithTooManyStepsLinter'             => TestWithTooManyStepsLinter.new }
+  @original_linters = { 'BackgroundDoesMoreThanSetupLinter'            => BackgroundDoesMoreThanSetupLinter.new,
+                        'ElementWithTooManyTagsLinter'                 => ElementWithTooManyTagsLinter.new,
+                        'ExampleWithoutNameLinter'                     => ExampleWithoutNameLinter.new,
+                        'FeatureWithTooManyDifferentTagsLinter'        => FeatureWithTooManyDifferentTagsLinter.new,
+                        'FeatureWithoutDescriptionLinter'              => FeatureWithoutDescriptionLinter.new,
+                        'FeatureWithoutNameLinter'                     => FeatureWithoutNameLinter.new,
+                        'FeatureWithoutScenariosLinter'                => FeatureWithoutScenariosLinter.new,
+                        'OutlineWithSingleExampleRowLinter'            => OutlineWithSingleExampleRowLinter.new,
+                        'SingleTestBackgroundLinter'                   => SingleTestBackgroundLinter.new,
+                        'StepWithEndPeriodLinter'                      => StepWithEndPeriodLinter.new,
+                        'StepWithTooManyCharactersLinter'              => StepWithTooManyCharactersLinter.new,
+                        'TestShouldUseBackgroundLinter'                => TestShouldUseBackgroundLinter.new,
+                        'TestWithNoActionStepLinter'                   => TestWithNoActionStepLinter.new,
+                        'TestWithNoNameLinter'                         => TestWithNoNameLinter.new,
+                        'TestWithNoVerificationStepLinter'             => TestWithNoVerificationStepLinter.new,
+                        'TestWithSetupStepAfterActionStepLinter'       => TestWithSetupStepAfterActionStepLinter.new,
+                        'TestWithSetupStepAfterVerificationStepLinter' => TestWithSetupStepAfterVerificationStepLinter.new,
+                        'TestWithTooManyStepsLinter'                   => TestWithTooManyStepsLinter.new }
 
 
   # Configures linters based on the given options
