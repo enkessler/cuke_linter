@@ -3,27 +3,7 @@ require_relative '../../../../../environments/rspec_env'
 
 RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
 
-  let(:good_data) do
-    outline_text = 'Scenario Outline:
-                      * a step
-                    Examples:
-                      | param   |
-                      | value 1 |
-                      | value 2 |'
-
-    CukeLinter::ModelFactory.generate_outline_model(source_text: outline_text)
-  end
-
-  let(:bad_data) do
-    outline_text = 'Scenario Outline:
-                      * a step
-                    Examples:
-                      | param   |
-                      | value 1 |'
-
-    CukeLinter::ModelFactory.generate_outline_model(source_text: outline_text)
-  end
-
+  let(:model_file_path) { 'some_file_path' }
 
   it_should_behave_like 'a linter at the unit level'
 
@@ -45,8 +25,12 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
                        | param |
                        | value |'
 
-          CukeLinter::ModelFactory.generate_outline_model(source_text: gherkin)
+          CukeLinter::ModelFactory.generate_outline_model(parent_file_path: model_file_path,
+                                                          source_text:      gherkin)
         end
+
+        it_should_behave_like 'a linter linting a bad model'
+
 
         it 'records a problem' do
           result = subject.lint(test_model)
@@ -67,8 +51,12 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
                        | param |
                        | value |'
 
-          CukeLinter::ModelFactory.generate_outline_model(source_text: gherkin)
+          CukeLinter::ModelFactory.generate_outline_model(parent_file_path: model_file_path,
+                                                          source_text:      gherkin)
         end
+
+        it_should_behave_like 'a linter linting a bad model'
+
 
         it 'records a problem' do
           result = subject.lint(test_model)
@@ -76,27 +64,6 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
           expect(result[:problem]).to eq('Outline has only one example row')
         end
 
-      end
-
-
-      it 'records the location of the problem' do
-        gherkin = 'Scenario Outline:
-                     * a step
-                   Examples:
-                     | param |
-                     | value |'
-
-        model_1 = CukeLinter::ModelFactory.generate_outline_model(source_text: gherkin, parent_file_path: 'path_to_file')
-        model_2 = CukeLinter::ModelFactory.generate_outline_model(source_text: gherkin, parent_file_path: 'path_to_file')
-
-        model_1.source_line = 1
-        model_2.source_line = 3
-
-        result = subject.lint(model_1)
-        expect(result[:location]).to eq('path_to_file:1')
-
-        result = subject.lint(model_2)
-        expect(result[:location]).to eq('path_to_file:3')
       end
 
     end
@@ -116,9 +83,7 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
           CukeLinter::ModelFactory.generate_outline_model(source_text: gherkin)
         end
 
-        it 'does not record a problem' do
-          expect(subject.lint(test_model)).to eq(nil)
-        end
+        it_should_behave_like 'a linter linting a good model'
 
       end
 
@@ -137,9 +102,7 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
           CukeLinter::ModelFactory.generate_outline_model(source_text: gherkin)
         end
 
-        it 'does not record a problem' do
-          expect(subject.lint(test_model)).to eq(nil)
-        end
+        it_should_behave_like 'a linter linting a good model'
 
       end
 
@@ -158,9 +121,7 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
             model
           end
 
-          it 'does not record a problem' do
-            expect(subject.lint(test_model)).to eq(nil)
-          end
+          it_should_behave_like 'a linter linting a good model'
 
         end
 
@@ -172,9 +133,7 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
             model
           end
 
-          it 'does not record a problem' do
-            expect(subject.lint(test_model)).to eq(nil)
-          end
+          it_should_behave_like 'a linter linting a good model'
 
         end
 
@@ -191,9 +150,7 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
           CukeLinter::ModelFactory.generate_outline_model(source_text: gherkin)
         end
 
-        it 'does not record a problem' do
-          expect(subject.lint(test_model)).to eq(nil)
-        end
+        it_should_behave_like 'a linter linting a good model'
 
       end
 
@@ -210,9 +167,7 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
           CukeLinter::ModelFactory.generate_outline_model(source_text: gherkin)
         end
 
-        it 'does not record a problem' do
-          expect(subject.lint(test_model)).to eq(nil)
-        end
+        it_should_behave_like 'a linter linting a good model'
 
       end
 
@@ -220,11 +175,9 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
 
     context 'a non-outline model' do
 
-      it 'returns no result' do
-        result = subject.lint(CukeModeler::Model.new)
+      let(:test_model) { CukeModeler::Model.new }
 
-        expect(result).to eq(nil)
-      end
+      it_should_behave_like 'a linter linting a good model'
 
     end
   end

@@ -3,20 +3,7 @@ require_relative '../../../../../environments/rspec_env'
 
 RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
 
-  let(:good_data) do
-    model       = CukeLinter::ModelFactory.generate_feature_model
-    model.tests = ['totally_a_test']
-
-    model
-  end
-
-  let(:bad_data) do
-    model       = CukeLinter::ModelFactory.generate_feature_model
-    model.tests = []
-
-    model
-  end
-
+  let(:model_file_path) { 'some_file_path' }
 
   it_should_behave_like 'a linter at the unit level'
 
@@ -27,50 +14,49 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
 
   describe 'linting' do
 
-    context 'a feature with no scenarios' do
+    context 'a feature with no tests' do
 
-      let(:test_model_with_empty_scenarios) do
-        model       = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
-        model.tests = []
+      context 'because the tests are empty' do
 
-        model
+        let(:test_model) do
+          model       = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path)
+          model.tests = []
+
+          model
+        end
+
+        it_should_behave_like 'a linter linting a bad model'
+
+        it 'records a problem' do
+          result = subject.lint(test_model)
+
+          expect(result[:problem]).to eq('Feature has no scenarios')
+        end
+
       end
 
-      let(:test_model_with_nil_scenarios) do
-        model       = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
-        model.tests = nil
+      context 'because the tests are nil' do
 
-        model
-      end
+        let(:test_model) do
+          model       = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path)
+          model.tests = nil
 
-      it 'records a problem' do
-        result = subject.lint(test_model_with_empty_scenarios)
+          model
+        end
 
-        expect(result[:problem]).to eq('Feature has no scenarios')
+        it_should_behave_like 'a linter linting a bad model'
 
-        result = subject.lint(test_model_with_nil_scenarios)
+        it 'records a problem' do
+          result = subject.lint(test_model)
 
-        expect(result[:problem]).to eq('Feature has no scenarios')
-      end
+          expect(result[:problem]).to eq('Feature has no scenarios')
+        end
 
-      it 'records the location of the problem' do
-        model_1             = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
-        model_1.tests       = []
-        model_1.source_line = 1
-        model_2             = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
-        model_2.tests       = []
-        model_2.source_line = 3
-
-        result = subject.lint(model_1)
-        expect(result[:location]).to eq('path_to_file:1')
-
-        result = subject.lint(model_2)
-        expect(result[:location]).to eq('path_to_file:3')
       end
 
     end
 
-    context 'a feature with scenarios' do
+    context 'a feature with tests' do
 
       context 'with a scenario' do
 
@@ -82,9 +68,7 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
           CukeLinter::ModelFactory.generate_feature_model(source_text: gherkin)
         end
 
-        it 'does not record a problem' do
-          expect(subject.lint(test_model)).to eq(nil)
-        end
+        it_should_behave_like 'a linter linting a good model'
 
       end
 
@@ -101,9 +85,7 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
           CukeLinter::ModelFactory.generate_feature_model(source_text: gherkin)
         end
 
-        it 'does not record a problem' do
-          expect(subject.lint(test_model)).to eq(nil)
-        end
+        it_should_behave_like 'a linter linting a good model'
 
       end
 
@@ -111,11 +93,9 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
 
     context 'a non-feature model' do
 
-      it 'returns no result' do
-        result = subject.lint(CukeModeler::Model.new)
+      let(:test_model) { CukeModeler::Model.new }
 
-        expect(result).to eq(nil)
-      end
+      it_should_behave_like 'a linter linting a good model'
 
     end
   end

@@ -3,30 +3,7 @@ require_relative '../../../../../environments/rspec_env'
 
 RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
 
-  let(:good_data) do
-    model      = CukeLinter::ModelFactory.generate_feature_model
-    model.tags = [CukeModeler::Tag.new('@1')]
-
-    model
-  end
-
-  let(:bad_data) do
-    model      = CukeLinter::ModelFactory.generate_feature_model
-    model.tags = [CukeModeler::Tag.new('@1'),
-                  CukeModeler::Tag.new('@2'),
-                  CukeModeler::Tag.new('@3'),
-                  CukeModeler::Tag.new('@4'),
-                  CukeModeler::Tag.new('@5'),
-                  CukeModeler::Tag.new('@6'),
-                  CukeModeler::Tag.new('@7'),
-                  CukeModeler::Tag.new('@8'),
-                  CukeModeler::Tag.new('@9'),
-                  CukeModeler::Tag.new('@10'),
-                  CukeModeler::Tag.new('@11')]
-
-    model
-  end
-
+  let(:model_file_path) { 'some_file_path' }
 
   it_should_behave_like 'a linter at the unit level'
   it_should_behave_like 'a configurable linter at the unit level'
@@ -41,7 +18,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
     context 'with a feature that contains too many different tags' do
 
       let(:test_model) do
-        model      = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
+        model      = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path)
         model.tags = [CukeModeler::Tag.new('@1'),
                       CukeModeler::Tag.new('@2'),
                       CukeModeler::Tag.new('@3'),
@@ -57,21 +34,13 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
         model
       end
 
+      it_should_behave_like 'a linter linting a bad model'
+
+
       it 'records a problem' do
         result = subject.lint(test_model)
 
         expect(result[:problem]).to match(/^Feature contains too many different tags. \d+ tags found \(max 10\)\.$/)
-      end
-
-      # TODO: figure out how to have this be a common spec, because it is the same for almost everything
-      it 'records the location of the problem' do
-        test_model.source_line = 1
-        result                 = subject.lint(test_model)
-        expect(result[:location]).to eq('path_to_file:1')
-
-        test_model.source_line = 3
-        result                 = subject.lint(test_model)
-        expect(result[:location]).to eq('path_to_file:3')
       end
 
       it 'includes the number of different tags found in the problem record' do
@@ -85,7 +54,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
       end
 
       it 'only counts unique tags' do
-        model      = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
+        model      = CukeLinter::ModelFactory.generate_feature_model
         model.tags = []
         100.times { model.tags << CukeModeler::Tag.new('@A') }
 
@@ -97,7 +66,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
       context 'with child models' do
 
         let(:test_model) do
-          model      = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: 'path_to_file')
+          model      = CukeLinter::ModelFactory.generate_feature_model
           model.tags = [CukeModeler::Tag.new('@1'),
                         CukeModeler::Tag.new('@2'),
                         CukeModeler::Tag.new('@3'),
@@ -185,9 +154,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
           model
         end
 
-        it 'does not record a problem' do
-          expect(subject.lint(test_model)).to eq(nil)
-        end
+        it_should_behave_like 'a linter linting a good model'
 
       end
 
@@ -200,9 +167,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
           model
         end
 
-        it 'does not record a problem' do
-          expect(subject.lint(test_model)).to eq(nil)
-        end
+        it_should_behave_like 'a linter linting a good model'
 
       end
 
@@ -217,9 +182,14 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
             model
           end
 
-          it 'does not record a problem' do
-            expect(subject.lint(test_model)).to eq(nil)
-          end
+          it_should_behave_like 'a linter linting a good model'
+
+        end
+
+        context 'because its tags are nil' do
+
+          # NOTE: Not handling the case of the model's tags being nil because the model methods used in the
+          # linter's implementation will themselves not work when the tags are nil.
 
         end
 
@@ -314,11 +284,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
 
       let(:test_model) { CukeModeler::Model.new }
 
-      it 'returns no result' do
-        result = subject.lint(test_model)
-
-        expect(result).to eq(nil)
-      end
+      it_should_behave_like 'a linter linting a good model'
 
     end
 

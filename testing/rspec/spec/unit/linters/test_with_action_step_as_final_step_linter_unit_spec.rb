@@ -3,18 +3,7 @@ require_relative '../../../../../environments/rspec_env'
 
 RSpec.describe CukeLinter::TestWithActionStepAsFinalStepLinter do
 
-  let(:good_data) do
-    CukeLinter::ModelFactory.generate_scenario_model(source_text: 'Scenario:
-                                                                     Given a step
-                                                                     Then a step')
-  end
-
-  let(:bad_data) do
-    CukeLinter::ModelFactory.generate_scenario_model(source_text: 'Scenario:
-                                                                     Given a step
-                                                                     When a step')
-  end
-
+  let(:model_file_path) { 'some_file_path' }
 
   it_should_behave_like 'a linter at the unit level'
 
@@ -30,28 +19,20 @@ RSpec.describe CukeLinter::TestWithActionStepAsFinalStepLinter do
       context "with a #{model_type} that has an action step as its final step" do
 
         let(:test_model) do
-          model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
+          model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
           model.steps = [CukeModeler::Step.new('Given a step'),
                          CukeModeler::Step.new('When a step')]
 
           model
         end
 
+        it_should_behave_like 'a linter linting a bad model'
+
 
         it 'records a problem' do
           result = subject.lint(test_model)
 
           expect(result[:problem]).to eq("Test has 'When' as the final step.")
-        end
-
-        it 'records the location of the problem' do
-          test_model.source_line = 1
-          result                 = subject.lint(test_model)
-          expect(result[:location]).to eq('path_to_file:1')
-
-          test_model.source_line = 3
-          result                 = subject.lint(test_model)
-          expect(result[:location]).to eq('path_to_file:3')
         end
 
       end
@@ -69,9 +50,7 @@ RSpec.describe CukeLinter::TestWithActionStepAsFinalStepLinter do
               model
             end
 
-            it 'does not record a problem' do
-              expect(subject.lint(test_model)).to eq(nil)
-            end
+            it_should_behave_like 'a linter linting a good model'
 
           end
 
@@ -84,9 +63,7 @@ RSpec.describe CukeLinter::TestWithActionStepAsFinalStepLinter do
               model
             end
 
-            it 'does not record a problem' do
-              expect(subject.lint(test_model)).to eq(nil)
-            end
+            it_should_behave_like 'a linter linting a good model'
 
           end
 
@@ -101,9 +78,7 @@ RSpec.describe CukeLinter::TestWithActionStepAsFinalStepLinter do
             model
           end
 
-          it 'does not record a problem' do
-            expect(subject.lint(test_model)).to eq(nil)
-          end
+          it_should_behave_like 'a linter linting a good model'
 
         end
 
@@ -116,11 +91,7 @@ RSpec.describe CukeLinter::TestWithActionStepAsFinalStepLinter do
 
       let(:test_model) { CukeModeler::Model.new }
 
-      it 'returns no result' do
-        result = subject.lint(test_model)
-
-        expect(result).to eq(nil)
-      end
+      it_should_behave_like 'a linter linting a good model'
 
     end
   end

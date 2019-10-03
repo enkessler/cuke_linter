@@ -3,16 +3,7 @@ require_relative '../../../../../environments/rspec_env'
 
 RSpec.describe CukeLinter::TestWithNoActionStepLinter do
 
-  let(:good_data) do
-    CukeLinter::ModelFactory.generate_scenario_model(source_text: 'Scenario:
-                                                                     When an action step')
-  end
-
-  let(:bad_data) do
-    CukeLinter::ModelFactory.generate_scenario_model(source_text: 'Scenario:
-                                                                     * no action step')
-  end
-
+  let(:model_file_path) { 'some_file_path' }
 
   it_should_behave_like 'a linter at the unit level'
 
@@ -32,7 +23,7 @@ RSpec.describe CukeLinter::TestWithNoActionStepLinter do
           context 'because its steps are empty' do
 
             let(:test_model) do
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
+              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
               model.steps = []
 
               model
@@ -44,22 +35,14 @@ RSpec.describe CukeLinter::TestWithNoActionStepLinter do
               expect(result[:problem]).to eq("Test does not have a 'When' step.")
             end
 
-            it 'records the location of the problem' do
-              test_model.source_line = 1
-              result                 = subject.lint(test_model)
-              expect(result[:location]).to eq('path_to_file:1')
-
-              test_model.source_line = 3
-              result                 = subject.lint(test_model)
-              expect(result[:location]).to eq('path_to_file:3')
-            end
+            it_should_behave_like 'a linter linting a bad model'
 
           end
 
           context 'because its steps are nil' do
 
             let(:test_model) do
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
+              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
               model.steps = nil
 
               model
@@ -71,15 +54,7 @@ RSpec.describe CukeLinter::TestWithNoActionStepLinter do
               expect(result[:problem]).to eq("Test does not have a 'When' step.")
             end
 
-            it 'records the location of the problem' do
-              test_model.source_line = 1
-              result                 = subject.lint(test_model)
-              expect(result[:location]).to eq('path_to_file:1')
-
-              test_model.source_line = 3
-              result                 = subject.lint(test_model)
-              expect(result[:location]).to eq('path_to_file:3')
-            end
+            it_should_behave_like 'a linter linting a bad model'
 
           end
 
@@ -88,7 +63,7 @@ RSpec.describe CukeLinter::TestWithNoActionStepLinter do
         context 'because none of its steps is an action step' do
 
           let(:test_model) do
-            model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
+            model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
             model.steps = [CukeModeler::Step.new('* not an action step')]
 
             model
@@ -100,15 +75,7 @@ RSpec.describe CukeLinter::TestWithNoActionStepLinter do
             expect(result[:problem]).to eq("Test does not have a 'When' step.")
           end
 
-          it 'records the location of the problem' do
-            test_model.source_line = 1
-            result                 = subject.lint(test_model)
-            expect(result[:location]).to eq('path_to_file:1')
-
-            test_model.source_line = 3
-            result                 = subject.lint(test_model)
-            expect(result[:location]).to eq('path_to_file:3')
-          end
+          it_should_behave_like 'a linter linting a bad model'
 
         end
 
@@ -128,9 +95,7 @@ RSpec.describe CukeLinter::TestWithNoActionStepLinter do
             model
           end
 
-          it 'does not record a problem' do
-            expect(subject.lint(test_model)).to eq(nil)
-          end
+          it_should_behave_like 'a linter linting a good model'
 
         end
 
@@ -143,9 +108,7 @@ RSpec.describe CukeLinter::TestWithNoActionStepLinter do
             model
           end
 
-          it 'does not record a problem' do
-            expect(subject.lint(test_model)).to eq(nil)
-          end
+          it_should_behave_like 'a linter linting a good model'
 
         end
 
@@ -206,11 +169,7 @@ RSpec.describe CukeLinter::TestWithNoActionStepLinter do
 
       let(:test_model) { CukeModeler::Model.new }
 
-      it 'returns no result' do
-        result = subject.lint(test_model)
-
-        expect(result).to eq(nil)
-      end
+      it_should_behave_like 'a linter linting a good model'
 
     end
   end

@@ -14,26 +14,39 @@ shared_examples_for 'a linter at the unit level' do
     expect(subject.method(:lint).arity).to eq(1)
   end
 
-  context 'with good data' do
+end
 
-    it 'returns no problem' do
-      expect(subject.lint(good_data)).to be_nil
-    end
 
+shared_examples_for 'a linter linting a good model' do
+
+  it 'returns no problem' do
+    expect(subject.lint(test_model)).to be_nil
   end
 
-  context 'with bad data' do
+end
 
-    it 'returns a detected problems' do
-      expect(subject.lint(bad_data)).to_not be_nil
-    end
 
-    it 'includes the problem and its locations in its result' do
-      result = subject.lint(bad_data)
+shared_examples_for 'a linter linting a bad model' do
 
-      expect(result).to_not be_nil
-      expect(result.keys).to match_array([:problem, :location])
-    end
-
+  it 'returns a detected problem' do
+    expect(subject.lint(test_model)).to_not be_nil
   end
+
+  it 'includes the problem and its location in its result' do
+    result = subject.lint(test_model)
+
+    expect(result).to_not be_nil
+    expect(result.keys).to match_array([:problem, :location])
+  end
+
+  it 'correctly records the location of the problem' do
+    test_model.source_line = 1
+    result                 = subject.lint(test_model)
+    expect(result[:location]).to eq("#{model_file_path}:1")
+
+    test_model.source_line = 3
+    result                 = subject.lint(test_model)
+    expect(result[:location]).to eq("#{model_file_path}:3")
+  end
+
 end

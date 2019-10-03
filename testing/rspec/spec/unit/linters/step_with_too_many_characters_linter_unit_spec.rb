@@ -3,18 +3,7 @@ require_relative '../../../../../environments/rspec_env'
 
 RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
 
-  let(:good_data) do
-    CukeLinter::ModelFactory.generate_step_model(source_text: '* a short step')
-  end
-
-  let(:bad_data) do
-    long_step = <<~EOL.delete("\n")
-      * this is a very long string which will violate the linter 
-      rule which expects step rules to have fewer than one hundred 
-      and twenty characters
-    EOL
-    CukeLinter::ModelFactory.generate_step_model(source_text: long_step)
-  end
+  let(:model_file_path) { 'some_file_path' }
 
   it_should_behave_like 'a linter at the unit level'
   it_should_behave_like 'a configurable linter at the unit level'
@@ -30,30 +19,28 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
 
     context 'when the step is too long' do
 
-      let(:step_too_long_model) do
+      let(:test_model) do
         step = 'x' * (default_character_threshold + 1)
-        CukeLinter::ModelFactory.generate_step_model(source_text: "* #{step}")
+        CukeLinter::ModelFactory.generate_step_model(parent_file_path: model_file_path,
+                                                     source_text:      "* #{step}")
       end
 
+      it_should_behave_like 'a linter linting a bad model'
+
+
       it 'reports a problem' do
-        result = subject.lint(step_too_long_model)
+        result = subject.lint(test_model)
 
         expect(result[:problem]).to match(/^Step is too long. \d+ characters found \(max 80\)/)
       end
 
-      it 'records the location of the problem' do
-        result = subject.lint(step_too_long_model)
-
-        expect(result[:location]).to eq('path_to_file:4')
-      end
-
       it 'includes the number of characters found in the problem record' do
-        character_count = step_too_long_model.text.length
-        result          = subject.lint(step_too_long_model)
+        character_count = test_model.text.length
+        result          = subject.lint(test_model)
         expect(result[:problem]).to eq("Step is too long. #{character_count} characters found (max 80)")
 
-        step_too_long_model.text += 'x'
-        result                   = subject.lint(step_too_long_model)
+        test_model.text += 'x'
+        result          = subject.lint(test_model)
         expect(result[:problem]).to eq("Step is too long. #{character_count + 1} characters found (max 80)")
       end
 
@@ -61,45 +48,36 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
 
     context 'when the step is the maximum length' do
 
-      let(:step_mex_length_model) do
+      let(:test_model) do
         step = 'x' * default_character_threshold
         CukeLinter::ModelFactory.generate_step_model(source_text: "* #{step}")
       end
 
-      it 'does not record a problem' do
-        result = subject.lint(step_mex_length_model)
-        expect(result).to eq(nil)
-      end
+      it_should_behave_like 'a linter linting a good model'
 
     end
 
     context 'when the step is below the maximum length' do
 
-      let(:step_below_length_model) do
+      let(:test_model) do
         step = 'x' * (default_character_threshold - 1)
         CukeLinter::ModelFactory.generate_step_model(source_text: "* #{step}")
       end
 
-      it 'does not record a problem' do
-        result = subject.lint(step_below_length_model)
-        expect(result).to eq(nil)
-      end
+      it_should_behave_like 'a linter linting a good model'
 
     end
 
     context 'when the step has no text' do
 
-      let(:step_with_nil_text_model) do
+      let(:test_model) do
         model      = CukeLinter::ModelFactory.generate_step_model
         model.text = nil
 
         model
       end
 
-      it 'does not record a problem' do
-        result = subject.lint(step_with_nil_text_model)
-        expect(result).to eq(nil)
-      end
+      it_should_behave_like 'a linter linting a good model'
 
     end
 
@@ -107,11 +85,7 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
 
       let(:test_model) { CukeModeler::Model.new }
 
-      it 'returns no result' do
-        result = subject.lint(test_model)
-
-        expect(result).to eq(nil)
-      end
+      it_should_behave_like 'a linter linting a good model'
 
     end
 

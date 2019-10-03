@@ -3,24 +3,7 @@ require_relative '../../../../../environments/rspec_env'
 
 RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
-  let(:good_data) do
-    parent_model = CukeLinter::ModelFactory.generate_feature_model(source_text: 'Feature:
-                                                                                   Scenario:
-                                                                                     * a step
-                                                                                   Scenario:
-                                                                                     * a different step')
-    parent_model.tests.first
-  end
-
-  let(:bad_data) do
-    parent_model = CukeLinter::ModelFactory.generate_feature_model(source_text: 'Feature:
-                                                                                   Scenario:
-                                                                                     * the same step
-                                                                                   Scenario:
-                                                                                     * the same step')
-    parent_model.tests.first
-  end
-
+  let(:model_file_path) { 'some_file_path' }
 
   it_should_behave_like 'a linter at the unit level'
 
@@ -37,14 +20,15 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
         let(:test_model) do
           step_text     = 'the step'
-          feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
-                                                                                           Scenario:
-                                                                                             * #{step_text}
-                                                                                           Scenario Outline:
-                                                                                             * #{step_text}
-                                                                                           Examples:
-                                                                                             | param |
-                                                                                             | value |")
+          feature_model = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path,
+                                                                          source_text:      "Feature:
+                                                                                               Scenario:
+                                                                                                 * #{step_text}
+                                                                                               Scenario Outline:
+                                                                                                 * #{step_text}
+                                                                                               Examples:
+                                                                                                 | param |
+                                                                                                 | value |")
 
           model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
           model.steps = [CukeModeler::Step.new("* #{step_text}")]
@@ -55,20 +39,13 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
           model
         end
 
+        it_should_behave_like 'a linter linting a bad model'
+
+
         it 'records a problem' do
           result = subject.lint(test_model)
 
           expect(result[:problem]).to eq('Test shares steps with all other tests in feature. Use a background.')
-        end
-
-        it 'records the location of the problem' do
-          test_model.source_line = 1
-          result                 = subject.lint(test_model)
-          expect(result[:location]).to eq('path_to_file:1')
-
-          test_model.source_line = 3
-          result                 = subject.lint(test_model)
-          expect(result[:location]).to eq('path_to_file:3')
         end
 
       end
@@ -97,9 +74,7 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
             model
           end
 
-          it 'does not record a problem' do
-            expect(subject.lint(test_model)).to eq(nil)
-          end
+          it_should_behave_like 'a linter linting a good model'
 
         end
 
@@ -127,9 +102,7 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
               model
             end
 
-            it 'does not record a problem' do
-              expect(subject.lint(test_model)).to eq(nil)
-            end
+            it_should_behave_like 'a linter linting a good model'
 
           end
 
@@ -155,9 +128,7 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
               model
             end
 
-            it 'does not record a problem' do
-              expect(subject.lint(test_model)).to eq(nil)
-            end
+            it_should_behave_like 'a linter linting a good model'
 
           end
 
@@ -188,9 +159,7 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
               model
             end
 
-            it 'does not record a problem' do
-              expect(subject.lint(test_model)).to eq(nil)
-            end
+            it_should_behave_like 'a linter linting a good model'
 
           end
 
@@ -217,9 +186,7 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
               model
             end
 
-            it 'does not record a problem' do
-              expect(subject.lint(test_model)).to eq(nil)
-            end
+            it_should_behave_like 'a linter linting a good model'
 
           end
 
@@ -240,9 +207,7 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
             model
           end
 
-          it 'does not record a problem' do
-            expect(subject.lint(test_model)).to eq(nil)
-          end
+          it_should_behave_like 'a linter linting a good model'
 
         end
 
@@ -254,11 +219,7 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
       let(:test_model) { CukeModeler::Model.new }
 
-      it 'returns no result' do
-        result = subject.lint(test_model)
-
-        expect(result).to eq(nil)
-      end
+      it_should_behave_like 'a linter linting a good model'
 
     end
   end
