@@ -109,8 +109,15 @@ module CukeLinter
   # Lints the given model trees and file paths using the given linting objects and formatting the results with the given formatters and their respective output locations
   def self.lint(file_paths: [], model_trees: [], linters: self.registered_linters.values, formatters: [[CukeLinter::PrettyFormatter.new]])
 
-    model_trees      = [CukeModeler::Directory.new(Dir.pwd)] if model_trees.empty? && file_paths.empty?
-    file_path_models = file_paths.collect do |file_path|
+    # TODO: Test this?
+    # Because directive memoization is based on a model's `#object_id` and Ruby reuses object IDs over the life
+    # life of a program as objects are garbage collected, it is not safe to remember the IDs forever. However,
+    # models shouldn't get GC'd in the middle of the linting process and so the start of the linting process is
+    # a good time to reset things
+    @directives_for_feature_file = {}
+
+    model_trees                  = [CukeModeler::Directory.new(Dir.pwd)] if model_trees.empty? && file_paths.empty?
+    file_path_models             = file_paths.collect do |file_path|
       # TODO: raise exception unless path exists
       case
         when File.directory?(file_path)
@@ -190,8 +197,7 @@ module CukeLinter
 
 
   def self.linter_directives_for_feature_file(feature_file_model)
-    # IMPORTANT ASSUMPTION: Models never change during the life of the program, so data only has to be gathered once
-    @directives_for_feature_file ||= {}
+    # IMPORTANT ASSUMPTION: Models never change during the life of a linting, so data only has to be gathered once
     return @directives_for_feature_file[feature_file_model.object_id] if @directives_for_feature_file[feature_file_model.object_id]
 
 
