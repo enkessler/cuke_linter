@@ -7,6 +7,7 @@ require 'cuke_linter/linters/linter'
 require 'cuke_linter/linters/background_does_more_than_setup_linter'
 require 'cuke_linter/linters/element_with_too_many_tags_linter'
 require 'cuke_linter/linters/example_without_name_linter'
+require 'cuke_linter/linters/feature_with_too_many_different_tags_linter'
 require 'cuke_linter/linters/feature_without_name_linter'
 require 'cuke_linter/linters/feature_without_description_linter'
 require 'cuke_linter/linters/feature_without_scenarios_linter'
@@ -14,9 +15,14 @@ require 'cuke_linter/linters/outline_with_single_example_row_linter'
 require 'cuke_linter/linters/single_test_background_linter'
 require 'cuke_linter/linters/step_with_end_period_linter'
 require 'cuke_linter/linters/step_with_too_many_characters_linter'
+require 'cuke_linter/linters/test_should_use_background_linter'
+require 'cuke_linter/linters/test_with_action_step_as_final_step_linter'
 require 'cuke_linter/linters/test_with_no_action_step_linter'
 require 'cuke_linter/linters/test_with_no_name_linter'
 require 'cuke_linter/linters/test_with_no_verification_step_linter'
+require 'cuke_linter/linters/test_with_setup_step_after_action_step_linter'
+require 'cuke_linter/linters/test_with_setup_step_after_verification_step_linter'
+require 'cuke_linter/linters/test_with_setup_step_as_final_step_linter'
 require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 
@@ -24,20 +30,26 @@ require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 module CukeLinter
 
-  @original_linters = { 'BackgroundDoesMoreThanSetupLinter' => BackgroundDoesMoreThanSetupLinter.new,
-                        'ElementWithTooManyTagsLinter'      => ElementWithTooManyTagsLinter.new,
-                        'ExampleWithoutNameLinter'          => ExampleWithoutNameLinter.new,
-                        'FeatureWithoutDescriptionLinter'   => FeatureWithoutDescriptionLinter.new,
-                        'FeatureWithoutNameLinter'          => FeatureWithoutNameLinter.new,
-                        'FeatureWithoutScenariosLinter'     => FeatureWithoutScenariosLinter.new,
-                        'OutlineWithSingleExampleRowLinter' => OutlineWithSingleExampleRowLinter.new,
-                        'SingleTestBackgroundLinter'        => SingleTestBackgroundLinter.new,
-                        'StepWithEndPeriodLinter'           => StepWithEndPeriodLinter.new,
-                        'TestWithNoActionStepLinter'        => TestWithNoActionStepLinter.new,
-                        'TestWithNoNameLinter'              => TestWithNoNameLinter.new,
-                        'TestWithNoVerificationStepLinter'  => TestWithNoVerificationStepLinter.new,
-                        'StepWithTooManyCharactersLinter'   => StepWithTooManyCharactersLinter.new,
-                        'TestWithTooManyStepsLinter'        => TestWithTooManyStepsLinter.new }
+  @original_linters = { 'BackgroundDoesMoreThanSetupLinter'            => BackgroundDoesMoreThanSetupLinter.new,
+                        'ElementWithTooManyTagsLinter'                 => ElementWithTooManyTagsLinter.new,
+                        'ExampleWithoutNameLinter'                     => ExampleWithoutNameLinter.new,
+                        'FeatureWithTooManyDifferentTagsLinter'        => FeatureWithTooManyDifferentTagsLinter.new,
+                        'FeatureWithoutDescriptionLinter'              => FeatureWithoutDescriptionLinter.new,
+                        'FeatureWithoutNameLinter'                     => FeatureWithoutNameLinter.new,
+                        'FeatureWithoutScenariosLinter'                => FeatureWithoutScenariosLinter.new,
+                        'OutlineWithSingleExampleRowLinter'            => OutlineWithSingleExampleRowLinter.new,
+                        'SingleTestBackgroundLinter'                   => SingleTestBackgroundLinter.new,
+                        'StepWithEndPeriodLinter'                      => StepWithEndPeriodLinter.new,
+                        'StepWithTooManyCharactersLinter'              => StepWithTooManyCharactersLinter.new,
+                        'TestShouldUseBackgroundLinter'                => TestShouldUseBackgroundLinter.new,
+                        'TestWithActionStepAsFinalStepLinter'          => TestWithActionStepAsFinalStepLinter.new,
+                        'TestWithNoActionStepLinter'                   => TestWithNoActionStepLinter.new,
+                        'TestWithNoNameLinter'                         => TestWithNoNameLinter.new,
+                        'TestWithNoVerificationStepLinter'             => TestWithNoVerificationStepLinter.new,
+                        'TestWithSetupStepAfterActionStepLinter'       => TestWithSetupStepAfterActionStepLinter.new,
+                        'TestWithSetupStepAfterVerificationStepLinter' => TestWithSetupStepAfterVerificationStepLinter.new,
+                        'TestWithSetupStepAsFinalStepLinter'           => TestWithSetupStepAsFinalStepLinter.new,
+                        'TestWithTooManyStepsLinter'                   => TestWithTooManyStepsLinter.new }
 
 
   # Configures linters based on the given options
@@ -97,8 +109,15 @@ module CukeLinter
   # Lints the given model trees and file paths using the given linting objects and formatting the results with the given formatters and their respective output locations
   def self.lint(file_paths: [], model_trees: [], linters: self.registered_linters.values, formatters: [[CukeLinter::PrettyFormatter.new]])
 
-    model_trees      = [CukeModeler::Directory.new(Dir.pwd)] if model_trees.empty? && file_paths.empty?
-    file_path_models = file_paths.collect do |file_path|
+    # TODO: Test this?
+    # Because directive memoization is based on a model's `#object_id` and Ruby reuses object IDs over the life
+    # life of a program as objects are garbage collected, it is not safe to remember the IDs forever. However,
+    # models shouldn't get GC'd in the middle of the linting process and so the start of the linting process is
+    # a good time to reset things
+    @directives_for_feature_file = {}
+
+    model_trees                  = [CukeModeler::Directory.new(Dir.pwd)] if model_trees.empty? && file_paths.empty?
+    file_path_models             = file_paths.collect do |file_path|
       # TODO: raise exception unless path exists
       case
         when File.directory?(file_path)
@@ -178,8 +197,7 @@ module CukeLinter
 
 
   def self.linter_directives_for_feature_file(feature_file_model)
-    # IMPORTANT ASSUMPTION: Models never change during the life of the program, so data only has to be gathered once
-    @directives_for_feature_file ||= {}
+    # IMPORTANT ASSUMPTION: Models never change during the life of a linting, so data only has to be gathered once
     return @directives_for_feature_file[feature_file_model.object_id] if @directives_for_feature_file[feature_file_model.object_id]
 
 

@@ -147,23 +147,10 @@ Rather than using the default linters or providing a custom set of of modified l
 
 For more detailed examples of usage, see the documentation [here](https://app.cucumber.pro/projects/cuke_linter).
 
+## Development and Contributing
 
-## Development
+See [CONTRIBUTING.md](https://github.com/enkessler/cuke_linter/blob/master/CONTRIBUTING.md)
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `bundle exec rake cuke_linter:test_everything` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/enkessler/cuke_linter.
-
-1. Fork it
-2. Create your feature branch **(off of the development branch)**
-   `git checkout -b my-new-feature`
-3. Commit your changes
-   `git commit -am 'Add some feature'`
-4. Push to the branch
-   `git push origin my-new-feature`
-5. Create new Pull Request
 
 ## License
 

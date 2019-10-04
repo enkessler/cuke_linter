@@ -1,8 +1,8 @@
 Feature: Example without name linter
 
   As a reader of documentation
-  I want every example to have a name
-  So that I can understand the significance of the example grouping
+  I want every example grouping to have a name
+  So that I can understand the significance of the example data
 
 
   Scenario: Linting
@@ -13,18 +13,20 @@ Feature: Example without name linter
 
         Scenario Outline:
           * a step
-        Examples:
+
+        Examples: Happy paths!
           | param |
           | value |
+
+        # Unknown paths :(
         Examples:
           | param |
           | value |
       """
     When it is linted
     Then an error is reported:
-      | linter                   | problem             | location         |
-      | ExampleWithoutNameLinter | Example has no name | <path_to_file>:5 |
-      | ExampleWithoutNameLinter | Example has no name | <path_to_file>:8 |
+      | linter                   | problem                      | location          |
+      | ExampleWithoutNameLinter | Example grouping has no name | <path_to_file>:11 |
 
   @wip
   Scenario: Configuration

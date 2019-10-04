@@ -13,7 +13,7 @@ module CukeLinter
 
     # The message used to describe the problem that has been found
     def message
-      'Example has no name'
+      'Example grouping has no name'
     end
 
   end

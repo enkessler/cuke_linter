@@ -2,7 +2,7 @@ Feature: Step that ends with a period linter
 
   As a writer of documentation
   I want to avoid periods at the end of steps
-  So that readability is not impacted when they are used elsewhere
+  So that readability is not impacted when the steps are used in other contexts
 
 
   Scenario: Linting

@@ -3,25 +3,7 @@ require_relative '../../../../../environments/rspec_env'
 
 RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
 
-  let(:good_data) do
-    model      = CukeLinter::ModelFactory.generate_scenario_model
-    model.tags = [:tag_1]
-
-    model
-  end
-
-  let(:bad_data) do
-    model      = CukeLinter::ModelFactory.generate_scenario_model
-    model.tags = [:tag_1,
-                  :tag_2,
-                  :tag_3,
-                  :tag_4,
-                  :tag_5,
-                  :tag_6]
-
-    model
-  end
-
+  let(:model_file_path) { 'some_file_path' }
 
   it_should_behave_like 'a linter at the unit level'
   it_should_behave_like 'a configurable linter at the unit level'
@@ -33,12 +15,15 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
 
   describe 'linting' do
 
-    ['feature', 'scenario', 'outline', 'example'].each do |model_type|
+    # Descriptive variable name, just in case what kinds of elements are taggable ever changes
+    taggable_elements = ['feature', 'scenario', 'outline', 'example']
+
+    taggable_elements.each do |model_type|
 
       context "with a #{model_type} that has too many tags" do
 
         let(:test_model) do
-          model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
+          model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
           model.tags = [:tag_1,
                         :tag_2,
                         :tag_3,
@@ -49,20 +34,13 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
           model
         end
 
+        it_should_behave_like 'a linter linting a bad model'
+
+
         it 'records a problem' do
           result = subject.lint(test_model)
 
           expect(result[:problem]).to match(/^#{model_type.capitalize} has too many tags. \d+ tags found \(max 5\)\.$/)
-        end
-
-        it 'records the location of the problem' do
-          test_model.source_line = 1
-          result                 = subject.lint(test_model)
-          expect(result[:location]).to eq('path_to_file:1')
-
-          test_model.source_line = 3
-          result                 = subject.lint(test_model)
-          expect(result[:location]).to eq('path_to_file:3')
         end
 
         it 'includes the number of tags found in the problem record' do
@@ -82,7 +60,7 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
         context 'because it has 5 tags' do
 
           let(:test_model) do
-            model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
+            model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
             model.tags = [:tag_1,
                           :tag_2,
                           :tag_3,
@@ -92,24 +70,20 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
             model
           end
 
-          it 'does not record a problem' do
-            expect(subject.lint(test_model)).to eq(nil)
-          end
+          it_should_behave_like 'a linter linting a good model'
 
         end
 
         context 'because it has fewer than 5 tags' do
 
           let(:test_model) do
-            model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
+            model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
             model.tags = [:tag_1]
 
             model
           end
 
-          it 'does not record a problem' do
-            expect(subject.lint(test_model)).to eq(nil)
-          end
+          it_should_behave_like 'a linter linting a good model'
 
         end
 
@@ -118,30 +92,26 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
           context 'because its tags are empty' do
 
             let(:test_model) do
-              model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
+              model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
               model.tags = []
 
               model
             end
 
-            it 'does not record a problem' do
-              expect(subject.lint(test_model)).to eq(nil)
-            end
+            it_should_behave_like 'a linter linting a good model'
 
           end
 
           context 'because its tags are nil' do
 
             let(:test_model) do
-              model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
+              model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
               model.tags = nil
 
               model
             end
 
-            it 'does not record a problem' do
-              expect(subject.lint(test_model)).to eq(nil)
-            end
+            it_should_behave_like 'a linter linting a good model'
 
           end
 
@@ -320,11 +290,7 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
 
       let(:test_model) { CukeModeler::Model.new }
 
-      it 'returns no result' do
-        result = subject.lint(test_model)
-
-        expect(result).to eq(nil)
-      end
+      it_should_behave_like 'a linter linting a good model'
 
     end
 

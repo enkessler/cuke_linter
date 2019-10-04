@@ -3,26 +3,45 @@ require_relative '../../../../../environments/rspec_env'
 
 RSpec.describe CukeLinter::Linter do
 
+  let(:model_file_path) { 'some_file_path' }
+
   let(:linter_name) { 'FooLinter' }
   let(:linter_message) { 'Foo!' }
   let(:linter_rule) { lambda { |model| !model.is_a?(CukeModeler::Example) } }
   let(:linter_options) { { name: linter_name, message: linter_message, rule: linter_rule } }
 
-  let(:good_data) do
-    CukeLinter::ModelFactory.generate_example_model
-  end
+  let(:good_data) { CukeLinter::ModelFactory.generate_example_model }
+  let(:bad_data) { CukeLinter::ModelFactory.generate_outline_model }
 
-  let(:bad_data) do
-    CukeLinter::ModelFactory.generate_outline_model
+
+  it_should_behave_like 'a linter at the unit level'
+
+  context 'with a linting rule' do
+
+    subject { CukeLinter::Linter.new(linter_options.merge({ rule: linter_rule })) }
+
+    context 'with a good model' do
+
+      let(:test_model) { CukeLinter::ModelFactory.generate_example_model }
+
+      it_should_behave_like 'a linter linting a good model'
+
+    end
+
+    context 'with a bad model' do
+
+      let(:test_model) { CukeLinter::ModelFactory.generate_outline_model(parent_file_path: model_file_path) }
+
+      it_should_behave_like 'a linter linting a bad model'
+
+    end
+
   end
 
 
   context 'with custom values' do
 
     subject { CukeLinter::Linter.new(linter_options) }
-
-
-    it_should_behave_like 'a linter at the unit level'
 
     it 'uses the provided name' do
       expect(subject.name).to eq(linter_name)
@@ -60,8 +79,6 @@ RSpec.describe CukeLinter::Linter do
 
               linter }
 
-
-    it_should_behave_like 'a linter at the unit level'
 
     it 'uses the provided #name' do
       expect(subject.name).to eq(linter_name)

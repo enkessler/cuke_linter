@@ -54,3 +54,8 @@ Feature: Test with too many steps linter
     Then an error is reported:
       | linter                     | problem                                         | location         |
       | TestWithTooManyStepsLinter | Test has too many steps. 4 steps found (max 3). | <path_to_file>:3 |
+
+  @wip
+  Scenario: Configuration
+
+  Ideas: Configure whether or not the linter includes steps from backgrounds
