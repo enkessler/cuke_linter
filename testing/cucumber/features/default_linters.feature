@@ -18,6 +18,7 @@ Feature: Default Linters
       | OutlineWithSingleExampleRowLinter            |
       | SingleTestBackgroundLinter                   |
       | StepWithEndPeriodLinter                      |
+      | ScenarioWithBadNameLinter                    |
       | StepWithTooManyCharactersLinter              |
       | TestShouldUseBackgroundLinter                |
       | TestWithActionStepAsFinalStepLinter          |

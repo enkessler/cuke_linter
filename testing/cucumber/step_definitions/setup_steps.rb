@@ -69,6 +69,10 @@ Given(/^a linter for features without a name$/) do
   @linter = CukeLinter::FeatureWithoutNameLinter.new
 end
 
+Given(/^a linter for tests with bad names$/) do
+  @linter = CukeLinter::ScenarioWithBadNameLinter.new
+end
+
 Given(/^a linter for elements with too many tags$/) do
   @linter = CukeLinter::ElementWithTooManyTagsLinter.new
 end
