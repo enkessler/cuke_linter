@@ -64,7 +64,7 @@ RSpec.describe CukeLinter::TestWithBadNameLinter do
 
         end
 
-        context 'a non-feature model' do
+        context 'a non-test model' do
 
           let(:test_model) { CukeModeler::Model.new }
 
