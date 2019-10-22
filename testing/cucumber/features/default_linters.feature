@@ -21,6 +21,7 @@ Feature: Default Linters
       | StepWithTooManyCharactersLinter              |
       | TestShouldUseBackgroundLinter                |
       | TestWithActionStepAsFinalStepLinter          |
+      | TestWithBadNameLinter                        |
       | TestWithNoActionStepLinter                   |
       | TestWithNoNameLinter                         |
       | TestWithNoVerificationStepLinter             |
