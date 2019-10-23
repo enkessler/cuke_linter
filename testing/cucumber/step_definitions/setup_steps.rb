@@ -25,6 +25,10 @@ Given(/^a linter for features without scenarios$/) do
   @linter = CukeLinter::FeatureWithoutScenariosLinter.new
 end
 
+Given(/^a linter for features with invalid file names$/) do
+  @linter = CukeLinter::FileWithInvalidNameLinter.new
+end
+
 Given(/^no other linters have been registered or unregistered$/) do
   CukeLinter.reset_linters
 end
