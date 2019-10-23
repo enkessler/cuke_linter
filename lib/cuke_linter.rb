@@ -17,6 +17,7 @@ require 'cuke_linter/linters/step_with_end_period_linter'
 require 'cuke_linter/linters/step_with_too_many_characters_linter'
 require 'cuke_linter/linters/test_should_use_background_linter'
 require 'cuke_linter/linters/test_with_action_step_as_final_step_linter'
+require 'cuke_linter/linters/file_with_invalid_name_linter'
 require 'cuke_linter/linters/test_with_no_action_step_linter'
 require 'cuke_linter/linters/test_with_no_name_linter'
 require 'cuke_linter/linters/test_with_no_verification_step_linter'
@@ -37,6 +38,7 @@ module CukeLinter
                         'FeatureWithoutDescriptionLinter'              => FeatureWithoutDescriptionLinter.new,
                         'FeatureWithoutNameLinter'                     => FeatureWithoutNameLinter.new,
                         'FeatureWithoutScenariosLinter'                => FeatureWithoutScenariosLinter.new,
+                        'FileWithInvalidNameLinter'                    => FileWithInvalidNameLinter.new,
                         'OutlineWithSingleExampleRowLinter'            => OutlineWithSingleExampleRowLinter.new,
                         'SingleTestBackgroundLinter'                   => SingleTestBackgroundLinter.new,
                         'StepWithEndPeriodLinter'                      => StepWithEndPeriodLinter.new,
