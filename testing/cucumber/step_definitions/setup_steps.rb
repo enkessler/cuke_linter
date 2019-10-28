@@ -193,3 +193,9 @@ And(/^a feature file model based on the following text:$/) do |text|
 
   @model = CukeModeler::FeatureFile.new(file_path)
 end
+
+Given(/^a feature file model named "([^"]*)"$/) do |file_path|
+  @model = CukeModeler::FeatureFile.new
+
+  @model.path = file_path
+end

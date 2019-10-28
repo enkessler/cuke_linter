@@ -4,15 +4,13 @@ Feature: File with invalid name linter
   I want to be warned about invalid file name
   so that I name all features consistently
 
-  Scenario: Linting
-    Given a file named "<name>.feature" with:
-      """
-      Feature:
-      """
+  Scenario Outline: Linting
+    Given a feature file model named "<name>.feature"
+    And a linter for features with invalid file names
     When it is linted
     Then an error is reported:
       | linter                    | problem                              | location         |
-      | FileWithInvalidNameLinter | Feature files should be snake_cased. | <path_to_file>:3 |
+      | FileWithInvalidNameLinter | Feature files should be snake_cased. | <path_to_file>   |
 
     Examples: Invalid Names
       | name    |
