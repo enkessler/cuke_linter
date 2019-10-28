@@ -14,11 +14,18 @@ Then(/^the resulting output will include the following:$/) do |text|
   expect(@results.chomp).to include(text)
 end
 
+# TODO: fix this later
 Then(/^an error is reported:$/) do |table|
   table.hashes.each do |error_record|
-    expect(@results).to include({ linter:   error_record['linter'],
-                                  problem:  error_record['problem'],
-                                  location: error_record['location'].sub('<path_to_file>', @model.get_ancestor(:feature_file).path).sub('<model_line_number>', @model.source_line.to_s) })
+    if @model.is_a?(CukeModeler::FeatureFile)
+      expect(@results).to include({ linter:   error_record['linter'],
+        problem:  error_record['problem'],
+        location: error_record['location'].sub('<path_to_file>', @model.path) })
+    else
+      expect(@results).to include({ linter:   error_record['linter'],
+                                    problem:  error_record['problem'],
+                                    location: error_record['location'].sub('<path_to_file>', @model.get_ancestor(:feature_file).path).sub('<model_line_number>', @model.source_line.to_s) })
+    end
   end
 end
 
