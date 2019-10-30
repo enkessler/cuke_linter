@@ -15,6 +15,7 @@ Feature: Default Linters
       | FeatureWithoutDescriptionLinter              |
       | FeatureWithoutNameLinter                     |
       | FeatureWithoutScenariosLinter                |
+      | FileWithInvalidNameLinter                    |
       | OutlineWithSingleExampleRowLinter            |
       | SingleTestBackgroundLinter                   |
       | StepWithEndPeriodLinter                      |
