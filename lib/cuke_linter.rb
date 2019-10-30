@@ -7,6 +7,7 @@ require 'cuke_linter/linters/linter'
 require 'cuke_linter/linters/background_does_more_than_setup_linter'
 require 'cuke_linter/linters/element_with_too_many_tags_linter'
 require 'cuke_linter/linters/example_without_name_linter'
+require 'cuke_linter/linters/feature_file_with_invalid_name_linter'
 require 'cuke_linter/linters/feature_with_too_many_different_tags_linter'
 require 'cuke_linter/linters/feature_without_name_linter'
 require 'cuke_linter/linters/feature_without_description_linter'
@@ -18,7 +19,6 @@ require 'cuke_linter/linters/step_with_too_many_characters_linter'
 require 'cuke_linter/linters/test_should_use_background_linter'
 require 'cuke_linter/linters/test_with_action_step_as_final_step_linter'
 require 'cuke_linter/linters/test_with_bad_name_linter'
-require 'cuke_linter/linters/file_with_invalid_name_linter'
 require 'cuke_linter/linters/test_with_no_action_step_linter'
 require 'cuke_linter/linters/test_with_no_name_linter'
 require 'cuke_linter/linters/test_with_no_verification_step_linter'
@@ -35,11 +35,11 @@ module CukeLinter
   @original_linters = { 'BackgroundDoesMoreThanSetupLinter'            => BackgroundDoesMoreThanSetupLinter.new,
                         'ElementWithTooManyTagsLinter'                 => ElementWithTooManyTagsLinter.new,
                         'ExampleWithoutNameLinter'                     => ExampleWithoutNameLinter.new,
+                        'FeatureFileWithInvalidNameLinter'             => FeatureFileWithInvalidNameLinter.new,
                         'FeatureWithTooManyDifferentTagsLinter'        => FeatureWithTooManyDifferentTagsLinter.new,
                         'FeatureWithoutDescriptionLinter'              => FeatureWithoutDescriptionLinter.new,
                         'FeatureWithoutNameLinter'                     => FeatureWithoutNameLinter.new,
                         'FeatureWithoutScenariosLinter'                => FeatureWithoutScenariosLinter.new,
-                        'FileWithInvalidNameLinter'                    => FileWithInvalidNameLinter.new,
                         'OutlineWithSingleExampleRowLinter'            => OutlineWithSingleExampleRowLinter.new,
                         'SingleTestBackgroundLinter'                   => SingleTestBackgroundLinter.new,
                         'StepWithEndPeriodLinter'                      => StepWithEndPeriodLinter.new,

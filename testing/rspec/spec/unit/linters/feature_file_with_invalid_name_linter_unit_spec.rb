@@ -1,7 +1,7 @@
 require_relative '../../../../../environments/rspec_env'
 
 
-RSpec.describe CukeLinter::FileWithInvalidNameLinter do
+RSpec.describe CukeLinter::FeatureFileWithInvalidNameLinter do
 
   let(:model_file_path) { 'some_file_path' }
 
@@ -9,7 +9,7 @@ RSpec.describe CukeLinter::FileWithInvalidNameLinter do
 
 
   it 'has a name' do
-    expect(subject.name).to eq('FileWithInvalidNameLinter')
+    expect(subject.name).to eq('FeatureFileWithInvalidNameLinter')
   end
 
   describe 'linting' do

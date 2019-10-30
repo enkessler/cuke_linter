@@ -1,8 +1,8 @@
 module CukeLinter
 
-  # A linter that detects invalid file names
+  # A linter that detects invalid feature file names
 
-  class FileWithInvalidNameLinter < Linter
+  class FeatureFileWithInvalidNameLinter < Linter
 
     #TODO: Fix generic version of lint to be inclusive of this use case
 

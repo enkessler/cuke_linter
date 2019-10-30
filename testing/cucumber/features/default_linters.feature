@@ -11,11 +11,11 @@ Feature: Default Linters
       | BackgroundDoesMoreThanSetupLinter            |
       | ElementWithTooManyTagsLinter                 |
       | ExampleWithoutNameLinter                     |
+      | FeatureFileWithInvalidNameLinter                    |
       | FeatureWithTooManyDifferentTagsLinter        |
       | FeatureWithoutDescriptionLinter              |
       | FeatureWithoutNameLinter                     |
       | FeatureWithoutScenariosLinter                |
-      | FileWithInvalidNameLinter                    |
       | OutlineWithSingleExampleRowLinter            |
       | SingleTestBackgroundLinter                   |
       | StepWithEndPeriodLinter                      |

@@ -1,4 +1,4 @@
-Feature: File with invalid name linter
+Feature: Feature file with invalid name linter
 
   As a writer of documentation
   I want to be warned about invalid file name
@@ -9,8 +9,8 @@ Feature: File with invalid name linter
     And a linter for features with invalid file names
     When it is linted
     Then an error is reported:
-      | linter                    | problem                              | location         |
-      | FileWithInvalidNameLinter | Feature files should be snake_cased. | <path_to_file>   |
+      | linter                           | problem                              | location       |
+      | FeatureFileWithInvalidNameLinter | Feature files should be snake_cased. | <path_to_file> |
 
     Examples: Invalid Names
       | name    |
