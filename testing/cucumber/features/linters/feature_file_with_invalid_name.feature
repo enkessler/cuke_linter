@@ -1,7 +1,7 @@
 Feature: Feature file with invalid name linter
 
   As a writer of documentation
-  I want to be warned about invalid file name
+  I want to be warned about invalid file names
   so that I name all features consistently
 
   Scenario Outline: Linting

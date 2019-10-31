@@ -15,16 +15,16 @@ RSpec.describe CukeLinter::FeatureFileWithInvalidNameLinter do
   describe 'linting' do
 
     it "only lints the file name" do
-      test_model = CukeLinter::ModelFactory.generate_feature_file_model
-      test_model.path = 'bad-directory/good_path.feature'
+      test_model      = CukeLinter::ModelFactory.generate_feature_file_model
+      test_model.path = 'bad-directory/good_file.feature'
 
       expect(subject.lint(test_model)).to be_nil
     end
 
-    context "with a feature_file_model that has an invalid file name" do
+    context "with a feature file model that has an invalid file name" do
 
       let(:test_model) do
-        model      = CukeLinter::ModelFactory.generate_feature_file_model
+        model = CukeLinter::ModelFactory.generate_feature_file_model
 
         model.path = model_file_path
         model
@@ -80,10 +80,10 @@ RSpec.describe CukeLinter::FeatureFileWithInvalidNameLinter do
 
     end
 
-    context "with a feature_file that does have a valid file name" do
+    context "with a feature file model that does have a valid file name" do
 
       let(:test_model) do
-        model      = CukeLinter::ModelFactory.generate_feature_file_model
+        model = CukeLinter::ModelFactory.generate_feature_file_model
 
         model.path = 'very_good_path'
         model
