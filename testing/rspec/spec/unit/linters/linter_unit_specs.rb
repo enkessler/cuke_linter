@@ -39,8 +39,6 @@ shared_examples_for 'a linter linting a bad model' do
     expect(result.keys).to match_array([:problem, :location])
   end
 
-  # TODO: extract examples into common example
-
   it 'correctly records the location of the problem' do
     if test_model.is_a?(CukeModeler::FeatureFile)
       result                 = subject.lint(test_model)
