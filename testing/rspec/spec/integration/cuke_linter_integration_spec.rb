@@ -173,6 +173,7 @@ RSpec.describe CukeLinter do
                                     { linter: 'FakeLinter2', location: 'path_to_file:1', problem: 'FakeLinter2 problem' }])
   end
 
+  # TODO: rewrite this to be an exact match check instead of letting a subset pass
   it 'has a default set of registered linters' do
     expect(subject.registered_linters.keys).to include('BackgroundDoesMoreThanSetupLinter')
     expect(subject.registered_linters['BackgroundDoesMoreThanSetupLinter']).to be_a(CukeLinter::BackgroundDoesMoreThanSetupLinter)
@@ -180,6 +181,8 @@ RSpec.describe CukeLinter do
     expect(subject.registered_linters['ElementWithTooManyTagsLinter']).to be_a(CukeLinter::ElementWithTooManyTagsLinter)
     expect(subject.registered_linters.keys).to include('ExampleWithoutNameLinter')
     expect(subject.registered_linters['ExampleWithoutNameLinter']).to be_a(CukeLinter::ExampleWithoutNameLinter)
+    expect(subject.registered_linters.keys).to include('FeatureFileWithInvalidNameLinter')
+    expect(subject.registered_linters['FeatureFileWithInvalidNameLinter']).to be_a(CukeLinter::FeatureFileWithInvalidNameLinter)
     expect(subject.registered_linters.keys).to include('FeatureWithTooManyDifferentTagsLinter')
     expect(subject.registered_linters['FeatureWithTooManyDifferentTagsLinter']).to be_a(CukeLinter::FeatureWithTooManyDifferentTagsLinter)
     expect(subject.registered_linters.keys).to include('FeatureWithoutDescriptionLinter')
