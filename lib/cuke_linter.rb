@@ -114,7 +114,7 @@ module CukeLinter
   def self.lint(file_paths: [], model_trees: [], linters: self.registered_linters.values, formatters: [[CukeLinter::PrettyFormatter.new]])
 
     # TODO: Test this?
-    # Because directive memoization is based on a model's `#object_id` and Ruby reuses object IDs over the life
+    # Because directive memoization is based on a model's `#object_id` and Ruby reuses object IDs over the
     # life of a program as objects are garbage collected, it is not safe to remember the IDs forever. However,
     # models shouldn't get GC'd in the middle of the linting process and so the start of the linting process is
     # a good time to reset things
