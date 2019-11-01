@@ -11,6 +11,7 @@ Feature: Default Linters
       | BackgroundDoesMoreThanSetupLinter            |
       | ElementWithTooManyTagsLinter                 |
       | ExampleWithoutNameLinter                     |
+      | FeatureFileWithInvalidNameLinter             |
       | FeatureWithTooManyDifferentTagsLinter        |
       | FeatureWithoutDescriptionLinter              |
       | FeatureWithoutNameLinter                     |
@@ -21,6 +22,7 @@ Feature: Default Linters
       | StepWithTooManyCharactersLinter              |
       | TestShouldUseBackgroundLinter                |
       | TestWithActionStepAsFinalStepLinter          |
+      | TestWithBadNameLinter                        |
       | TestWithNoActionStepLinter                   |
       | TestWithNoNameLinter                         |
       | TestWithNoVerificationStepLinter             |

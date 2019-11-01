@@ -174,46 +174,37 @@ RSpec.describe CukeLinter do
   end
 
   it 'has a default set of registered linters' do
-    expect(subject.registered_linters.keys).to include('BackgroundDoesMoreThanSetupLinter')
-    expect(subject.registered_linters['BackgroundDoesMoreThanSetupLinter']).to be_a(CukeLinter::BackgroundDoesMoreThanSetupLinter)
-    expect(subject.registered_linters.keys).to include('ElementWithTooManyTagsLinter')
-    expect(subject.registered_linters['ElementWithTooManyTagsLinter']).to be_a(CukeLinter::ElementWithTooManyTagsLinter)
-    expect(subject.registered_linters.keys).to include('ExampleWithoutNameLinter')
-    expect(subject.registered_linters['ExampleWithoutNameLinter']).to be_a(CukeLinter::ExampleWithoutNameLinter)
-    expect(subject.registered_linters.keys).to include('FeatureWithTooManyDifferentTagsLinter')
-    expect(subject.registered_linters['FeatureWithTooManyDifferentTagsLinter']).to be_a(CukeLinter::FeatureWithTooManyDifferentTagsLinter)
-    expect(subject.registered_linters.keys).to include('FeatureWithoutDescriptionLinter')
-    expect(subject.registered_linters['FeatureWithoutDescriptionLinter']).to be_a(CukeLinter::FeatureWithoutDescriptionLinter)
-    expect(subject.registered_linters.keys).to include('FeatureWithoutNameLinter')
-    expect(subject.registered_linters['FeatureWithoutNameLinter']).to be_a(CukeLinter::FeatureWithoutNameLinter)
-    expect(subject.registered_linters.keys).to include('FeatureWithoutScenariosLinter')
-    expect(subject.registered_linters['FeatureWithoutScenariosLinter']).to be_a(CukeLinter::FeatureWithoutScenariosLinter)
-    expect(subject.registered_linters.keys).to include('OutlineWithSingleExampleRowLinter')
-    expect(subject.registered_linters['OutlineWithSingleExampleRowLinter']).to be_a(CukeLinter::OutlineWithSingleExampleRowLinter)
-    expect(subject.registered_linters.keys).to include('SingleTestBackgroundLinter')
-    expect(subject.registered_linters['SingleTestBackgroundLinter']).to be_a(CukeLinter::SingleTestBackgroundLinter)
-    expect(subject.registered_linters.keys).to include('StepWithEndPeriodLinter')
-    expect(subject.registered_linters['StepWithEndPeriodLinter']).to be_a(CukeLinter::StepWithEndPeriodLinter)
-    expect(subject.registered_linters.keys).to include('StepWithTooManyCharactersLinter')
-    expect(subject.registered_linters['StepWithTooManyCharactersLinter']).to be_a(CukeLinter::StepWithTooManyCharactersLinter)
-    expect(subject.registered_linters.keys).to include('TestShouldUseBackgroundLinter')
-    expect(subject.registered_linters['TestShouldUseBackgroundLinter']).to be_a(CukeLinter::TestShouldUseBackgroundLinter)
-    expect(subject.registered_linters.keys).to include('TestWithActionStepAsFinalStepLinter')
-    expect(subject.registered_linters['TestWithActionStepAsFinalStepLinter']).to be_a(CukeLinter::TestWithActionStepAsFinalStepLinter)
-    expect(subject.registered_linters.keys).to include('TestWithNoActionStepLinter')
-    expect(subject.registered_linters['TestWithNoActionStepLinter']).to be_a(CukeLinter::TestWithNoActionStepLinter)
-    expect(subject.registered_linters.keys).to include('TestWithNoNameLinter')
-    expect(subject.registered_linters['TestWithNoNameLinter']).to be_a(CukeLinter::TestWithNoNameLinter)
-    expect(subject.registered_linters.keys).to include('TestWithNoVerificationStepLinter')
-    expect(subject.registered_linters['TestWithNoVerificationStepLinter']).to be_a(CukeLinter::TestWithNoVerificationStepLinter)
-    expect(subject.registered_linters.keys).to include('TestWithSetupStepAfterActionStepLinter')
-    expect(subject.registered_linters['TestWithSetupStepAfterActionStepLinter']).to be_a(CukeLinter::TestWithSetupStepAfterActionStepLinter)
-    expect(subject.registered_linters.keys).to include('TestWithSetupStepAfterVerificationStepLinter')
-    expect(subject.registered_linters['TestWithSetupStepAfterVerificationStepLinter']).to be_a(CukeLinter::TestWithSetupStepAfterVerificationStepLinter)
-    expect(subject.registered_linters.keys).to include('TestWithSetupStepAsFinalStepLinter')
-    expect(subject.registered_linters['TestWithSetupStepAsFinalStepLinter']).to be_a(CukeLinter::TestWithSetupStepAsFinalStepLinter)
-    expect(subject.registered_linters.keys).to include('TestWithTooManyStepsLinter')
-    expect(subject.registered_linters['TestWithTooManyStepsLinter']).to be_a(CukeLinter::TestWithTooManyStepsLinter)
+    subject.reset_linters
+
+    default_linter_classes = ['BackgroundDoesMoreThanSetupLinter',
+                              'ElementWithTooManyTagsLinter',
+                              'ExampleWithoutNameLinter',
+                              'FeatureFileWithInvalidNameLinter',
+                              'FeatureWithTooManyDifferentTagsLinter',
+                              'FeatureWithoutDescriptionLinter',
+                              'FeatureWithoutNameLinter',
+                              'FeatureWithoutScenariosLinter',
+                              'OutlineWithSingleExampleRowLinter',
+                              'SingleTestBackgroundLinter',
+                              'StepWithEndPeriodLinter',
+                              'StepWithTooManyCharactersLinter',
+                              'TestShouldUseBackgroundLinter',
+                              'TestWithActionStepAsFinalStepLinter',
+                              'TestWithBadNameLinter',
+                              'TestWithNoActionStepLinter',
+                              'TestWithNoNameLinter',
+                              'TestWithNoVerificationStepLinter',
+                              'TestWithSetupStepAfterActionStepLinter',
+                              'TestWithSetupStepAfterVerificationStepLinter',
+                              'TestWithSetupStepAsFinalStepLinter',
+                              'TestWithTooManyStepsLinter']
+
+    expect(subject.registered_linters.keys).to eq(default_linter_classes)
+
+    default_linter_classes.each do |clazz|
+      expect(subject.registered_linters[clazz]).to be_a(CukeLinter.const_get(clazz))
+
+    end
   end
 
   it 'returns to its default set of linters after being reset' do

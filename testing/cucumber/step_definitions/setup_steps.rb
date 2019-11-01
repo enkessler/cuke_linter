@@ -25,6 +25,10 @@ Given(/^a linter for features without scenarios$/) do
   @linter = CukeLinter::FeatureWithoutScenariosLinter.new
 end
 
+Given(/^a linter for features with invalid file names$/) do
+  @linter = CukeLinter::FeatureFileWithInvalidNameLinter.new
+end
+
 Given(/^no other linters have been registered or unregistered$/) do
   CukeLinter.reset_linters
 end
@@ -35,6 +39,10 @@ end
 
 Given(/^a linter for outlines with only one example row$/) do
   @linter = CukeLinter::OutlineWithSingleExampleRowLinter.new
+end
+
+Given("a linter for tests with bad names") do
+  @linter = CukeLinter::TestWithBadNameLinter.new
 end
 
 Given(/^a linter for tests with too many steps$/) do
@@ -188,4 +196,10 @@ And(/^a feature file model based on the following text:$/) do |text|
   @created_files << file_path
 
   @model = CukeModeler::FeatureFile.new(file_path)
+end
+
+Given(/^a feature file model named "([^"]*)"$/) do |file_path|
+  @model = CukeModeler::FeatureFile.new
+
+  @model.path = file_path
 end

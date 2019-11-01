@@ -27,6 +27,12 @@ module CukeLinter
       model
     end
 
+    def self.generate_feature_file_model
+      model              = CukeModeler::FeatureFile.new
+
+      model
+    end
+
     def self.generate_example_model(source_text: 'Examples:', parent_file_path: 'path_to_file')
       fake_parent_model = generate_outline_model(parent_file_path: parent_file_path)
 
