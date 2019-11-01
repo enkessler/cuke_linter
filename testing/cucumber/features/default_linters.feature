@@ -11,7 +11,7 @@ Feature: Default Linters
       | BackgroundDoesMoreThanSetupLinter            |
       | ElementWithTooManyTagsLinter                 |
       | ExampleWithoutNameLinter                     |
-      | FeatureFileWithInvalidNameLinter                    |
+      | FeatureFileWithInvalidNameLinter             |
       | FeatureWithTooManyDifferentTagsLinter        |
       | FeatureWithoutDescriptionLinter              |
       | FeatureWithoutNameLinter                     |
