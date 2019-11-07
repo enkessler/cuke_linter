@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Nothing yet... *(see development branch)*
 
+
+## [0.11.1] - 2019-11-07
+
+### Fixed
+ - Fixed the Pretty formatter so that it can handle linting problems whose locations do not have a line number.
+
+
 ## [0.11.0] - 2019-11-01
 
 ### Added
@@ -112,7 +119,8 @@ Nothing yet... *(see development branch)*
 - Custom linters, formatters, and command line usability
 
 
-[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.11.1...HEAD
+[0.11.1]: https://github.com/enkessler/cuke_linter/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/enkessler/cuke_linter/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/enkessler/cuke_linter/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/enkessler/cuke_linter/compare/v0.8.0...v0.9.0
