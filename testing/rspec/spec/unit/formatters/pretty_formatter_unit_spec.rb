@@ -12,7 +12,10 @@ RSpec.describe CukeLinter::PrettyFormatter do
                       location: 'path/to/the_file:1' },
                     { linter:   'SomeOtherLinter',
                       problem:  'Some other problem',
-                      location: 'path/to/the_file:1' }]
+                      location: 'path/to/the_file:1' },
+                    { linter:   'YetAnotherLinter',
+                      problem:  'Yet another problem',
+                      location: 'path/to/the_file' }]
 
     results = subject.format(linting_data)
 
@@ -22,8 +25,11 @@ RSpec.describe CukeLinter::PrettyFormatter do
                            'SomeOtherLinter',
                            '  Some other problem',
                            '    path/to/the_file:1',
+                           'YetAnotherLinter',
+                           '  Yet another problem',
+                           '    path/to/the_file',
                            '',
-                           '2 issues found'].join("\n"))
+                           '3 issues found'].join("\n"))
   end
 
   it 'groups data by linter and problem' do
@@ -50,7 +56,7 @@ RSpec.describe CukeLinter::PrettyFormatter do
                            '3 issues found'].join("\n"))
   end
 
-  it 'orders violations within the same category by file path' do
+  it 'orders violations within the same problem category by file path' do
     linting_data = [{ linter:   'SomeLinter',
                       problem:  'Some problem',
                       location: 'path/to/the_file:1' },
@@ -87,19 +93,23 @@ RSpec.describe CukeLinter::PrettyFormatter do
                       location: 'path/to/the_file:3' }, # duplicate number
                     { linter:   'SomeLinter',
                       problem:  'Some problem',
+                      location: 'path/to/the_file' }, # no number
+                    { linter:   'SomeLinter',
+                      problem:  'Some problem',
                       location: 'path/to/the_file:1' }]
 
     results = subject.format(linting_data)
 
     expect(results).to eq(['SomeLinter',
                            '  Some problem',
+                           '    path/to/the_file',
                            '    path/to/the_file:1',
                            '    path/to/the_file:2',
                            '    path/to/the_file:3',
                            '    path/to/the_file:3',
                            '    path/to/the_file:11',
                            '',
-                           '5 issues found'].join("\n"))
+                           '6 issues found'].join("\n"))
   end
 
 end
