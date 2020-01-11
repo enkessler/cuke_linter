@@ -81,6 +81,8 @@ RSpec.describe CukeLinter do
       linting_options.delete(:model_trees)
     end
 
+    # TODO: add a negative test that makes sure that non-included paths aren't linted when paths are explicitly included
+
     it 'lints every model in each path' do
       results = subject.lint(linting_options)
 

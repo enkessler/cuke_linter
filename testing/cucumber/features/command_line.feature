@@ -57,14 +57,14 @@ Feature: Using cuke_linter on the command line
       """
 
   Scenario: Specifying directories and files to lint
-    Given the following feature file "some.feature":
+    Given the following feature file "some_feature.feature":
       """
       Feature: Some feature
         Scenario: A scenario
           When a step
           Then a step
       """
-    And the following feature file "a_directory/with_a.feature":
+    And the following feature file "a_directory/with/some_feature.feature":
       """
       Feature: Some feature
         Scenario: A scenario
@@ -73,14 +73,14 @@ Feature: Using cuke_linter on the command line
       """
     When the following command is executed:
       """
-      cuke_linter -p <path_to>/some.feature -p <path_to>/a_directory
+      cuke_linter -p <path_to>/some_feature.feature -p <path_to>/a_directory
       """
     Then the resulting output is the following:
       """
       FeatureWithoutDescriptionLinter
         Feature has no description
-          <path_to>/a_directory/with_a.feature:1
-          <path_to>/some.feature:1
+          <path_to>/a_directory/with/some_feature.feature:1
+          <path_to>/some_feature.feature:1
 
       2 issues found
       """
@@ -173,8 +173,8 @@ Feature: Using cuke_linter on the command line
 
     Given the following feature file "has_no_scenarios.feature":
       """
-      Feature: This feature
-        has no scenarios
+      Feature: Has no scenarios
+        Not a single one
      """
     And the following configuration file "my_config.file":
       """
