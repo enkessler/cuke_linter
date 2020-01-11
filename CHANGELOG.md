@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet... *(see development branch)*
+### Added
+ - New linters
+   - FeatureFileWithMismatchedNameLinter
 
 
 ## [0.11.1] - 2019-11-07

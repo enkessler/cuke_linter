@@ -12,6 +12,7 @@ Feature: Default Linters
       | ElementWithTooManyTagsLinter                 |
       | ExampleWithoutNameLinter                     |
       | FeatureFileWithInvalidNameLinter             |
+      | FeatureFileWithMismatchedNameLinter          |
       | FeatureWithTooManyDifferentTagsLinter        |
       | FeatureWithoutDescriptionLinter              |
       | FeatureWithoutNameLinter                     |

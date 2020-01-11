@@ -180,6 +180,7 @@ RSpec.describe CukeLinter do
                               'ElementWithTooManyTagsLinter',
                               'ExampleWithoutNameLinter',
                               'FeatureFileWithInvalidNameLinter',
+                              'FeatureFileWithMismatchedNameLinter',
                               'FeatureWithTooManyDifferentTagsLinter',
                               'FeatureWithoutDescriptionLinter',
                               'FeatureWithoutNameLinter',

@@ -29,6 +29,10 @@ Given(/^a linter for features with invalid file names$/) do
   @linter = CukeLinter::FeatureFileWithInvalidNameLinter.new
 end
 
+And(/^a linter for features with mismatched file names$/) do
+  @linter = CukeLinter::FeatureFileWithMismatchedNameLinter.new
+end
+
 Given(/^no other linters have been registered or unregistered$/) do
   CukeLinter.reset_linters
 end
@@ -202,4 +206,13 @@ Given(/^a feature file model named "([^"]*)"$/) do |file_path|
   @model = CukeModeler::FeatureFile.new
 
   @model.path = file_path
+end
+
+Given(/^a feature file model based on the file "([^"]*)" with the following text:$/) do |file_name, text|
+  file_path = CukeLinter::FileHelper.create_file(directory: @root_test_directory, extension: '.feature', text: text, name: file_name)
+
+  @created_files ||= []
+  @created_files << file_path
+
+  @model = CukeModeler::FeatureFile.new(file_path)
 end

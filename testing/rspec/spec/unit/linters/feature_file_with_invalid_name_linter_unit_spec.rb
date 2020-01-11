@@ -93,7 +93,7 @@ RSpec.describe CukeLinter::FeatureFileWithInvalidNameLinter do
 
     end
 
-    context 'a non-test model' do
+    context 'a non-feature-file model' do
 
       let(:test_model) { CukeModeler::Model.new }
 

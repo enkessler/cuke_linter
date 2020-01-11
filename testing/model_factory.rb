@@ -24,11 +24,13 @@ module CukeLinter
       model              = CukeModeler::Feature.new(source_text)
       model.parent_model = fake_parent_model
 
+      fake_parent_model.feature = model
+
       model
     end
 
     def self.generate_feature_file_model
-      model              = CukeModeler::FeatureFile.new
+      model = CukeModeler::FeatureFile.new
 
       model
     end
