@@ -93,6 +93,10 @@ Given(/^a linter for elements with too many tags has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::ElementWithTooManyTagsLinter.new, name: 'ElementWithTooManyTagsLinter')
 end
 
+Given(/^a linter for elements with duplicate tags has been registered$/) do
+  CukeLinter.register_linter(linter: CukeLinter::ElementWithDuplicateTagsLinter.new, name: 'ElementWithDuplicateTagsLinter')
+end
+
 Given(/^a linter for tests with too many steps has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::TestWithTooManyStepsLinter.new, name: 'TestWithTooManyStepsLinter')
 end
@@ -123,6 +127,10 @@ end
 
 Given(/^a linter for tests with an action step as the final step$/) do
   @linter = CukeLinter::TestWithActionStepAsFinalStepLinter.new
+end
+
+Given(/^a linter for elements with duplicate tags$/) do
+  @linter = CukeLinter::ElementWithDuplicateTagsLinter.new
 end
 
 Given(/^a linter for test steps with too many characters has been registered$/) do

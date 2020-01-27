@@ -7,6 +7,12 @@ module CukeLinter
     include CukeModeler::Sourceable
     include CukeModeler::Taggable
 
+    def initialize
+      super
+
+      @tags = []
+    end
+
   end
 end
 
@@ -78,6 +84,10 @@ module CukeLinter
       model.parent_model = fake_parent_model
 
       model
+    end
+
+    def self.generate_tag_model(source_text: '@a_tag')
+      CukeModeler::Tag.new(source_text)
     end
 
     def self.generate_lintable_model(parent_file_path: 'path_to_file', source_line: 1, children: [])

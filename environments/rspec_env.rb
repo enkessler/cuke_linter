@@ -12,6 +12,10 @@ require_relative '../testing/rspec/spec/unit/linters/linter_unit_specs'
 require_relative '../testing/rspec/spec/integration/formatters/formatter_integration_specs'
 require_relative '../testing/rspec/spec/integration/linters/linter_integration_specs'
 
+# Convenient constant, just in case what kinds of elements are taggable ever changes
+TAGGABLE_ELEMENTS = ['feature', 'scenario', 'outline', 'example']
+
+
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"
