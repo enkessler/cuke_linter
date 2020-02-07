@@ -133,6 +133,10 @@ Given(/^a linter for elements with duplicate tags$/) do
   @linter = CukeLinter::ElementWithDuplicateTagsLinter.new
 end
 
+Given(/^a linter for elements with common tags$/) do
+  @linter = CukeLinter::ElementWithCommonTagsLinter.new
+end
+
 Given(/^a linter for test steps with too many characters has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::StepWithTooManyCharactersLinter.new, name: 'StepWithTooManyCharactersLinter')
 end

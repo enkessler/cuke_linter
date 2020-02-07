@@ -179,6 +179,7 @@ RSpec.describe CukeLinter do
     subject.reset_linters
 
     default_linter_classes = ['BackgroundDoesMoreThanSetupLinter',
+                              'ElementWithCommonTagsLinter',
                               'ElementWithDuplicateTagsLinter',
                               'ElementWithTooManyTagsLinter',
                               'ExampleWithoutNameLinter',
