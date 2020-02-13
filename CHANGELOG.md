@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
    - ElementWithDuplicateTagsLinter
    - FeatureFileWithMismatchedNameLinter
 
+ - Now compatible with CukeModeler 2.x
 
 ## [0.11.1] - 2019-11-07
 
