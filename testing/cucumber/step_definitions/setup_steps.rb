@@ -29,6 +29,10 @@ Given(/^a linter for features with invalid file names$/) do
   @linter = CukeLinter::FeatureFileWithInvalidNameLinter.new
 end
 
+And(/^a linter for features with mismatched file names$/) do
+  @linter = CukeLinter::FeatureFileWithMismatchedNameLinter.new
+end
+
 Given(/^no other linters have been registered or unregistered$/) do
   CukeLinter.reset_linters
 end
@@ -89,6 +93,10 @@ Given(/^a linter for elements with too many tags has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::ElementWithTooManyTagsLinter.new, name: 'ElementWithTooManyTagsLinter')
 end
 
+Given(/^a linter for elements with duplicate tags has been registered$/) do
+  CukeLinter.register_linter(linter: CukeLinter::ElementWithDuplicateTagsLinter.new, name: 'ElementWithDuplicateTagsLinter')
+end
+
 Given(/^a linter for tests with too many steps has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::TestWithTooManyStepsLinter.new, name: 'TestWithTooManyStepsLinter')
 end
@@ -119,6 +127,14 @@ end
 
 Given(/^a linter for tests with an action step as the final step$/) do
   @linter = CukeLinter::TestWithActionStepAsFinalStepLinter.new
+end
+
+Given(/^a linter for elements with duplicate tags$/) do
+  @linter = CukeLinter::ElementWithDuplicateTagsLinter.new
+end
+
+Given(/^a linter for elements with common tags$/) do
+  @linter = CukeLinter::ElementWithCommonTagsLinter.new
 end
 
 Given(/^a linter for test steps with too many characters has been registered$/) do
@@ -202,4 +218,13 @@ Given(/^a feature file model named "([^"]*)"$/) do |file_path|
   @model = CukeModeler::FeatureFile.new
 
   @model.path = file_path
+end
+
+Given(/^a feature file model based on the file "([^"]*)" with the following text:$/) do |file_name, text|
+  file_path = CukeLinter::FileHelper.create_file(directory: @root_test_directory, extension: '.feature', text: text, name: file_name)
+
+  @created_files ||= []
+  @created_files << file_path
+
+  @model = CukeModeler::FeatureFile.new(file_path)
 end

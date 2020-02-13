@@ -15,10 +15,7 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
 
   describe 'linting' do
 
-    # Descriptive variable name, just in case what kinds of elements are taggable ever changes
-    taggable_elements = ['feature', 'scenario', 'outline', 'example']
-
-    taggable_elements.each do |model_type|
+    TAGGABLE_ELEMENTS.each do |model_type|
 
       context "with a #{model_type} that has too many tags" do
 

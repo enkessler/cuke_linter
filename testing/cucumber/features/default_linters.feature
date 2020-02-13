@@ -9,9 +9,12 @@ Feature: Default Linters
     Given no other linters have been registered or unregistered
     Then the following linters are registered by default
       | BackgroundDoesMoreThanSetupLinter            |
+      | ElementWithCommonTagsLinter                  |
+      | ElementWithDuplicateTagsLinter               |
       | ElementWithTooManyTagsLinter                 |
       | ExampleWithoutNameLinter                     |
       | FeatureFileWithInvalidNameLinter             |
+      | FeatureFileWithMismatchedNameLinter          |
       | FeatureWithTooManyDifferentTagsLinter        |
       | FeatureWithoutDescriptionLinter              |
       | FeatureWithoutNameLinter                     |

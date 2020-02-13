@@ -99,7 +99,7 @@ RSpec.describe 'the Command Line Interface' do
       let!(:linted_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
                                                               name:      'nothing_wrong',
                                                               extension: '.feature',
-                                                              text:      'Feature: A name
+                                                              text:      'Feature: Nothing wrong
                                                                             A description
                                                                             Scenario: A scenario
                                                                               When a step
@@ -148,14 +148,14 @@ RSpec.describe 'the Command Line Interface' do
 
           context 'with path arguments' do
             let(:file_1) { CukeLinter::FileHelper.create_file(directory: test_directory,
-                                                              name:      'some',
+                                                              name:      'some_feature',
                                                               extension: '.feature',
                                                               text:      'Feature: Some feature
                                                                           Scenario: A scenario
                                                                             When a step
                                                                             Then a step') }
             let(:file_2) { CukeLinter::FileHelper.create_file(directory: test_directory,
-                                                              name:      'a_directory/with_a',
+                                                              name:      'a_directory/with/some_feature',
                                                               extension: '.feature',
                                                               text:      'Feature: Some feature
                                                                           Scenario: A scenario
@@ -165,12 +165,13 @@ RSpec.describe 'the Command Line Interface' do
             let(:file_2_directory) { File.dirname(file_2) }
             let(:command) { "bundle exec ruby #{executable_path} #{flag} #{file_1_path} #{flag} #{file_2_directory}" }
 
+            # TODO: add a negative test that makes sure that non-included paths aren't linted when paths are explicitly included
 
             it "lints that locations specified by '#{path_flag}'" do
               expect(results[:std_out]).to eq(['FeatureWithoutDescriptionLinter',
                                                '  Feature has no description',
-                                               '    <path_to>/a_directory/with_a.feature:1',
-                                               '    <path_to>/some.feature:1',
+                                               '    <path_to>/a_directory/with/some_feature.feature:1',
+                                               '    <path_to>/some_feature.feature:1',
                                                '',
                                                '2 issues found',
                                                ''].join("\n").gsub('<path_to>', test_directory))
@@ -209,7 +210,7 @@ RSpec.describe 'the Command Line Interface' do
           let(:flag) { formatter_flag }
 
           context 'with formatter arguments' do
-            let(:linted_file) { CukeLinter::FileHelper.create_file(name:      'some',
+            let(:linted_file) { CukeLinter::FileHelper.create_file(name:      'some_feature',
                                                                    extension: '.feature',
                                                                    text:      'Feature: Some feature
                                                                                Scenario: A scenario
@@ -275,7 +276,7 @@ RSpec.describe 'the Command Line Interface' do
           context 'with output arguments' do
             let(:output_location) { "#{CukeLinter::FileHelper.create_directory}/output.txt" }
             let(:other_output_location) { "#{CukeLinter::FileHelper.create_directory}/other_output.txt" }
-            let(:linted_file) { CukeLinter::FileHelper.create_file(name:      'some',
+            let(:linted_file) { CukeLinter::FileHelper.create_file(name:      'some_feature',
                                                                    extension: '.feature',
                                                                    text:      'Feature: Some feature
                                                                                Scenario: A scenario
