@@ -7,6 +7,12 @@ module CukeLinter
     include CukeModeler::Sourceable
     include CukeModeler::Taggable
 
+    def initialize
+      super
+
+      @tags = []
+    end
+
   end
 end
 
@@ -44,7 +50,7 @@ module CukeLinter
       model
     end
 
-    def self.generate_outline_model(source_text: "Scenario Outline:\n*a step\nExamples:\n|param|", parent_file_path: 'path_to_file')
+    def self.generate_outline_model(source_text: "Scenario Outline:", parent_file_path: 'path_to_file')
       fake_parent_model = generate_feature_model(parent_file_path: parent_file_path)
 
       model              = CukeModeler::Outline.new(source_text)
@@ -78,6 +84,10 @@ module CukeLinter
       model.parent_model = fake_parent_model
 
       model
+    end
+
+    def self.generate_tag_model(source_text: '@a_tag')
+      CukeModeler::Tag.new(source_text)
     end
 
     def self.generate_lintable_model(parent_file_path: 'path_to_file', source_line: 1, children: [])

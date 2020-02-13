@@ -6,9 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Nothing yet...
+
+## [0.12.0] - 2020-02-13
+
 ### Added
  - New linters
+   - ElementWithCommonTagsLinter
+   - ElementWithDuplicateTagsLinter
    - FeatureFileWithMismatchedNameLinter
+
+ - Now compatible with CukeModeler 2.x
 
 
 ## [0.11.1] - 2019-11-07
@@ -121,7 +129,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Custom linters, formatters, and command line usability
 
 
-[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.11.1...HEAD
+[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/enkessler/cuke_linter/compare/v0.11.1...v0.12.0
 [0.11.1]: https://github.com/enkessler/cuke_linter/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/enkessler/cuke_linter/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/enkessler/cuke_linter/compare/v0.9.0...v0.10.0
