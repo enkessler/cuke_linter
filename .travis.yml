@@ -8,12 +8,21 @@ dist: trusty
 
 language: ruby
 rvm:
-  - 2.3.1
+  - 2.3.3
   - 2.4.0
   - 2.5.1
   - 2.6.0
   - jruby-9.1.7.0
 
+matrix:
+  exclude:
+    # Ruby 2.3.x is currently broken on TravisCI and is no longer a supported Ruby version, anyway.
+    - rvm: 2.3.3
+      os: osx
+
+gemfile:
+  - testing/gemfiles/cuke_modeler1.gemfile
+  - testing/gemfiles/cuke_modeler2.gemfile
 
 gemfile:
   - testing/gemfiles/cuke_modeler1.gemfile
