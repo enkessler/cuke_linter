@@ -1,5 +1,6 @@
 module CukeLinter
 
+  # TODO: Make a new class that it is from the POV of a Feature model instead
   # A linter that detects scenarios and outlines within a feature that all share common beginning steps
 
   class TestShouldUseBackgroundLinter < Linter
