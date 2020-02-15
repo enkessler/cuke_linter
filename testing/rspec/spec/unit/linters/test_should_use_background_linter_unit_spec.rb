@@ -50,6 +50,90 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
       end
 
+      context 'with parameters that are not really parameters' do
+
+        if (model_type == 'scenario')
+
+          # Scenarios don't actually have parameters, even if they look like they do
+          context 'because they are in scenarios' do
+
+            let(:test_model) do
+              step_text     = 'the not really <parameterized> step'
+              feature_model = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path,
+                                                                              source_text:      "Feature:
+                                                                                                   Scenario:
+                                                                                                     * #{step_text}
+                                                                                                   Scenario:
+                                                                                                     * #{step_text}")
+
+              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model.steps = [CukeModeler::Step.new("* #{step_text}")]
+
+              model.parent_model = feature_model
+              feature_model.tests << model
+
+              model
+            end
+
+            it_should_behave_like 'a linter linting a bad model'
+
+
+            it 'records a problem' do
+              result = subject.lint(test_model)
+
+              expect(result[:problem]).to eq('Test shares steps with all other tests in feature. Use a background.')
+            end
+
+          end
+
+        end
+
+
+        if model_type == 'outline'
+
+          context 'because of extra whitespace' do
+
+            let(:test_model) do
+              # Whitespace is significant
+              step_text     = "the step <    param_foo     >"
+              feature_model = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path,
+                                                                              source_text:      "Feature:
+                                                                                                   Scenario Outline:
+                                                                                                     * #{step_text}
+                                                                                                   Examples:
+                                                                                                     | param_foo |
+                                                                                                     | value     |
+                                                                                                   Scenario Outline:
+                                                                                                     * #{step_text}
+                                                                                                   Examples:
+                                                                                                     | param_foo |
+                                                                                                     | value     |")
+
+              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model.steps = [CukeModeler::Step.new("* #{step_text}")]
+
+              model.parent_model = feature_model
+              feature_model.tests << model
+
+              model
+            end
+
+            it_should_behave_like 'a linter linting a bad model'
+
+
+            it 'records a problem' do
+              result = subject.lint(test_model)
+
+              expect(result[:problem]).to eq('Test shares steps with all other tests in feature. Use a background.')
+            end
+
+          end
+
+        end
+
+      end
+
+
       context "with a #{model_type} that does not share a first step with all other tests in the feature" do
 
         context 'because the steps are different' do
@@ -208,6 +292,160 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
           end
 
           it_should_behave_like 'a linter linting a good model'
+
+        end
+
+        context 'because its first step contains a parameter' do
+
+          let(:test_model) do
+            step_text     = 'the maybe <parameterized> step'
+            feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
+                                                                                            Scenario:
+                                                                                              * #{step_text}
+                                                                                            Scenario Outline:
+                                                                                              * #{step_text}
+                                                                                            Examples:
+                                                                                              | parameterized |
+                                                                                              | value         |")
+
+            model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            model.steps = [CukeModeler::Step.new("* #{step_text}")]
+
+            model.parent_model = feature_model
+            feature_model.tests << model
+
+            model
+          end
+
+          it_should_behave_like 'a linter linting a good model'
+
+          if model_type == 'outline'
+
+            context 'even with a bunch of parameterized outlines' do
+
+              context 'with a parameter in the text of the step' do
+
+                let(:test_model) do
+                  step_text     = 'the <parameterized> step'
+                  feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
+                                                                                                  Scenario Outline:
+                                                                                                    * #{step_text}
+                                                                                                  Examples:
+                                                                                                    | parameterized |
+                                                                                                    | value         |
+                                                                                                  Scenario Outline:
+                                                                                                    * #{step_text}
+                                                                                                  Examples:
+                                                                                                    | parameterized |
+                                                                                                    | value         |")
+
+                  model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+                  model.steps = [CukeModeler::Step.new("* #{step_text}")]
+
+                  model.parent_model = feature_model
+                  feature_model.tests << model
+
+                  model
+                end
+
+                it_should_behave_like 'a linter linting a good model'
+
+              end
+
+              context 'with a parameter in the table of the step' do
+
+                let(:test_model) do
+                  step_text     = "the step\n | <param_foo> |"
+                  feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
+                                                                                                  Scenario Outline:
+                                                                                                    * #{step_text}
+                                                                                                  Examples:
+                                                                                                    | param_foo |
+                                                                                                    | value     |
+                                                                                                  Scenario Outline:
+                                                                                                    * #{step_text}
+                                                                                                  Examples:
+                                                                                                    | param_foo |
+                                                                                                    | value     |")
+
+                  model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+                  model.steps = [CukeModeler::Step.new("* #{step_text}")]
+
+                  model.parent_model = feature_model
+                  feature_model.tests << model
+
+                  model
+                end
+
+                it_should_behave_like 'a linter linting a good model'
+
+              end
+
+              context 'with a parameter in the doc string of the step' do
+
+                let(:test_model) do
+                  step_text     = "the step\n \"\"\"\n <param_foo>\n \"\"\""
+                  feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
+                                                                                                  Scenario Outline:
+                                                                                                    * #{step_text}
+                                                                                                  Examples:
+                                                                                                    | param_foo |
+                                                                                                    | value     |
+                                                                                                  Scenario Outline:
+                                                                                                    * #{step_text}
+                                                                                                  Examples:
+                                                                                                    | param_foo |
+                                                                                                    | value     |")
+
+                  model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+                  model.steps = [CukeModeler::Step.new("* #{step_text}")]
+
+                  model.parent_model = feature_model
+                  feature_model.tests << model
+
+                  model
+                end
+
+                it_should_behave_like 'a linter linting a good model'
+
+              end
+
+              context 'with inconsistent parameter usage' do
+
+                let(:test_model) do
+                  step_text     = "the step <param_foo>"
+                  feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
+                                                                                                  Scenario Outline:
+                                                                                                    * #{step_text}
+                                                                                                  Examples:
+                                                                                                    | param_foo |
+                                                                                                    | value     |
+                                                                                                  Scenario Outline:
+                                                                                                    * #{step_text}
+                                                                                                  Examples:
+                                                                                                    | param_bar |
+                                                                                                    | value     |
+                                                                                                  Examples:
+                                                                                                    | param_foo |
+                                                                                                    | value     |")
+
+                  model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+                  model.steps = [CukeModeler::Step.new("* #{step_text}")]
+
+                  model.parent_model = feature_model
+                  feature_model.tests << model
+
+                  model
+                end
+
+                it_should_behave_like 'a linter linting a good model'
+
+              end
+
+              # TODO: do outline parameters even get substituted in the doc string type?
+            end
+
+          end
 
         end
 
