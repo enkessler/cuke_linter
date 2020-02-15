@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet...
+### Fixed
+ - `TestShouldUseBackgroundLinter` no longer suggests moving steps to the background if they have an outline parameter.
 
 ## [0.12.0] - 2020-02-13
 
