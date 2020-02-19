@@ -8,14 +8,15 @@ module CukeLinter
     def rule(model)
       return false unless model.is_a?(CukeModeler::Scenario) || model.is_a?(CukeModeler::Outline)
 
+      dialect           = DialectHelper.get_model_dialect(model)
       model_steps       = model.steps || []
       action_step_found = false
 
       model_steps.each do |step|
         if action_step_found
-          return true if step.keyword == 'Given'
+          return true if step.keyword == dialect.given_keyword
         else
-          action_step_found = step.keyword == 'When'
+          action_step_found = step.keyword == dialect.when_keyword
         end
       end
 

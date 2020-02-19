@@ -11,7 +11,7 @@ module CukeLinter
       model_steps      = model.steps || []
       background_steps = model.parent_model.has_background? ? model.parent_model.background.steps || [] : []
       all_steps        = model_steps + background_steps
-      all_steps.none? { |step| step.keyword == 'When' }
+      all_steps.none? { |step| step.keyword == DialectHelper.get_model_dialect(model).when_keyword }
     end
 
     # The message used to describe the problem that has been found

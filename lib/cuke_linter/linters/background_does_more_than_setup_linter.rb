@@ -8,7 +8,8 @@ module CukeLinter
     def rule(model)
       return false unless model.is_a?(CukeModeler::Background)
 
-      model.steps.collect(&:keyword).any? { |keyword| (keyword == 'When') || (keyword == 'Then') }
+      dialect = DialectHelper.get_model_dialect(model)
+      model.steps.collect(&:keyword).any? { |keyword| (keyword == dialect.when_keyword) || (keyword == dialect.then_keyword) }
     end
 
     # The message used to describe the problem that has been found

@@ -1,6 +1,6 @@
 require 'yaml'
 require 'cuke_modeler'
-
+#linters
 require "cuke_linter/version"
 require 'cuke_linter/formatters/pretty_formatter'
 require 'cuke_linter/linters/linter'
@@ -29,6 +29,8 @@ require 'cuke_linter/linters/test_with_setup_step_after_action_step_linter'
 require 'cuke_linter/linters/test_with_setup_step_after_verification_step_linter'
 require 'cuke_linter/linters/test_with_setup_step_as_final_step_linter'
 require 'cuke_linter/linters/test_with_too_many_steps_linter'
+#helpers
+require 'cuke_linter/helpers/dialect_helper'
 
 
 # The top level namespace used by this gem

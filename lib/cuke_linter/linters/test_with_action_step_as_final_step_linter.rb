@@ -11,7 +11,7 @@ module CukeLinter
       model_steps = model.steps || []
       return false unless model_steps.last
 
-      model_steps.last.keyword == 'When'
+      model_steps.last.keyword == DialectHelper.get_model_dialect(model).when_keyword
     end
 
     # The message used to describe the problem that has been found
