@@ -4,6 +4,11 @@ module CukeLinter
 
   class TestWithNoVerificationStepLinter < Linter
 
+    # Changes the linting settings on the linter using the provided configuration
+    def configure(options)
+      DialectHelper.set_then_keywords(options)
+    end
+
     # The rule used to determine if a model has a problem
     def rule(model)
       return false unless model.is_a?(CukeModeler::Scenario) || model.is_a?(CukeModeler::Outline)
