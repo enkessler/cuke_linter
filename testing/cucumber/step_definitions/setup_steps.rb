@@ -101,6 +101,34 @@ Given(/^a linter for tests with too many steps has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::TestWithTooManyStepsLinter.new, name: 'TestWithTooManyStepsLinter')
 end
 
+Given(/^a linter for backgrounds that do more than setup has been registered$/) do
+  CukeLinter.register_linter(linter: CukeLinter::BackgroundDoesMoreThanSetupLinter.new, name: 'BackgroundDoesMoreThanSetupLinter')
+end
+
+Given(/^a linter for tests with an action step as the final step has been registered$/) do
+  CukeLinter.register_linter(linter: CukeLinter::TestWithActionStepAsFinalStepLinter.new, name: 'TestWithActionStepAsFinalStepLinter')
+end
+
+Given(/^a linter for tests with no action step has been registered$/) do
+  CukeLinter.register_linter(linter: CukeLinter::TestWithNoActionStepLinter.new, name: 'TestWithNoActionStepLinter')
+end
+
+Given(/^a linter for tests with no verification step has been registered$/) do
+  CukeLinter.register_linter(linter: CukeLinter::TestWithNoVerificationStepLinter.new, name: 'TestWithNoVerificationStepLinter')
+end
+
+Given(/^a linter for tests with a setup step after an action step has been registered$/) do
+  CukeLinter.register_linter(linter: CukeLinter::TestWithSetupStepAfterActionStepLinter.new, name: 'TestWithSetupStepAfterActionStepLinter')
+end
+
+Given(/^a linter for tests with a setup step after a verification step has been registered$/) do
+  CukeLinter.register_linter(linter: CukeLinter::TestWithSetupStepAfterVerificationStepLinter.new, name: 'TestWithSetupStepAfterVerificationStepLinter')
+end
+
+Given(/^a linter for tests with a setup step as the final step has been registered$/) do
+  CukeLinter.register_linter(linter: CukeLinter::TestWithSetupStepAsFinalStepLinter.new, name: 'TestWithSetupStepAsFinalStepLinter')
+end
+
 Given("a linter for features without a description") do
   @linter = CukeLinter::FeatureWithoutDescriptionLinter.new
 end

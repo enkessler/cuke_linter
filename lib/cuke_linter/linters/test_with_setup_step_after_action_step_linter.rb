@@ -6,8 +6,8 @@ module CukeLinter
 
     # Changes the linting settings on the linter using the provided configuration
     def configure(options)
-      DialectHelper.set_when_keywords(options)
-      DialectHelper.set_given_keywords(options)
+      @given_keywords = DialectHelper.get_configured_keywords(options, DEFAULT_GIVEN_KEYWORD)
+      @when_keywords = DialectHelper.get_configured_keywords(options, DEFAULT_WHEN_KEYWORD)
     end
 
     # The rule used to determine if a model has a problem
@@ -19,9 +19,9 @@ module CukeLinter
 
       model_steps.each do |step|
         if action_step_found
-          return true if DialectHelper.get_given_keywords.include?(step.keyword)
+          return true if given_keywords.include?(step.keyword)
         else
-          action_step_found = DialectHelper.get_when_keywords.include?(step.keyword)
+          action_step_found = when_keywords.include?(step.keyword)
         end
       end
 
@@ -31,6 +31,16 @@ module CukeLinter
     # The message used to describe the problem that has been found
     def message
       "Test has 'Given' step after 'When' step."
+    end
+
+    private
+
+    def given_keywords
+      @given_keywords || [DEFAULT_GIVEN_KEYWORD]
+    end
+
+    def when_keywords
+      @when_keywords || [DEFAULT_WHEN_KEYWORD]
     end
 
   end

@@ -6,7 +6,7 @@ module CukeLinter
 
     # Changes the linting settings on the linter using the provided configuration
     def configure(options)
-      DialectHelper.set_then_keywords(options)
+      @then_keywords = DialectHelper.get_configured_keywords(options, DEFAULT_THEN_KEYWORD)
     end
 
     # The rule used to determine if a model has a problem
@@ -16,12 +16,18 @@ module CukeLinter
       model_steps      = model.steps || []
       background_steps = model.parent_model.has_background? ? model.parent_model.background.steps || [] : []
       all_steps        = model_steps + background_steps
-      all_steps.none? { |step| DialectHelper.get_then_keywords.include?(step.keyword) }
+      all_steps.none? { |step| then_keywords.include?(step.keyword) }
     end
 
     # The message used to describe the problem that has been found
     def message
       "Test does not have a 'Then' step."
+    end
+
+    private
+
+    def then_keywords
+      @then_keywords || [DEFAULT_THEN_KEYWORD]
     end
 
   end

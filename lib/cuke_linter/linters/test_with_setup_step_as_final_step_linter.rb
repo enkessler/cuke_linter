@@ -6,7 +6,7 @@ module CukeLinter
 
     # Changes the linting settings on the linter using the provided configuration
     def configure(options)
-      DialectHelper.set_given_keywords(options)
+      @given_keywords = DialectHelper.get_configured_keywords(options, DEFAULT_GIVEN_KEYWORD)
     end
 
     # The rule used to determine if a model has a problem
@@ -16,12 +16,18 @@ module CukeLinter
       model_steps = model.steps || []
       return false unless model_steps.last
 
-      DialectHelper.get_given_keywords.include?(model_steps.last.keyword)
+      given_keywords.include?(model_steps.last.keyword)
     end
 
     # The message used to describe the problem that has been found
     def message
       "Test has 'Given' as the final step."
+    end
+
+    private
+
+    def given_keywords
+      @given_keywords || [DEFAULT_GIVEN_KEYWORD]
     end
 
   end
