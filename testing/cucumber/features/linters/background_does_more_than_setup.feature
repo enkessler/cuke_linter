@@ -77,6 +77,6 @@ Feature: Background does more than setup linter
       | BackgroundDoesMoreThanSetupLinter | Background has non-setup steps | <path_to_file>:4 |
 
     Examples:
-    | step                                      |
-    | Quando this is an action in pt dialect    |
-    | Então this is an validation in pt dialect |
+      | step                                      |
+      | Quando this is an action in pt dialect    |
+      | Então this is an validation in pt dialect |
