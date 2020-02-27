@@ -22,7 +22,28 @@ Feature: Test with setup step as final step linter
       | linter                             | problem                             | location         |
       | TestWithSetupStepAsFinalStepLinter | Test has 'Given' as the final step. | <path_to_file>:3 |
 
-  @wip
-  Scenario: Configuration
+  Scenario: Configuration of keywords for different dialect
+    Given a linter for tests with a setup step as the final step has been registered
+    And the following configuration file:
+      """
+      TestWithSetupStepAsFinalStepLinter:
+        Given:
+          - Dado
+        When:
+          - Quando
+        Then:
+          - Então
+      """
+    And the following feature:
+      """
+      # language:pt
+      Funcionalidade: Feature name
 
-  Configure the keyword(s) that count as setup steps?
+        Cenário: scenario name
+          Dado some setup in pt dialect
+      """
+    When the configuration file is loaded
+    And it is linted
+    Then an error is reported:
+      | linter                             | problem                             | location         |
+      | TestWithSetupStepAsFinalStepLinter | Test has 'Given' as the final step. | <path_to_file>:4 |
