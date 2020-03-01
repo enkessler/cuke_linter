@@ -25,6 +25,18 @@ RSpec.describe CukeLinter do
     expect(CukeLinter::VERSION).not_to be nil
   end
 
+  it "has a default keyword for 'Given'" do
+    expect(CukeLinter::DEFAULT_GIVEN_KEYWORD).to eq('Given')
+  end
+
+  it "has a default keyword for 'When'" do
+    expect(CukeLinter::DEFAULT_WHEN_KEYWORD).to eq('When')
+  end
+
+  it "has a default keyword for 'Then'" do
+    expect(CukeLinter::DEFAULT_THEN_KEYWORD).to eq('Then')
+  end
+
   it 'can lint' do
     expect(CukeLinter).to respond_to(:lint)
   end
