@@ -60,13 +60,14 @@ Feature: Background does more than setup linter
           - Quando
         Then:
           - Então
+          - Entao
       """
     And the following feature:
       """
       # language:pt
       Funcionalidade: Feature name
 
-        Contexto:
+        Contexto: A Background in pt dialect
           Dado some setup in pt dialect
           <step>
       """
@@ -77,6 +78,7 @@ Feature: Background does more than setup linter
       | BackgroundDoesMoreThanSetupLinter | Background has non-setup steps | <path_to_file>:4 |
 
     Examples:
-      | step                                      |
-      | Quando this is an action in pt dialect    |
-      | Então this is an validation in pt dialect |
+      | step                                          |
+      | Quando this is an action in pt dialect        |
+      | Então this is a validation in pt dialect      |
+      | Entao this is also a validation in pt dialect |
