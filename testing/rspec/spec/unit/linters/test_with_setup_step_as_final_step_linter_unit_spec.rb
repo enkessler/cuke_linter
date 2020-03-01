@@ -86,6 +86,71 @@ RSpec.describe CukeLinter::TestWithSetupStepAsFinalStepLinter do
 
     end
 
+    describe 'configuration' do
+
+      let(:test_model) do
+        CukeLinter::ModelFactory.generate_scenario_model(source_text: 'Scenario:
+                                                                         * a step')
+      end
+
+      context 'with configuration' do
+
+        before(:each) do
+          subject.configure(configuration)
+        end
+
+        context "with a configured 'Given' keyword" do
+
+          let(:given_keyword) { 'Foo' }
+          let(:configuration) { { 'Given' => given_keyword } }
+
+          it "uses the configured 'Given' keyword" do
+            test_model.steps.last.keyword = given_keyword
+
+            result = subject.lint(test_model)
+
+            expect(result).to_not be_nil
+          end
+
+        end
+
+      end
+
+      context 'without configuration' do
+
+        context 'because configuration never happened' do
+
+          it "uses the default 'Given' keyword" do
+            test_model.steps.last.keyword = CukeLinter::DEFAULT_GIVEN_KEYWORD
+
+            result = subject.lint(test_model)
+
+            expect(result).to_not be_nil
+          end
+
+        end
+
+        context "because configuration did not set a 'Given' keyword" do
+
+          before(:each) do
+            subject.configure(configuration)
+          end
+
+          let(:configuration) { {} }
+
+          it "uses the default 'Given' keyword" do
+            test_model.steps.last.keyword = CukeLinter::DEFAULT_GIVEN_KEYWORD
+
+            result = subject.lint(test_model)
+
+            expect(result).to_not be_nil
+          end
+
+        end
+
+      end
+
+    end
 
     context 'a non-test model' do
 

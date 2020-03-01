@@ -29,6 +29,7 @@ Feature: Test with setup step as final step linter
       TestWithSetupStepAsFinalStepLinter:
         Given:
           - Dado
+          - Dadas
         When:
           - Quando
         Then:
