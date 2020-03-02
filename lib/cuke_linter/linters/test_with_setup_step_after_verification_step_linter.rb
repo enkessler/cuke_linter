@@ -6,8 +6,8 @@ module CukeLinter
 
     # Changes the linting settings on the linter using the provided configuration
     def configure(options)
-      @given_keywords = DialectHelper.get_configured_keywords(options, DEFAULT_GIVEN_KEYWORD)
-      @then_keywords = DialectHelper.get_configured_keywords(options, DEFAULT_THEN_KEYWORD)
+      @given_keywords = options['Given']
+      @then_keywords  = options['Then']
     end
 
     # The rule used to determine if a model has a problem
