@@ -6,6 +6,7 @@ RSpec.describe CukeLinter::TestWithNoVerificationStepLinter do
   let(:model_file_path) { 'some_file_path' }
 
   it_should_behave_like 'a linter at the unit level'
+  it_should_behave_like 'a configurable linter at the unit level'
 
 
   it 'has a name' do
@@ -167,6 +168,72 @@ RSpec.describe CukeLinter::TestWithNoVerificationStepLinter do
 
     end
 
+
+    describe 'configuration' do
+
+      let(:test_model) do
+        CukeLinter::ModelFactory.generate_scenario_model(source_text: 'Scenario:
+                                                                         Then a step')
+      end
+
+      context 'with configuration' do
+
+        before(:each) do
+          subject.configure(configuration)
+        end
+
+        context "with a configured 'Then' keyword" do
+
+          let(:then_keyword) { 'Foo' }
+          let(:configuration) { { 'Then' => then_keyword } }
+
+          it "uses the configured 'Then' keyword" do
+            test_model.steps.first.keyword = 'Then'
+
+            result = subject.lint(test_model)
+
+            expect(result).to_not be_nil
+          end
+
+        end
+
+      end
+
+      context 'without configuration' do
+
+        context 'because configuration never happened' do
+
+          it "uses the default 'Then' keyword" do
+            test_model.steps.first.keyword = CukeLinter::DEFAULT_THEN_KEYWORD
+
+            result = subject.lint(test_model)
+
+            expect(result).to be_nil
+          end
+
+        end
+
+        context "because configuration did not set a 'Then' keyword" do
+
+          before(:each) do
+            subject.configure(configuration)
+          end
+
+          let(:configuration) { {} }
+
+          it "uses the default 'Then' keyword" do
+            test_model.steps.last.keyword = CukeLinter::DEFAULT_THEN_KEYWORD
+
+            result = subject.lint(test_model)
+
+            expect(result).to be_nil
+          end
+
+        end
+
+      end
+
+    end
 
     context 'a non-test model' do
 

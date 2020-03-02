@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Nothing yet...
 
+## [0.13.0] - 2020-03-01
+
+### Added
+ - Added the ability to configure relevant keywords for linters whose behavior is impacted by the dialect in which feature files are written.
+   - BackgroundDoesMoreThanSetupLinter
+   - TestWithActionStepAsFinalStepLinter
+   - TestWithNoActionStepLinter
+   - TestWithNoVerificationStepLinter
+   - TestWithSetupStepAfterActionStepLinter
+   - TestWithSetupStepAfterVerificationStepLinter
+   - TestWithSetupStepAsFinalStepLinter
+
 
 ## [0.12.1] - 2020-02-15
 
@@ -135,7 +147,8 @@ Nothing yet...
 - Custom linters, formatters, and command line usability
 
 
-[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.12.1...HEAD
+[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.13.0...HEAD
+[0.13.0]: https://github.com/enkessler/cuke_linter/compare/v0.12.1...v0.13.0
 [0.12.1]: https://github.com/enkessler/cuke_linter/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/enkessler/cuke_linter/compare/v0.11.1...v0.12.0
 [0.11.1]: https://github.com/enkessler/cuke_linter/compare/v0.11.0...v0.11.1
