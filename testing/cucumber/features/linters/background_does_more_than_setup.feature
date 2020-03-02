@@ -48,3 +48,37 @@ Feature: Background does more than setup linter
       """
     When it is linted
     Then no error is reported
+
+  Scenario Outline: Configuration of keywords for different dialect
+    Given a linter for backgrounds that do more than setup has been registered
+    And the following configuration file:
+      """
+      BackgroundDoesMoreThanSetupLinter:
+        Given:
+          - Dado
+        When:
+          - Quando
+        Then:
+          - Então
+          - Entao
+      """
+    And the following feature:
+      """
+      # language:pt
+      Funcionalidade: Feature name
+
+        Contexto: A Background in pt dialect
+          Dado some setup in pt dialect
+          <step>
+      """
+    When the configuration file is loaded
+    And it is linted
+    Then an error is reported:
+      | linter                            | problem                        | location         |
+      | BackgroundDoesMoreThanSetupLinter | Background has non-setup steps | <path_to_file>:4 |
+
+    Examples:
+      | step                                          |
+      | Quando this is an action in pt dialect        |
+      | Então this is a validation in pt dialect      |
+      | Entao this is also a validation in pt dialect |

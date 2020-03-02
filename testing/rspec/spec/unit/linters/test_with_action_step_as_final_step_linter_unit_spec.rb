@@ -6,6 +6,7 @@ RSpec.describe CukeLinter::TestWithActionStepAsFinalStepLinter do
   let(:model_file_path) { 'some_file_path' }
 
   it_should_behave_like 'a linter at the unit level'
+  it_should_behave_like 'a configurable linter at the unit level'
 
 
   it 'has a name' do
@@ -79,6 +80,72 @@ RSpec.describe CukeLinter::TestWithActionStepAsFinalStepLinter do
           end
 
           it_should_behave_like 'a linter linting a good model'
+
+        end
+
+      end
+
+    end
+
+    describe 'configuration' do
+
+      let(:test_model) do
+        CukeLinter::ModelFactory.generate_scenario_model(source_text: 'Scenario:
+                                                                         * a step')
+      end
+
+      context 'with configuration' do
+
+        before(:each) do
+          subject.configure(configuration)
+        end
+
+        context "with a configured 'When' keyword" do
+
+          let(:when_keyword) { 'Foo' }
+          let(:configuration) { { 'When' => when_keyword } }
+
+          it "uses the configured 'When' keyword" do
+            test_model.steps.last.keyword = when_keyword
+
+            result = subject.lint(test_model)
+
+            expect(result).to_not be_nil
+          end
+
+        end
+
+      end
+
+      context 'without configuration' do
+
+        context 'because configuration never happened' do
+
+          it "uses the default 'When' keyword" do
+            test_model.steps.last.keyword = CukeLinter::DEFAULT_WHEN_KEYWORD
+
+            result = subject.lint(test_model)
+
+            expect(result).to_not be_nil
+          end
+
+        end
+
+        context "because configuration did not set a 'When' keyword" do
+
+          before(:each) do
+            subject.configure(configuration)
+          end
+
+          let(:configuration) { {} }
+
+          it "uses the default 'When' keyword" do
+            test_model.steps.last.keyword = CukeLinter::DEFAULT_WHEN_KEYWORD
+
+            result = subject.lint(test_model)
+
+            expect(result).to_not be_nil
+          end
 
         end
 

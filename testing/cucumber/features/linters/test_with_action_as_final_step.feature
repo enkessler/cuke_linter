@@ -22,7 +22,29 @@ Feature: Test with action step as final step linter
       | linter                              | problem                            | location         |
       | TestWithActionStepAsFinalStepLinter | Test has 'When' as the final step. | <path_to_file>:3 |
 
-  @wip
-  Scenario: Configuration
+  Scenario: Configuration of keywords for different dialect
+    Given a linter for tests with an action step as the final step has been registered
+    And the following configuration file:
+      """
+      TestWithActionStepAsFinalStepLinter:
+        Given:
+          - Dado
+        When:
+          - Quando
+          - '*'
+        Then:
+          - Então
+      """
+    And the following feature:
+      """
+      # language:pt
+      Funcionalidade: Feature name
 
-  Configure the keyword(s) that count as action steps?
+        Cenário: scenario name
+          Quando this is an action in pt dialect
+      """
+    When the configuration file is loaded
+    And it is linted
+    Then an error is reported:
+      | linter                              | problem                            | location         |
+      | TestWithActionStepAsFinalStepLinter | Test has 'When' as the final step. | <path_to_file>:4 |

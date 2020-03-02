@@ -35,6 +35,10 @@ require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 module CukeLinter
 
+  DEFAULT_GIVEN_KEYWORD = 'Given'.freeze
+  DEFAULT_WHEN_KEYWORD = 'When'.freeze
+  DEFAULT_THEN_KEYWORD = 'Then'.freeze
+
   @original_linters = { 'BackgroundDoesMoreThanSetupLinter'            => BackgroundDoesMoreThanSetupLinter.new,
                         'ElementWithCommonTagsLinter'                  => ElementWithCommonTagsLinter.new,
                         'ElementWithDuplicateTagsLinter'               => ElementWithDuplicateTagsLinter.new,

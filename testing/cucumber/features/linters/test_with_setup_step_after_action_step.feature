@@ -23,8 +23,35 @@ Feature: Test with setup step after action step linter
       | linter                                 | problem                                  | location         |
       | TestWithSetupStepAfterActionStepLinter | Test has 'Given' step after 'When' step. | <path_to_file>:3 |
 
+  Scenario: Configuration of keywords for different dialect
+    Given a linter for tests with a setup step after an action step has been registered
+    And the following configuration file:
+      """
+      TestWithSetupStepAfterActionStepLinter:
+        Given:
+          - Dado
+          - Dadas
+        When:
+          - Quando
+        Then:
+          - Então
+      """
+    And the following feature:
+      """
+      # language:pt
+      Funcionalidade: Feature name
+
+        Cenário: scenario name
+          Quando this is an action in pt dialect
+          Dado some setup in pt dialect
+      """
+    When the configuration file is loaded
+    And it is linted
+    Then an error is reported:
+      | linter                                 | problem                                  | location         |
+      | TestWithSetupStepAfterActionStepLinter | Test has 'Given' step after 'When' step. | <path_to_file>:4 |
+
   @wip
   Scenario: Configuration
 
-  Configure the keyword(s) that count as setup/action/verification steps?
   Configure whether or not to include background steps?
