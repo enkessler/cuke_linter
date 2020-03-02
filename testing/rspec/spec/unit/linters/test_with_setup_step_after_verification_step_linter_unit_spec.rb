@@ -6,6 +6,7 @@ RSpec.describe CukeLinter::TestWithSetupStepAfterVerificationStepLinter do
   let(:model_file_path) { 'some_file_path' }
 
   it_should_behave_like 'a linter at the unit level'
+  it_should_behave_like 'a configurable linter at the unit level'
 
 
   it 'has a name' do
