@@ -31,6 +31,7 @@ Feature: Test with action step as final step linter
           - Dado
         When:
           - Quando
+          - '*'
         Then:
           - Então
       """
