@@ -30,6 +30,7 @@ Feature: Test with setup step after action step linter
       TestWithSetupStepAfterActionStepLinter:
         Given:
           - Dado
+          - Dadas
         When:
           - Quando
         Then:
