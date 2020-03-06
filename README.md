@@ -8,11 +8,11 @@ User stuff:
 [![Yard Docs](http://img.shields.io/badge/Documentation-API-blue.svg)](https://www.rubydoc.info/gems/cuke_linter)
 
 Developer stuff:
-[![Build Status](https://travis-ci.org/enkessler/cuke_linter.svg?branch=dev)](https://travis-ci.org/enkessler/cuke_linter)
-[![Build Status](https://ci.appveyor.com/api/projects/status/g5o70u747x073evy/branch/dev?svg=true)](https://ci.appveyor.com/project/enkessler/cuke-linter/branch/dev)
-[![Coverage Status](https://coveralls.io/repos/github/enkessler/cuke_linter/badge.svg?branch=dev)](https://coveralls.io/github/enkessler/cuke_linter?branch=dev)
+[![Build Status](https://travis-ci.org/enkessler/cuke_linter.svg?branch=master)](https://travis-ci.org/enkessler/cuke_linter)
+[![Build Status](https://ci.appveyor.com/api/projects/status/g5o70u747x073evy/branch/master?svg=true)](https://ci.appveyor.com/project/enkessler/cuke-linter/branch/master)
+[![Coverage Status](https://coveralls.io/repos/github/enkessler/cuke_linter/badge.svg?branch=master)](https://coveralls.io/github/enkessler/cuke_linter?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d1b86760e59a457c8e73/maintainability)](https://codeclimate.com/github/enkessler/cuke_linter/maintainability)
-[![Inline docs](http://inch-ci.org/github/enkessler/cuke_linter.svg?branch=dev)](https://inch-ci.org/github/enkessler/cuke_linter?branch=dev)
+[![Inline docs](http://inch-ci.org/github/enkessler/cuke_linter.svg?branch=master)](https://inch-ci.org/github/enkessler/cuke_linter?branch=master)
 
 ---
 
