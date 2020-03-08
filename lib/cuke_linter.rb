@@ -35,8 +35,11 @@ require 'cuke_linter/linters/test_with_too_many_steps_linter'
 
 module CukeLinter
 
+  # The default keyword that is considered a 'Given' keyword
   DEFAULT_GIVEN_KEYWORD = 'Given'.freeze
+  # The default keyword that is considered a 'When' keyword
   DEFAULT_WHEN_KEYWORD = 'When'.freeze
+  # The default keyword that is considered a 'Then' keyword
   DEFAULT_THEN_KEYWORD = 'Then'.freeze
 
   @original_linters = { 'BackgroundDoesMoreThanSetupLinter'            => BackgroundDoesMoreThanSetupLinter.new,
