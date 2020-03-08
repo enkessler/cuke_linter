@@ -3,10 +3,14 @@ require_relative '../../../../environments/rspec_env'
 
 RSpec.describe 'the gem' do
 
-  let(:gemspec) { eval(File.read "#{__dir__}/../../../../cuke_linter.gemspec") }
+  let(:root_dir) { "#{__dir__}/../../../.." }
+  let(:gemspec) { eval(File.read "#{root_dir}/cuke_linter.gemspec") }
+  let(:lib_folder) { "#{root_dir}/lib" }
+  let(:exe_folder) { "#{root_dir}/exe" }
+  let(:features_folder) { "#{root_dir}/testing/cucumber/features" }
 
   it 'has an executable' do
-    expect(gemspec.executables).to include('cuke_linter')
+    expect(gemspec.executables).to eq(['cuke_linter'])
   end
 
   it 'validates cleanly' do
@@ -14,6 +18,76 @@ RSpec.describe 'the gem' do
     Gem::DefaultUserInteraction.use_ui(mock_ui) { gemspec.validate }
 
     expect(mock_ui.error).to_not match(/warn/i)
+  end
+
+  describe 'included files' do
+
+    it 'does not include files that are not source controlled' do
+      bad_file_1 = File.absolute_path("#{lib_folder}/foo.txt")
+      bad_file_2 = File.absolute_path("#{exe_folder}/foo.txt")
+      bad_file_3 = File.absolute_path("#{features_folder}/foo.txt")
+
+      begin
+        FileUtils.touch(bad_file_1)
+        FileUtils.touch(bad_file_2)
+        FileUtils.touch(bad_file_3)
+
+        gem_files = gemspec.files.map { |file| File.absolute_path(file) }
+
+        expect(gem_files).to_not include(bad_file_1, bad_file_2, bad_file_3)
+      ensure
+        FileUtils.rm([bad_file_1, bad_file_2, bad_file_3])
+      end
+    end
+
+    it 'includes all of the library files' do
+      lib_files = Dir.chdir(root_dir) do
+        Dir.glob('lib/**/*').reject { |file| File.directory?(file) }
+      end
+
+      expect(gemspec.files).to include(*lib_files)
+    end
+
+    it 'includes all of the executable files' do
+      exe_files = Dir.chdir(root_dir) do
+        Dir.glob('exe/**/*').reject { |file| File.directory?(file) }
+      end
+
+      expect(gemspec.files).to include(*exe_files)
+    end
+
+    it 'includes all of the documentation files' do
+      feature_files = Dir.chdir(root_dir) do
+        Dir.glob('testing/cucumber/features/**/*').reject { |file| File.directory?(file) }
+      end
+
+      expect(gemspec.files).to include(*feature_files)
+    end
+
+    it 'includes the README file' do
+      readme_file = 'README.md'
+
+      expect(gemspec.files).to include(readme_file)
+    end
+
+    it 'includes the license file' do
+      license_file = 'LICENSE.txt'
+
+      expect(gemspec.files).to include(license_file)
+    end
+
+    it 'includes the CHANGELOG file' do
+      changelog_file = 'CHANGELOG.md'
+
+      expect(gemspec.files).to include(changelog_file)
+    end
+
+    it 'includes the gemspec file' do
+      gemspec_file = 'cuke_linter.gemspec'
+
+      expect(gemspec.files).to include(gemspec_file)
+    end
+
   end
 
 end
