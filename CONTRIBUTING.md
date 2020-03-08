@@ -20,7 +20,8 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/enkess
 ### Adding a new linter
 
 Some guidelines when adding a new linter
-  * Inherit from the base linter class. It will handle almost all of the functional requirements of a linter.
+  * Inherit from the base linter class. It will handle most of the boilerplate functional requirements of a linter.
   * Existing linters should provide decent examples of how to create new linters and how to test them. A copy/paste/tweak approach is perfectly valid.
   * Keep linters simple. Rather than have one linter that has different behaviors depending on context, create a different linter class for each context.
   * Keep things alphabetical. There are going to be lots of linters and things will be easier to find if lists of them in the code base (e.g. `require` statments, documentation, etc.) are in an intuitive order.
+  * Because linters are based on models, name them after the model type that they lint. E.g. `FeatureThatHasAThing`, `OutlineWithoutThing`, etc.
