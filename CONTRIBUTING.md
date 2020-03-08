@@ -25,3 +25,4 @@ Some guidelines when adding a new linter
   * Keep linters simple. Rather than have one linter that has different behaviors depending on context, create a different linter class for each context.
   * Keep things alphabetical. There are going to be lots of linters and things will be easier to find if lists of them in the code base (e.g. `require` statments, documentation, etc.) are in an intuitive order.
   * Because linters are based on models, name them after the model type that they lint. E.g. `FeatureThatHasAThing`, `OutlineWithoutThing`, etc.
+  * DO NOT add the new linter to the default linters. The default linters will be updated when new major versions are released.
