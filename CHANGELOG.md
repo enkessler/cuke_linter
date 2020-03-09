@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Nothing yet...
+
+
+## [1.0.0] - 2020-03-09
+
 ### Changed
  - No longer including every file in the Git repository as part of the gem. Only the files needed for using the linter (and the informative ones like the README) will be packaged into the released gem.
 
@@ -149,7 +154,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Custom linters, formatters, and command line usability
 
 
-[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v0.13.0...HEAD
+[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/enkessler/cuke_linter/compare/v0.13.0...v1.0.0
 [0.13.0]: https://github.com/enkessler/cuke_linter/compare/v0.12.1...v0.13.0
 [0.12.1]: https://github.com/enkessler/cuke_linter/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/enkessler/cuke_linter/compare/v0.11.1...v0.12.0
