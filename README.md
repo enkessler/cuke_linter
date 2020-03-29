@@ -140,7 +140,7 @@ CukeLinter.lint(linters: [linter], formatters: [[formatter], [formatter, output_
 
 ### Configuration
 
-Rather than using the default linters or providing a custom set of of modified linters every time linting occurs, which linters to use and any linter specific modifications can be configured in a more static manner via a configuration file or setting the configuration directly in code. See [documentation](#documentation) for specifics.
+Rather than using the default linters or providing a custom set of of modified linters every time linting occurs, which linters to use and any linter specific modifications (such as choosing a non-default dialect) can be configured in a more static manner via a configuration file or setting the configuration directly in code. See [documentation](#documentation) for specifics.
 
 
 ### <a id="documentation"></a>Everything Else
