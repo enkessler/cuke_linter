@@ -104,7 +104,8 @@ class MyCustomLinter
     return nil unless model.is_a?(CukeModeler::Scenario)
 
     if model.name.empty?
-      { problem: 'Scenario has no name', location: "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" }
+      { problem: 'Scenario has no name', 
+        location: "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" }
     else
       nil
     end
@@ -134,8 +135,11 @@ output_path          = "#{__dir__}/my_report.txt"
 model_tree_root      = CukeModeler::Directory.new(Dir.pwd)
 additional_file_path = 'path/to/some.feature'
 
-# Providing the formatter twice so that it also is printed to the console
-CukeLinter.lint(linters: [linter], formatters: [[formatter], [formatter, output_path]], model_trees: [model_tree_root], file_paths: [additional_file_path])
+# Providing the formatter twice so that output also is printed to the console
+CukeLinter.lint(linters: [linter],
+                formatters: [[formatter], [formatter, output_path]],
+                model_trees: [model_tree_root],
+                file_paths: [additional_file_path])
 ```
 
 ### Configuration
