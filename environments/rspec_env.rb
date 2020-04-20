@@ -31,12 +31,11 @@ RSpec.configure do |config|
     spec_list        = File.read(source_file).split("\n")
     config.instance_variable_set(:@files_or_directories_to_run, spec_list)
   else
-    config.pattern   = 'testing/rspec/spec/**/*_spec.rb'
-    persistence_file = '.rspec_status'
+    config.pattern    = 'testing/rspec/spec/**/*_spec.rb'
+    config.color_mode = :on
+    persistence_file  = '.rspec_status'
   end
 
-  # Always try to show color
-  config.color_mode = :on
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = persistence_file
 

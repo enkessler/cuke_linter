@@ -56,15 +56,19 @@ module CukeLinter
         Kernel.puts "Running #{spec_list.count} specs across #{parallel_count} processes..."
 
         parallel_count.times do |process_count|
-          directory      = "#{REPORT_FOLDER}/rspec/part_#{process_count + 1}"
-          json_file_path = "results_#{process_count + 1}.json"
-          html_file_path = "results_#{process_count + 1}.html"
+          directory        = "#{REPORT_FOLDER}/rspec/part_#{process_count + 1}"
+          json_file_path   = "results_#{process_count + 1}.json"
+          html_file_path   = "results_#{process_count + 1}.html"
+          stdout_file_name = "std_out_#{process_count + 1}.txt"
+          stdout_file_path = "#{directory}/#{stdout_file_name}"
 
           process = ChildProcess.build('cmd.exe', '/c', 'bundle', 'exec', 'rspec',
                                        '-r', './environments/rspec_env.rb',
                                        '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', "#{directory}/#{json_file_path}",
-                                       '--format', 'html', '--out', "#{directory}/#{html_file_path}")
-          process.io.inherit!
+                                       '--format', 'html', '--out', "#{directory}/#{html_file_path}",
+                                       '--format', 'p')
+          FileUtils.touch(stdout_file_path)
+          process.io.stdout                                         = File.new(stdout_file_path, 'w')
           process.environment['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] = process_count + 1
           process.start
           processes << process
@@ -75,7 +79,25 @@ module CukeLinter
           problem_process_groups << index + 1 unless process.exit_code.zero?
         end
 
-        raise(Rainbow("RSpec tests encountered problems! (see reports for groups #{problem_process_groups}").red) if problem_process_groups.any?
+
+        if problem_process_groups.any?
+          puts Rainbow('Dumping output for errored processes...').yellow
+
+          problem_process_groups.each do |process_number|
+            puts Rainbow("Dumping output for process #{process_number}...").yellow
+
+            directory        = "#{REPORT_FOLDER}/rspec/part_#{process_number}"
+            stdout_file_name = "std_out_#{process_number}.txt"
+            stdout_file_path = "#{directory}/#{stdout_file_name}"
+
+            process_output = File.read(stdout_file_path)
+            puts Rainbow(process_output).cyan
+          end
+
+          raise(Rainbow("RSpec tests encountered problems! (see reports for groups #{problem_process_groups}").red)
+        end
+
+        # raise(Rainbow("RSpec tests encountered problems! (see reports for groups #{problem_process_groups}").red) if problem_process_groups.any?
 
         puts Rainbow('All RSpec tests passing. :)').green
       end
@@ -110,15 +132,17 @@ module CukeLinter
           directory        = "#{REPORT_FOLDER}/cucumber/part_#{process_count + 1}"
           json_file_path   = "results_#{process_count + 1}.json"
           html_file_path   = "results_#{process_count + 1}.html"
-          pretty_file_path = "output_#{process_count + 1}.txt"
+          stdout_file_name = "std_out_#{process_count + 1}.txt"
+          stdout_file_path = "#{directory}/#{stdout_file_name}"
 
           process = ChildProcess.build('cmd.exe', '/c', 'bundle', 'exec', 'cucumber',
                                        "@#{directory}/tests_to_run_#{process_count + 1}.txt",
                                        '-p', 'parallel',
                                        '--format', 'json', '--out', "#{directory}/#{json_file_path}",
                                        '--format', 'html', '--out', "#{directory}/#{html_file_path}",
-                                       '--format', 'pretty', '--out', "#{directory}/#{pretty_file_path}")
-          process.io.inherit!
+                                       '--format', 'progress')
+          FileUtils.touch(stdout_file_path)
+          process.io.stdout                                         = File.new(stdout_file_path, 'w')
           process.environment['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] = process_count + 1
           process.start
           processes << process
@@ -128,7 +152,23 @@ module CukeLinter
           process.wait
           problem_process_groups << index + 1 unless process.exit_code.zero?
         end
-        raise(Rainbow("Cucumber tests encountered problems! (see reports for groups #{problem_process_groups}").red) if problem_process_groups.any?
+
+        if problem_process_groups.any?
+          puts Rainbow('Dumping output for errored processes...').yellow
+
+          problem_process_groups.each do |process_number|
+            puts Rainbow("Dumping output for process #{process_number}...").yellow
+
+            directory        = "#{REPORT_FOLDER}/cucumber/part_#{process_number}"
+            stdout_file_name = "std_out_#{process_number}.txt"
+            stdout_file_path = "#{directory}/#{stdout_file_name}"
+
+            process_output = File.read(stdout_file_path)
+            puts Rainbow(process_output).cyan
+          end
+
+          raise(Rainbow("Cucumber tests encountered problems! (see reports for groups #{problem_process_groups}").red)
+        end
 
         puts Rainbow('All Cucumber tests passing. :)').green
       end
