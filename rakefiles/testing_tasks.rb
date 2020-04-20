@@ -21,20 +21,22 @@ namespace 'cuke_linter' do
   desc 'Run all of the RSpec tests'
   task :run_rspec_tests_in_parallel => [:clear_coverage, :clear_report_directory] do
     puts Rainbow("Running RSpec tests").cyan
-    ENV['CUKE_LINTER_PARALLEL_RUN'] ||= 'true'
 
     pattern = 'testing/rspec/spec/**/*_spec.rb'
     specs   = CukeLinter::ParallelHelper.get_discrete_specs(spec_pattern: pattern)
+
+    ENV['CUKE_LINTER_PARALLEL_RUN'] ||= 'true'
     CukeLinter::ParallelHelper.run_rspec_in_parallel(spec_list: specs)
   end
 
   desc 'Run all of the Cucumber tests'
   task :run_cucumber_tests_in_parallel => [:clear_coverage, :clear_report_directory] do
     puts Rainbow("Running Cucumber tests...").cyan
-    ENV['CUKE_LINTER_PARALLEL_RUN'] ||= 'true'
 
     feature_directory = 'testing/cucumber/features'
     scenarios         = CukeLinter::ParallelHelper.get_discrete_scenarios(directory: feature_directory)
+
+    ENV['CUKE_LINTER_PARALLEL_RUN'] ||= 'true'
     CukeLinter::ParallelHelper.run_cucumber_in_parallel(scenario_list: scenarios)
   end
 
