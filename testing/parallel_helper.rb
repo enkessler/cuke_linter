@@ -19,11 +19,11 @@ module CukeLinter
         puts "Gathering specs..."
 
         temp_file = Tempfile.new
-        process   = ChildProcess.build('cmd.exe', '/c', 'bundle', 'exec', 'rspec',
-                                       '--pattern', "#{spec_pattern}",
-                                       '--dry-run',
-                                       '-r', './environments/rspec_env.rb',
-                                       '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', temp_file.path)
+        process   = CukeLinter::ProcessHelper.create_process('bundle', 'exec', 'rspec',
+                                                             '--pattern', "#{spec_pattern}",
+                                                             '--dry-run',
+                                                             '-r', './environments/rspec_env.rb',
+                                                             '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', temp_file.path)
         process.io.inherit!
         process.environment['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] = 'rspec_spec_gathering'
         process.start
@@ -62,11 +62,11 @@ module CukeLinter
           stdout_file_name = "std_out_#{process_count + 1}.txt"
           stdout_file_path = "#{directory}/#{stdout_file_name}"
 
-          process = ChildProcess.build('cmd.exe', '/c', 'bundle', 'exec', 'rspec',
-                                       '-r', './environments/rspec_env.rb',
-                                       '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', "#{directory}/#{json_file_path}",
-                                       '--format', 'html', '--out', "#{directory}/#{html_file_path}",
-                                       '--format', 'p')
+          process = CukeLinter::ProcessHelper.create_process('bundle', 'exec', 'rspec',
+                                                             '-r', './environments/rspec_env.rb',
+                                                             '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', "#{directory}/#{json_file_path}",
+                                                             '--format', 'html', '--out', "#{directory}/#{html_file_path}",
+                                                             '--format', 'p')
           FileUtils.touch(stdout_file_path)
           process.io.stdout                                         = File.new(stdout_file_path, 'w')
           process.environment['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] = process_count + 1
@@ -135,12 +135,12 @@ module CukeLinter
           stdout_file_name = "std_out_#{process_count + 1}.txt"
           stdout_file_path = "#{directory}/#{stdout_file_name}"
 
-          process = ChildProcess.build('cmd.exe', '/c', 'bundle', 'exec', 'cucumber',
-                                       "@#{directory}/tests_to_run_#{process_count + 1}.txt",
-                                       '-p', 'parallel',
-                                       '--format', 'json', '--out', "#{directory}/#{json_file_path}",
-                                       '--format', 'html', '--out', "#{directory}/#{html_file_path}",
-                                       '--format', 'progress')
+          process = CukeLinter::ProcessHelper.create_process('bundle', 'exec', 'cucumber',
+                                                             "@#{directory}/tests_to_run_#{process_count + 1}.txt",
+                                                             '-p', 'parallel',
+                                                             '--format', 'json', '--out', "#{directory}/#{json_file_path}",
+                                                             '--format', 'html', '--out', "#{directory}/#{html_file_path}",
+                                                             '--format', 'progress')
           FileUtils.touch(stdout_file_path)
           process.io.stdout                                         = File.new(stdout_file_path, 'w')
           process.environment['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] = process_count + 1

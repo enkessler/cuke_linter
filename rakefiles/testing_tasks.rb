@@ -1,3 +1,4 @@
+require_relative '../testing/process_helper'
 require_relative '../testing/parallel_helper'
 
 namespace 'cuke_linter' do
@@ -6,8 +7,8 @@ namespace 'cuke_linter' do
   task :run_rspec_tests => [:clear_coverage, :clear_report_directory] do
     puts Rainbow("Running RSpec tests...").cyan
 
-    process = ChildProcess.build('cmd.exe', '/c', 'bundle', 'exec', 'rspec',
-                                 '-r', './environments/rspec_env.rb')
+    process = CukeLinter::ProcessHelper.create_process('bundle', 'exec', 'rspec',
+                                                       '-r', './environments/rspec_env.rb')
     process.io.inherit!
     process.environment['CUKE_LINTER_PARALLEL_RUN'] = 'false'
     process.start
@@ -44,8 +45,8 @@ namespace 'cuke_linter' do
   task :run_cucumber_tests => [:clear_coverage, :clear_report_directory] do
     puts Rainbow("Running Cucumber tests...").cyan
 
-    process = ChildProcess.build('cmd.exe', '/c', 'bundle', 'exec', 'cucumber',
-                                 '-p', 'default')
+    process = CukeLinter::ProcessHelper.create_process('bundle', 'exec', 'cucumber',
+                                                       '-p', 'default')
     process.io.inherit!
     process.environment['CUKE_LINTER_PARALLEL_RUN'] = 'false'
     process.start
