@@ -1,0 +1,5 @@
+common: -r environments/cucumber_env.rb -t 'not @wip'
+default: -p common 'testing/cucumber/features' -f progress --color
+
+# It is assumed that a specific file will be fed to the Cucumber command when running in parallel and color output isn't needed
+parallel: -p common

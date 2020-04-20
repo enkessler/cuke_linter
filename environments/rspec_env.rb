@@ -1,6 +1,12 @@
-require 'simplecov'
-SimpleCov.command_name('rspec_tests')
+if ENV['CUKE_LINTER_PARALLEL_RUN']
+  ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] ||= "rspec_tests_part_#{ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']}"
+  ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  ||= "testing/reports/rspec/part_#{ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']}/coverage"
+else
+  ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] ||= 'rspec_tests'
+  ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  ||= 'coverage'
+end
 
+require 'simplecov'
 require_relative 'common_env'
 require 'rspec'
 require 'rubygems/mock_gem_ui'
@@ -17,8 +23,22 @@ TAGGABLE_ELEMENTS               = ['feature', 'scenario', 'outline', 'example']
 ELEMENTS_WITH_TAGGABLE_CHILDREN = ['feature', 'outline']
 
 RSpec.configure do |config|
+
+  if ENV['CUKE_LINTER_PARALLEL_RUN']
+    process_count    = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']
+    source_file      = "testing/reports/rspec/part_#{process_count}/spec_file_#{process_count}.txt"
+    persistence_file = "testing/reports/rspec/part_#{process_count}/.rspec_status_#{process_count}"
+    spec_list        = File.read(source_file).split("\n")
+    config.instance_variable_set(:@files_or_directories_to_run, spec_list)
+  else
+    config.pattern   = 'testing/rspec/spec/**/*_spec.rb'
+    persistence_file = '.rspec_status'
+  end
+
+  # Always try to show color
+  config.color_mode = :on
   # Enable flags like --only-failures and --next-failure
-  config.example_status_persistence_file_path = ".rspec_status"
+  config.example_status_persistence_file_path = persistence_file
 
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!

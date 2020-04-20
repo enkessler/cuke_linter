@@ -30,11 +30,14 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "< 3.0"
   spec.add_development_dependency "cucumber", "~> 3.0"
-  spec.add_development_dependency "racatt", "~> 1.0"
   spec.add_development_dependency "rake", "~> 12.0"
   spec.add_development_dependency "require_all", "~> 2.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency 'simplecov', '< 1.0.0'
   spec.add_development_dependency 'coveralls', '< 1.0.0'
   spec.add_development_dependency 'rainbow', '< 4.0.0'
+  spec.add_development_dependency 'parallel', '~> 1.0'
+  spec.add_development_dependency 'childprocess', '~> 3.0'
+  spec.add_development_dependency 'ffi', '~> 1.0'
+  spec.add_development_dependency 'cuke_slicer', '>= 2.0.2', '< 3.0'
 end
