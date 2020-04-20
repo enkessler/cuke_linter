@@ -213,11 +213,14 @@ RSpec.describe CukeLinter do
   end
 
   it 'returns to its default set of linters after being reset' do
+    CukeLinter.reset_linters
+
     original_names        = CukeLinter.registered_linters.keys
     original_linter_types = CukeLinter.registered_linters.values.map(&:class)
     new_linter            = CukeLinter::LinterFactory.generate_fake_linter
 
     CukeLinter.register_linter(linter: new_linter, name: 'FakeLinter')
+    expect(CukeLinter.registered_linters.keys).to include('FakeLinter')
     CukeLinter.reset_linters
 
     expect(CukeLinter.registered_linters.keys).to eq(original_names)

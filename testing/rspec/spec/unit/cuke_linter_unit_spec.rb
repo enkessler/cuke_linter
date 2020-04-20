@@ -22,6 +22,8 @@ RSpec.describe 'the gem' do
 
   describe 'included files' do
 
+    # This test modifies the files present in the gem and so it can interfere with other gem
+    # related tests when being run in parallel.
     it 'does not include files that are not source controlled' do
       bad_file_1 = File.absolute_path("#{lib_folder}/foo.txt")
       bad_file_2 = File.absolute_path("#{exe_folder}/foo.txt")
@@ -41,27 +43,60 @@ RSpec.describe 'the gem' do
     end
 
     it 'includes all of the library files' do
-      lib_files = Dir.chdir(root_dir) do
-        Dir.glob('lib/**/*').reject { |file| File.directory?(file) }
-      end
+      retried = false
 
-      expect(gemspec.files).to include(*lib_files)
+      # When run in parallel, this test can fail due to race conditions with other tests that modify the files present
+      # in the gem. It's easier to just retry this test if it fails than to try and isolate the other offending tests.
+      begin
+        lib_files = Dir.chdir(root_dir) do
+          Dir.glob('lib/**/*').reject { |file| File.directory?(file) }
+        end
+
+        expect(gemspec.files).to include(*lib_files)
+      rescue => e
+        raise e if retried
+        retried = true
+        sleep 2
+        retry
+      end
     end
 
     it 'includes all of the executable files' do
-      exe_files = Dir.chdir(root_dir) do
-        Dir.glob('exe/**/*').reject { |file| File.directory?(file) }
-      end
+      retried = false
 
-      expect(gemspec.files).to include(*exe_files)
+      # When run in parallel, this test can fail due to race conditions with other tests that modify the files present
+      # in the gem. It's easier to just retry this test if it fails than to try and isolate the other offending tests.
+      begin
+        exe_files = Dir.chdir(root_dir) do
+          Dir.glob('exe/**/*').reject { |file| File.directory?(file) }
+        end
+
+        expect(gemspec.files).to include(*exe_files)
+      rescue => e
+        raise e if retried
+        retried = true
+        sleep 2
+        retry
+      end
     end
 
     it 'includes all of the documentation files' do
-      feature_files = Dir.chdir(root_dir) do
-        Dir.glob('testing/cucumber/features/**/*').reject { |file| File.directory?(file) }
-      end
+      retried = false
 
-      expect(gemspec.files).to include(*feature_files)
+      # When run in parallel, this test can fail due to race conditions with other tests that modify the files present
+      # in the gem. It's easier to just retry this test if it fails than to try and isolate the other offending tests.
+      begin
+        feature_files = Dir.chdir(root_dir) do
+          Dir.glob('testing/cucumber/features/**/*').reject { |file| File.directory?(file) }
+        end
+
+        expect(gemspec.files).to include(*feature_files)
+      rescue => e
+        raise e if retried
+        retried = true
+        sleep 2
+        retry
+      end
     end
 
     it 'includes the README file' do
