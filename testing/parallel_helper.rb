@@ -174,6 +174,9 @@ module CukeLinter
       end
 
       def combine_code_coverage_reports
+        # TODO: figure out a way to do this with earlier versions of SimpleCov
+        return unless SimpleCov::VERSION =~ /^0.18/
+
         SimpleCov.collate Dir["#{REPORT_FOLDER}/{rspec,cucumber}/part_*/coverage/.resultset.json"] do
           formatter SimpleCov::Formatter::MultiFormatter.new([SimpleCov::Formatter::SimpleFormatter,
                                                               SimpleCov::Formatter::HTMLFormatter])
