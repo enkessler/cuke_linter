@@ -43,7 +43,7 @@ RSpec.describe 'the gem' do
     end
 
     it 'includes all of the library files' do
-      retried = false
+      retries = 0
 
       # When run in parallel, this test can fail due to race conditions with other tests that modify the files present
       # in the gem. It's easier to just retry this test if it fails than to try and isolate the other offending tests.
@@ -53,16 +53,16 @@ RSpec.describe 'the gem' do
         end
 
         expect(gemspec.files).to include(*lib_files)
-      rescue => e
-        raise e if retried
-        retried = true
+      rescue RSpec::Expectations::ExpectationNotMetError => e
+        raise e if retries > 2
+        retries += 1
         sleep 2
         retry
       end
     end
 
     it 'includes all of the executable files' do
-      retried = false
+      retries = 0
 
       # When run in parallel, this test can fail due to race conditions with other tests that modify the files present
       # in the gem. It's easier to just retry this test if it fails than to try and isolate the other offending tests.
@@ -72,16 +72,17 @@ RSpec.describe 'the gem' do
         end
 
         expect(gemspec.files).to include(*exe_files)
-      rescue => e
-        raise e if retried
-        retried = true
+      rescue RSpec::Expectations::ExpectationNotMetError => e
+
+        raise e if retries > 2
+        retries += 1
         sleep 2
         retry
       end
     end
 
     it 'includes all of the documentation files' do
-      retried = false
+      retries = 0
 
       # When run in parallel, this test can fail due to race conditions with other tests that modify the files present
       # in the gem. It's easier to just retry this test if it fails than to try and isolate the other offending tests.
@@ -91,9 +92,9 @@ RSpec.describe 'the gem' do
         end
 
         expect(gemspec.files).to include(*feature_files)
-      rescue => e
-        raise e if retried
-        retried = true
+      rescue RSpec::Expectations::ExpectationNotMetError => e
+        raise e if retries > 2
+        retries += 1
         sleep 2
         retry
       end
