@@ -22,4 +22,7 @@ namespace 'cuke_linter' do
     FileUtils.mkdir(CukeLinter::ParallelHelper::REPORT_FOLDER)
   end
 
+  desc 'Removes existing test results and code coverage'
+  task :clear_old_results => [:clear_report_directory, :clear_coverage]
+
 end

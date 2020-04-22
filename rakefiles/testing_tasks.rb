@@ -4,7 +4,7 @@ require_relative '../testing/parallel_helper'
 namespace 'cuke_linter' do
 
   desc 'Run all of the RSpec tests'
-  task :run_rspec_tests => [:clear_coverage, :clear_report_directory] do
+  task :run_rspec_tests => [:clear_old_results] do
     puts Rainbow("Running RSpec tests...").cyan
 
     process = CukeLinter::ProcessHelper.create_process('bundle', 'exec', 'rspec',
@@ -21,7 +21,7 @@ namespace 'cuke_linter' do
   end
 
   desc 'Run all of the RSpec tests'
-  task :run_rspec_tests_in_parallel => [:clear_coverage, :clear_report_directory] do
+  task :run_rspec_tests_in_parallel => [:clear_old_results] do
     puts Rainbow("Running RSpec tests").cyan
 
     pattern = 'testing/rspec/spec/**/*_spec.rb'
@@ -32,7 +32,7 @@ namespace 'cuke_linter' do
   end
 
   desc 'Run all of the Cucumber tests'
-  task :run_cucumber_tests_in_parallel => [:clear_coverage, :clear_report_directory] do
+  task :run_cucumber_tests_in_parallel => [:clear_old_results] do
     puts Rainbow("Running Cucumber tests...").cyan
 
     feature_directory = 'testing/cucumber/features'
@@ -43,7 +43,7 @@ namespace 'cuke_linter' do
   end
 
   desc 'Run all of the Cucumber tests'
-  task :run_cucumber_tests => [:clear_coverage, :clear_report_directory] do
+  task :run_cucumber_tests => [:clear_old_results] do
     puts Rainbow("Running Cucumber tests...").cyan
 
     process = CukeLinter::ProcessHelper.create_process('bundle', 'exec', 'cucumber',
@@ -60,7 +60,7 @@ namespace 'cuke_linter' do
   end
 
   desc 'Run all of the tests'
-  task :test_everything => [:clear_coverage, :clear_report_directory] do
+  task :test_everything => [:clear_old_results] do
     begin
       Rake::Task['cuke_linter:run_rspec_tests_in_parallel'].invoke
       Rake::Task['cuke_linter:run_cucumber_tests_in_parallel'].invoke
