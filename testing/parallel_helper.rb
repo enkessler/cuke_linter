@@ -5,6 +5,9 @@ require 'parallel'
 require 'open3'
 require 'childprocess'
 require 'cuke_slicer'
+
+# This file is loaded as part of the project framework, not during tests
+ENV['CUKE_LINTER_TEST_PROCESS'] = 'false'
 require 'simplecov'
 
 module CukeLinter
@@ -26,6 +29,7 @@ module CukeLinter
                                                              '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', temp_file.path)
         process.io.inherit!
         process.environment['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] = 'rspec_spec_gathering'
+        process.environment['CUKE_LINTER_TEST_PROCESS']           = 'false'
         process.start
         process.wait
 
@@ -70,6 +74,7 @@ module CukeLinter
           FileUtils.touch(stdout_file_path)
           process.io.stdout                                         = File.new(stdout_file_path, 'w')
           process.environment['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] = process_count + 1
+          process.environment['CUKE_LINTER_TEST_PROCESS']           = 'true'
           process.start
           processes << process
         end
@@ -144,6 +149,7 @@ module CukeLinter
           FileUtils.touch(stdout_file_path)
           process.io.stdout                                         = File.new(stdout_file_path, 'w')
           process.environment['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] = process_count + 1
+          process.environment['CUKE_LINTER_TEST_PROCESS']           = 'true'
           process.start
           processes << process
         end

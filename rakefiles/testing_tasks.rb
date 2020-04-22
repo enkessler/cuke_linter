@@ -3,7 +3,7 @@ require_relative '../testing/parallel_helper'
 
 namespace 'cuke_linter' do
 
-  desc 'Run all of the Cucumber tests'
+  desc 'Run all of the RSpec tests'
   task :run_rspec_tests => [:clear_coverage, :clear_report_directory] do
     puts Rainbow("Running RSpec tests...").cyan
 
@@ -11,6 +11,7 @@ namespace 'cuke_linter' do
                                                        '-r', './environments/rspec_env.rb')
     process.io.inherit!
     process.environment['CUKE_LINTER_PARALLEL_RUN'] = 'false'
+    process.environment['CUKE_LINTER_TEST_PROCESS'] = 'true'
     process.start
     process.wait
 
@@ -49,6 +50,7 @@ namespace 'cuke_linter' do
                                                        '-p', 'default')
     process.io.inherit!
     process.environment['CUKE_LINTER_PARALLEL_RUN'] = 'false'
+    process.environment['CUKE_LINTER_TEST_PROCESS'] = 'true'
     process.start
     process.wait
 

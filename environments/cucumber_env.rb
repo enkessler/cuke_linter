@@ -1,4 +1,4 @@
-if ENV['CUKE_LINTER_PARALLEL_RUN']
+if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
   ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] = "cucumber_tests_part_#{ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']}"
   ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  = "testing/reports/cucumber/part_#{ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']}/coverage"
 else
@@ -6,6 +6,8 @@ else
   ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  = 'coverage'
 end
 
+# Unless otherwise set, assume that this file is only loaded during testing
+ENV['CUKE_LINTER_TEST_PROCESS'] ||= 'true'
 require 'simplecov'
 require_relative 'common_env'
 require 'cucumber'

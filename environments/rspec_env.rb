@@ -1,10 +1,13 @@
-if ENV['CUKE_LINTER_PARALLEL_RUN']
+if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
   ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] ||= "rspec_tests_part_#{ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']}"
   ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  ||= "testing/reports/rspec/part_#{ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']}/coverage"
 else
   ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] ||= 'rspec_tests'
   ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  ||= 'coverage'
 end
+
+# Unless otherwise set, assume that this file is only loaded during testing
+ENV['CUKE_LINTER_TEST_PROCESS'] ||= 'true'
 
 require 'simplecov'
 require_relative 'common_env'
@@ -24,7 +27,7 @@ ELEMENTS_WITH_TAGGABLE_CHILDREN = ['feature', 'outline']
 
 RSpec.configure do |config|
 
-  if ENV['CUKE_LINTER_PARALLEL_RUN']
+  if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
     process_count    = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']
     source_file      = "testing/reports/rspec/part_#{process_count}/spec_file_#{process_count}.txt"
     persistence_file = "testing/reports/rspec/part_#{process_count}/.rspec_status_#{process_count}"
