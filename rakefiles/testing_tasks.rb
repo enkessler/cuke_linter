@@ -62,9 +62,14 @@ namespace 'cuke_linter' do
   desc 'Run all of the tests'
   task :test_everything => [:clear_old_results] do
     begin
-      Rake::Task['cuke_linter:run_rspec_tests_in_parallel'].invoke
-      Rake::Task['cuke_linter:run_cucumber_tests_in_parallel'].invoke
-      Rake::Task['cuke_linter:combine_code_coverage_reports'].invoke
+      unless ChildProcess.jruby?
+        Rake::Task['cuke_linter:run_rspec_tests_in_parallel'].invoke
+        Rake::Task['cuke_linter:run_cucumber_tests_in_parallel'].invoke
+        Rake::Task['cuke_linter:combine_code_coverage_reports'].invoke
+      else
+        Rake::Task['cuke_linter:run_rspec_tests'].invoke
+        Rake::Task['cuke_linter:run_cucumber_tests'].invoke
+      end
     rescue => e
       puts Rainbow("-----------------------\nSomething isn't right!").red
       puts Rainbow(e.message).yellow
