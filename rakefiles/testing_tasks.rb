@@ -62,6 +62,7 @@ namespace 'cuke_linter' do
   desc 'Run all of the tests'
   task :test_everything => [:clear_old_results] do
     begin
+      # JRuby doesn't seem to work reliably with the parallel process approach
       unless ChildProcess.jruby?
         Rake::Task['cuke_linter:run_rspec_tests_in_parallel'].invoke
         Rake::Task['cuke_linter:run_cucumber_tests_in_parallel'].invoke
