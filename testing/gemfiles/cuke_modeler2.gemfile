@@ -1,9 +1,11 @@
 source "https://rubygems.org"
 
-git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 # Specify your gem's dependencies in cuke_linter.gemspec
 gemspec :path => "../../"
+
+gem 'simplecov', '<= 0.16.1' # The Coveralls gem can't handle more recent versions of the SimpleCov gem
 
 gem 'cuke_modeler', '~> 2.0'
 
