@@ -180,13 +180,19 @@ module CukeLinter
       end
 
       def combine_code_coverage_reports
-        # TODO: figure out a way to do this with earlier versions of SimpleCov
-        return unless SimpleCov::VERSION =~ /^0.18/
+        all_results = Dir["#{REPORT_FOLDER}/{rspec,cucumber}/part_*/coverage/.resultset.json"]
 
-        SimpleCov.collate Dir["#{REPORT_FOLDER}/{rspec,cucumber}/part_*/coverage/.resultset.json"] do
-          formatter SimpleCov::Formatter::MultiFormatter.new([SimpleCov::Formatter::SimpleFormatter,
-                                                              SimpleCov::Formatter::HTMLFormatter])
+        result_objects = []
+        all_results.each do |result_file_name|
+          result_objects << SimpleCov::Result.from_hash(JSON.parse(File.read(result_file_name)))
         end
+        merged_result = SimpleCov::ResultMerger.merge_results(*result_objects)
+
+        # Creates the HTML report
+        merged_result.format!
+
+        # Creates the finalized JSON file that Coveralls will need
+        SimpleCov::ResultMerger.store_result(merged_result)
       end
 
     end
