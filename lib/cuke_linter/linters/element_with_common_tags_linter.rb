@@ -27,13 +27,10 @@ module CukeLinter
     def message
       class_name = @linted_model_class.name.split('::').last
 
-      case class_name
-        when 'Feature'
-          "All tests in #{class_name} have tag '#{@common_tag}'. Move tag to #{class_name} level."
-        when 'Outline'
-          "All Examples in #{class_name} have tag '#{@common_tag}'. Move tag to #{class_name} level."
-        else
-          raise("Linted an unexpected model type '#{class_name}'!")
+      if class_name == 'Feature'
+        "All tests in Feature have tag '#{@common_tag}'. Move tag to #{class_name} level."
+      else
+        "All Examples in Outline have tag '#{@common_tag}'. Move tag to #{class_name} level."
       end
     end
 
