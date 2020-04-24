@@ -64,15 +64,28 @@ RSpec.describe CukeLinter::TestWithBadNameLinter do
 
         end
 
-        context 'a non-test model' do
+      end
 
-          let(:test_model) { CukeModeler::Model.new }
+      context "with a #{model_type} that has does not have a bad name" do
 
-          it_should_behave_like 'a linter linting a good model'
+        let(:test_model) do
+          model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+          model.name = 'A perfectly fine name'
 
+          model
         end
 
+        it_should_behave_like 'a linter linting a good model'
+
       end
+
+    end
+
+    context 'a non-test model' do
+
+      let(:test_model) { CukeModeler::Model.new }
+
+      it_should_behave_like 'a linter linting a good model'
 
     end
 
