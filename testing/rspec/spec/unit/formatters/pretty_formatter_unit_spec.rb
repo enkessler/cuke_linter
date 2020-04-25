@@ -6,6 +6,18 @@ RSpec.describe CukeLinter::PrettyFormatter do
   it_should_behave_like 'a formatter at the unit level'
 
 
+  context 'with no problems to format' do
+
+    let(:linting_data) { [] }
+
+    it 'generates a pretty message' do
+      results = subject.format(linting_data)
+
+      expect(results).to eq(['0 issues found'].join("\n"))
+    end
+
+  end
+
   it 'formats linting data as pretty text' do
     linting_data = [{ linter:   'SomeLinter',
                       problem:  'Some problem',
