@@ -32,3 +32,9 @@ Some guidelines when adding a new linter
   * Keep things alphabetical. There are going to be lots of linters and things will be easier to find if lists of them in the code base (e.g. `require` statments, documentation, etc.) are in an intuitive order.
   * Because linters are based on models, name them after the model type that they lint. E.g. `FeatureThatHasAThing`, `OutlineWithoutThing`, etc.
   * DO NOT add the new linter to the default linters. The default linters will be updated when new major versions are released.
+
+### Adding a new formatter
+
+Some guidelines when adding a new formatter
+  * While most linters only produce a single type of problem, it is not a strict requirement. The formatter should be able to handle multiple problem types per linter.
+  * Some linters report problems at the file level instead of the line level. The formatter should be able to handle locations that do not include lines numbers.
