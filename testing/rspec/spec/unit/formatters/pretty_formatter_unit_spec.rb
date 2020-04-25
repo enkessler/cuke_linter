@@ -40,6 +40,9 @@ RSpec.describe CukeLinter::PrettyFormatter do
                       problem:  'Some other problem',
                       location: 'path/to/the_file:1' },
                     { linter:   'SomeLinter',
+                      problem:  'Same linter, different problem',
+                      location: 'path/to/the_file:1' },
+                    { linter:   'SomeLinter',
                       problem:  'Some problem',
                       location: 'path/to/the_file:11' }]
 
@@ -49,11 +52,13 @@ RSpec.describe CukeLinter::PrettyFormatter do
                            '  Some problem',
                            '    path/to/the_file:1',
                            '    path/to/the_file:11',
+                           '  Same linter, different problem',
+                           '    path/to/the_file:1',
                            'SomeOtherLinter',
                            '  Some other problem',
                            '    path/to/the_file:1',
                            '',
-                           '3 issues found'].join("\n"))
+                           '4 issues found'].join("\n"))
   end
 
   it 'orders violations within the same problem category by file path' do
