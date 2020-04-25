@@ -40,6 +40,10 @@ namespace 'cuke_linter' do
     puts Rainbow("-----------------------\nAll is well. :)").green
   end
 
+  desc 'Generate a Rubocop report for the project'
+  task :rubocop do
+    puts `rubocop ./ -f html -o rubocop.html -f fu -S`
+  end
 end
 
 
