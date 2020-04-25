@@ -1,6 +1,7 @@
 require 'rake'
 require 'coveralls/rake/task'
 require 'rainbow'
+require 'rubocop/rake_task'
 
 require_relative 'rakefiles/reporting_tasks'
 require_relative 'rakefiles/testing_tasks'
@@ -41,9 +42,12 @@ namespace 'cuke_linter' do
   end
 
   desc 'Generate a Rubocop report for the project'
-  task :rubocop do
-    puts `rubocop ./ -f html -o rubocop.html -f fu -S`
+  RuboCop::RakeTask.new(:rubocop) do |task|
+    task.patterns   = ['./']
+    task.formatters = ['fuubar', 'html']
+    task.options    = ['--out', 'rubocop.html', '-S']
   end
+
 end
 
 
