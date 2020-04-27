@@ -14,13 +14,16 @@ require 'cucumber'
 
 require_all 'testing/cucumber/step_definitions'
 
+World(CukeLinter::FileHelper)
+World(CukeLinter::FormatterFactory)
+World(CukeLinter::LinterFactory)
 
 Before do
   CukeLinter.clear_registered_linters
 end
 
 Before do
-  @root_test_directory = CukeLinter::FileHelper.create_directory
+  @root_test_directory = create_directory
 end
 
 at_exit do

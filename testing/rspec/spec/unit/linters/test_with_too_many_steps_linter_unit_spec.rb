@@ -20,7 +20,7 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
       context "with a #{model_type} that has too many steps" do
 
         let(:test_model) do
-          model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+          model       = send("generate_#{model_type}_model", parent_file_path: model_file_path)
           model.steps = [:step_1,
                          :step_2,
                          :step_3,
@@ -62,7 +62,7 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
         context 'because it has fewer than 10 steps' do
 
           let(:test_model) do
-            model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
+            model       = send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
             model.steps = [:step_1]
 
             model
@@ -77,7 +77,7 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
           context 'because its steps are empty' do
 
             let(:test_model) do
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
+              model       = send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
               model.steps = []
 
               model
@@ -90,7 +90,7 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
           context 'because its steps are nil' do
 
             let(:test_model) do
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
+              model       = send("generate_#{model_type}_model", parent_file_path: 'path_to_file')
               model.steps = nil
 
               model
@@ -114,7 +114,7 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
           context 'because configuration never happened' do
 
             let(:unconfigured_test_model) do
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model       = send("generate_#{model_type}_model")
               model.steps = []
               (default_step_threshhold + 1).times { model.steps << :a_step }
 
@@ -132,7 +132,7 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
           context 'because configuration did not set a step threshold' do
             let(:configuration) { {} }
             let(:configured_test_model) do
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model       = send("generate_#{model_type}_model")
               model.steps = []
               (default_step_threshhold + 1).times { model.steps << :a_step }
 
@@ -162,7 +162,7 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
                     linter }
 
           let(:test_model) do
-            model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            model       = send("generate_#{model_type}_model")
             model.steps = []
             (step_threshhold + 1).times { model.steps << :a_step }
 

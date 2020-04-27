@@ -21,8 +21,8 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
 
       let(:test_model) do
         step = 'x' * (default_character_threshold + 1)
-        CukeLinter::ModelFactory.generate_step_model(parent_file_path: model_file_path,
-                                                     source_text:      "* #{step}")
+        generate_step_model(parent_file_path: model_file_path,
+                            source_text:      "* #{step}")
       end
 
       it_should_behave_like 'a linter linting a bad model'
@@ -50,7 +50,7 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
 
       let(:test_model) do
         step = 'x' * default_character_threshold
-        CukeLinter::ModelFactory.generate_step_model(source_text: "* #{step}")
+        generate_step_model(source_text: "* #{step}")
       end
 
       it_should_behave_like 'a linter linting a good model'
@@ -61,7 +61,7 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
 
       let(:test_model) do
         step = 'x' * (default_character_threshold - 1)
-        CukeLinter::ModelFactory.generate_step_model(source_text: "* #{step}")
+        generate_step_model(source_text: "* #{step}")
       end
 
       it_should_behave_like 'a linter linting a good model'
@@ -71,7 +71,7 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
     context 'when the step has no text' do
 
       let(:test_model) do
-        model      = CukeLinter::ModelFactory.generate_step_model
+        model      = generate_step_model
         model.text = nil
 
         model
@@ -101,7 +101,7 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
 
         let(:default_model) do
           step = 'x' * (default_character_threshold + 1)
-          CukeLinter::ModelFactory.generate_step_model(source_text: "* #{step}")
+          generate_step_model(source_text: "* #{step}")
         end
 
         it 'defaults to a maximum of 80 characters' do
@@ -117,7 +117,7 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
         let(:configured_model) do
           subject.configure(configuration)
           step = 'x' * (default_character_threshold + 1)
-          CukeLinter::ModelFactory.generate_step_model(source_text: "* #{step}")
+          generate_step_model(source_text: "* #{step}")
         end
 
         it 'defaults to a maximum of 80 characters' do
@@ -140,7 +140,7 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
 
       let(:test_model) do
         step = 'x' * (character_threshold + 1)
-        CukeLinter::ModelFactory.generate_step_model(source_text: "* #{step}")
+        generate_step_model(source_text: "* #{step}")
       end
 
       it 'uses the maximum character length provided by configuration' do

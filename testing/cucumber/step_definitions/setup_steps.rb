@@ -176,7 +176,7 @@ end
 Given(/^the following configuration file(?: "([^"]*)")?:$/) do |file_name, text|
   file_name ||= '.cuke_linter'
 
-  @configuration_file_path = CukeLinter::FileHelper.create_file(directory: @root_test_directory, name: file_name, extension: '', text: text)
+  @configuration_file_path = create_file(directory: @root_test_directory, name: file_name, extension: '', text: text)
 end
 
 Given(/^a linter "([^"]*)"$/) do |linter_class|
@@ -184,11 +184,11 @@ Given(/^a linter "([^"]*)"$/) do |linter_class|
 end
 
 Given(/^a linter registered as "([^"]*)"$/) do |linter_name|
-  CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: linter_name), name: linter_name)
+  CukeLinter.register_linter(linter: generate_fake_linter(name: linter_name), name: linter_name)
 end
 
 Given(/^a directory "([^"]*)"$/) do |directory_name|
-  @test_directory = CukeLinter::FileHelper.create_directory(directory: @root_test_directory, name: directory_name)
+  @test_directory = create_directory(directory: @root_test_directory, name: directory_name)
 end
 
 Given(/^no linters are currently registered$/) do
@@ -197,7 +197,7 @@ end
 
 Given(/^the following custom linter object:$/) do |code|
   code.sub!('<path_to>', @root_test_directory)
-  code.sub!('<code_to_generate_a_new_linter_instance>', 'CukeLinter::LinterFactory.generate_fake_linter')
+  code.sub!('<code_to_generate_a_new_linter_instance>', 'generate_fake_linter')
 
   if @working_directory
     Dir.chdir(@working_directory) do
@@ -226,7 +226,7 @@ Given(/^the following(?: feature)? file "([^"]*)":$/) do |file_path, text|
   path, extension = file_path.split('.')
 
   @created_files ||= []
-  @created_files << CukeLinter::FileHelper.create_file(directory: @root_test_directory, name: path, extension: ".#{extension}", text: text)
+  @created_files << create_file(directory: @root_test_directory, name: path, extension: ".#{extension}", text: text)
 end
 
 Given(/^the default linters are being used$/) do
@@ -234,7 +234,7 @@ Given(/^the default linters are being used$/) do
 end
 
 And(/^a feature file model based on the following text:$/) do |text|
-  file_path = CukeLinter::FileHelper.create_file(directory: @root_test_directory, extension: '.feature', text: text)
+  file_path = create_file(directory: @root_test_directory, extension: '.feature', text: text)
 
   @created_files ||= []
   @created_files << file_path
@@ -249,7 +249,7 @@ Given(/^a feature file model named "([^"]*)"$/) do |file_path|
 end
 
 Given(/^a feature file model based on the file "([^"]*)" with the following text:$/) do |file_name, text|
-  file_path = CukeLinter::FileHelper.create_file(directory: @root_test_directory, extension: '.feature', text: text, name: file_name)
+  file_path = create_file(directory: @root_test_directory, extension: '.feature', text: text, name: file_name)
 
   @created_files ||= []
   @created_files << file_path

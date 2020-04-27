@@ -10,8 +10,8 @@ RSpec.describe CukeLinter::Linter do
   let(:linter_rule) { lambda { |model| !model.is_a?(CukeModeler::Example) } }
   let(:linter_options) { { name: linter_name, message: linter_message, rule: linter_rule } }
 
-  let(:good_data) { CukeLinter::ModelFactory.generate_example_model }
-  let(:bad_data) { CukeLinter::ModelFactory.generate_outline_model }
+  let(:good_data) { generate_example_model }
+  let(:bad_data) { generate_outline_model }
 
 
   it_should_behave_like 'a linter at the unit level'
@@ -22,7 +22,7 @@ RSpec.describe CukeLinter::Linter do
 
     context 'with a good model' do
 
-      let(:test_model) { CukeLinter::ModelFactory.generate_example_model }
+      let(:test_model) { generate_example_model }
 
       it_should_behave_like 'a linter linting a good model'
 
@@ -30,7 +30,7 @@ RSpec.describe CukeLinter::Linter do
 
     context 'with a bad model' do
 
-      let(:test_model) { CukeLinter::ModelFactory.generate_outline_model(parent_file_path: model_file_path) }
+      let(:test_model) { generate_outline_model(parent_file_path: model_file_path) }
 
       it_should_behave_like 'a linter linting a bad model'
 
@@ -100,11 +100,11 @@ RSpec.describe CukeLinter::Linter do
   context 'with both custom values and methods' do
 
     let(:good_data) do
-      CukeLinter::ModelFactory.generate_outline_model
+      generate_outline_model
     end
 
     let(:bad_data) do
-      CukeLinter::ModelFactory.generate_example_model
+      generate_example_model
     end
 
     subject { linter = CukeLinter::Linter.new(linter_options)

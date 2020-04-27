@@ -15,8 +15,8 @@ RSpec.describe CukeLinter::FeatureFileWithMismatchedNameLinter do
   describe 'linting' do
 
     let(:test_model) do
-      feature_model = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path,
-                                                                      source_text:      "Feature: #{model_feature_name}")
+      feature_model = generate_feature_model(parent_file_path: model_file_path,
+                                             source_text:      "Feature: #{model_feature_name}")
 
       feature_model.parent_model
     end

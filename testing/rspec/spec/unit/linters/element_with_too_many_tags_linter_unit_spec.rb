@@ -20,7 +20,7 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
       context "with a #{model_type} that has too many tags" do
 
         let(:test_model) do
-          model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+          model      = send("generate_#{model_type}_model", parent_file_path: model_file_path)
           model.tags = [:tag_1,
                         :tag_2,
                         :tag_3,
@@ -57,7 +57,7 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
         context 'because it has 5 tags' do
 
           let(:test_model) do
-            model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            model      = send("generate_#{model_type}_model")
             model.tags = [:tag_1,
                           :tag_2,
                           :tag_3,
@@ -74,7 +74,7 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
         context 'because it has fewer than 5 tags' do
 
           let(:test_model) do
-            model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            model      = send("generate_#{model_type}_model")
             model.tags = [:tag_1]
 
             model
@@ -89,7 +89,7 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
           context 'because its tags are empty' do
 
             let(:test_model) do
-              model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model      = send("generate_#{model_type}_model")
               model.tags = []
 
               model
@@ -102,7 +102,7 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
           context 'because its tags are nil' do
 
             let(:test_model) do
-              model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model      = send("generate_#{model_type}_model")
               model.tags = nil
 
               model
@@ -129,7 +129,7 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
             context 'because configuration never happened' do
 
               let(:unconfigured_test_model) do
-                model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+                model      = send("generate_#{model_type}_model")
                 model.tags = []
                 (default_tag_threshold + 1).times { model.tags << :a_tag }
 
@@ -148,7 +148,7 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
 
               let(:configuration) { {} }
               let(:test_model) do
-                model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+                model      = send("generate_#{model_type}_model")
                 model.tags = []
                 (default_tag_threshold + 1).times { model.tags << :a_tag }
 
@@ -179,7 +179,7 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
             end
 
             let(:test_model) do
-              model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model      = send("generate_#{model_type}_model")
               model.tags = []
               (tag_threshold + 1).times { model.tags << :a_tag }
 
@@ -200,11 +200,11 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
         describe 'tag inheritance configuration' do
 
           let(:test_model_with_inherited_tags) do
-            test_model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            test_model      = send("generate_#{model_type}_model")
             test_model.tags = []
             (default_tag_threshold).times { test_model.tags << :a_tag }
 
-            ancestor_model      = CukeLinter::ModelFactory.generate_lintable_model
+            ancestor_model      = generate_lintable_model
             ancestor_model.tags = [:an_extra_tag]
 
             test_model.parent_model = ancestor_model

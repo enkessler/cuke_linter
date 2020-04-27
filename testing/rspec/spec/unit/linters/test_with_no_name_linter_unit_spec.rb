@@ -21,7 +21,7 @@ RSpec.describe CukeLinter::TestWithNoNameLinter do
         context 'because its name is empty' do
 
           let(:test_model) do
-            model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+            model      = send("generate_#{model_type}_model", parent_file_path: model_file_path)
             model.name = ''
 
             model
@@ -41,7 +41,7 @@ RSpec.describe CukeLinter::TestWithNoNameLinter do
         context 'because its name is nil' do
 
           let(:test_model) do
-            model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+            model      = send("generate_#{model_type}_model", parent_file_path: model_file_path)
             model.name = nil
 
             model
@@ -63,7 +63,7 @@ RSpec.describe CukeLinter::TestWithNoNameLinter do
       context "with a #{model_type} that does have a name" do
 
         let(:test_model) do
-          model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+          model      = send("generate_#{model_type}_model")
           model.name = 'foo'
 
           model

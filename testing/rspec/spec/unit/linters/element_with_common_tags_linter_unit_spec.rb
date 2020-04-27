@@ -19,11 +19,11 @@ RSpec.describe CukeLinter::ElementWithCommonTagsLinter do
       context "with a #{model_type} that has common tags on all of its children" do
 
         let(:test_model) do
-          model = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+          model = send("generate_#{model_type}_model", parent_file_path: model_file_path)
 
           2.times do
-            child_model      = CukeLinter::ModelFactory.generate_lintable_model
-            child_model.tags = [CukeLinter::ModelFactory.generate_tag_model(source_text: '@same')]
+            child_model      = generate_lintable_model
+            child_model.tags = [generate_tag_model(source_text: '@same')]
 
             case model_type
               when 'feature'
@@ -60,8 +60,8 @@ RSpec.describe CukeLinter::ElementWithCommonTagsLinter do
           result     = subject.lint(test_model)
           expect(result[:problem]).to match(/have tag '#{common_tag}'\./)
 
-          test_model.children.first.tags = [CukeLinter::ModelFactory.generate_tag_model(source_text: '@still_same')]
-          test_model.children.last.tags  = [CukeLinter::ModelFactory.generate_tag_model(source_text: '@still_same')]
+          test_model.children.first.tags = [generate_tag_model(source_text: '@still_same')]
+          test_model.children.last.tags  = [generate_tag_model(source_text: '@still_same')]
 
           common_tag = test_model.children.first.tags.first.name
           result     = subject.lint(test_model)
@@ -75,11 +75,11 @@ RSpec.describe CukeLinter::ElementWithCommonTagsLinter do
         context 'because none of their tags are common' do
 
           let(:test_model) do
-            model = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+            model = send("generate_#{model_type}_model", parent_file_path: model_file_path)
 
             2.times do |count|
-              child_model      = CukeLinter::ModelFactory.generate_lintable_model
-              child_model.tags = [CukeLinter::ModelFactory.generate_tag_model(source_text: "@tag_#{count}")]
+              child_model      = generate_lintable_model
+              child_model.tags = [generate_tag_model(source_text: "@tag_#{count}")]
 
               case model_type
                 when 'feature'
@@ -104,10 +104,10 @@ RSpec.describe CukeLinter::ElementWithCommonTagsLinter do
           context 'because their tags are empty' do
 
             let(:test_model) do
-              model = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+              model = send("generate_#{model_type}_model", parent_file_path: model_file_path)
 
               2.times do
-                child_model      = CukeLinter::ModelFactory.generate_lintable_model
+                child_model      = generate_lintable_model
                 child_model.tags = []
 
                 case model_type
@@ -131,10 +131,10 @@ RSpec.describe CukeLinter::ElementWithCommonTagsLinter do
           context 'because their tags are nil' do
 
             let(:test_model) do
-              model = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+              model = send("generate_#{model_type}_model", parent_file_path: model_file_path)
 
               2.times do
-                child_model      = CukeLinter::ModelFactory.generate_lintable_model
+                child_model      = generate_lintable_model
                 child_model.tags = nil
 
                 case model_type
@@ -160,11 +160,11 @@ RSpec.describe CukeLinter::ElementWithCommonTagsLinter do
         context 'because the model only has one child' do
 
           let(:test_model) do
-            model = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+            model = send("generate_#{model_type}_model", parent_file_path: model_file_path)
 
             1.times do
-              child_model      = CukeLinter::ModelFactory.generate_lintable_model
-              child_model.tags = [CukeLinter::ModelFactory.generate_tag_model(source_text: '@a_tag')]
+              child_model      = generate_lintable_model
+              child_model.tags = [generate_tag_model(source_text: '@a_tag')]
 
               case model_type
                 when 'feature'
@@ -189,7 +189,7 @@ RSpec.describe CukeLinter::ElementWithCommonTagsLinter do
           context 'because the children are empty' do
 
             let(:test_model) do
-              model = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+              model = send("generate_#{model_type}_model", parent_file_path: model_file_path)
 
               case model_type
                 when 'feature'
@@ -210,7 +210,7 @@ RSpec.describe CukeLinter::ElementWithCommonTagsLinter do
           context 'because the children are nil' do
 
             let(:test_model) do
-              model = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+              model = send("generate_#{model_type}_model", parent_file_path: model_file_path)
 
               case model_type
                 when 'feature'

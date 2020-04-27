@@ -19,7 +19,7 @@ RSpec.describe CukeLinter::ExampleWithoutNameLinter do
       context 'because the name is nil' do
 
         let(:test_model) do
-          model      = CukeLinter::ModelFactory.generate_example_model(parent_file_path: model_file_path)
+          model      = generate_example_model(parent_file_path: model_file_path)
           model.name = nil
 
           model
@@ -38,7 +38,7 @@ RSpec.describe CukeLinter::ExampleWithoutNameLinter do
       context 'because the name is empty' do
 
         let(:test_model) do
-          model      = CukeLinter::ModelFactory.generate_example_model(parent_file_path: model_file_path)
+          model      = generate_example_model(parent_file_path: model_file_path)
           model.name = ''
 
           model
@@ -59,7 +59,7 @@ RSpec.describe CukeLinter::ExampleWithoutNameLinter do
     context 'an example with a name' do
 
       let(:test_model) do
-        model      = CukeLinter::ModelFactory.generate_example_model
+        model      = generate_example_model
         model.name = 'a name'
 
         model

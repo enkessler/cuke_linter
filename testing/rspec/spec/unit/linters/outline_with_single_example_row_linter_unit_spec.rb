@@ -25,8 +25,8 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
                        | param |
                        | value |'
 
-          CukeLinter::ModelFactory.generate_outline_model(parent_file_path: model_file_path,
-                                                          source_text:      gherkin)
+          generate_outline_model(parent_file_path: model_file_path,
+                                 source_text:      gherkin)
         end
 
         it_should_behave_like 'a linter linting a bad model'
@@ -51,8 +51,8 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
                        | param |
                        | value |'
 
-          CukeLinter::ModelFactory.generate_outline_model(parent_file_path: model_file_path,
-                                                          source_text:      gherkin)
+          generate_outline_model(parent_file_path: model_file_path,
+                                 source_text:      gherkin)
         end
 
         it_should_behave_like 'a linter linting a bad model'
@@ -80,7 +80,7 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
                        | value 1 |
                        | value 2 |'
 
-          CukeLinter::ModelFactory.generate_outline_model(source_text: gherkin)
+          generate_outline_model(source_text: gherkin)
         end
 
         it_should_behave_like 'a linter linting a good model'
@@ -99,7 +99,7 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
                        | param   |
                        | value 1 |'
 
-          CukeLinter::ModelFactory.generate_outline_model(source_text: gherkin)
+          generate_outline_model(source_text: gherkin)
         end
 
         it_should_behave_like 'a linter linting a good model'
@@ -115,7 +115,7 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
         context 'because its examples are nil' do
 
           let(:test_model) do
-            model          = CukeLinter::ModelFactory.generate_outline_model
+            model          = generate_outline_model
             model.examples = nil
 
             model
@@ -127,7 +127,7 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
 
         context 'because its examples are empty' do
           let(:test_model) do
-            model          = CukeLinter::ModelFactory.generate_outline_model
+            model          = generate_outline_model
             model.examples = []
 
             model
@@ -147,7 +147,7 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
                      Examples:
                        | param |'
 
-          CukeLinter::ModelFactory.generate_outline_model(source_text: gherkin)
+          generate_outline_model(source_text: gherkin)
         end
 
         it_should_behave_like 'a linter linting a good model'
@@ -164,7 +164,7 @@ RSpec.describe CukeLinter::OutlineWithSingleExampleRowLinter do
                      Examples:
                        | param |'
 
-          CukeLinter::ModelFactory.generate_outline_model(source_text: gherkin)
+          generate_outline_model(source_text: gherkin)
         end
 
         it_should_behave_like 'a linter linting a good model'

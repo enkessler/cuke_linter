@@ -20,7 +20,7 @@ RSpec.describe CukeLinter::TestWithSetupStepAsFinalStepLinter do
       context "with a #{model_type} that has a setup step as its final step" do
 
         let(:test_model) do
-          model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+          model       = send("generate_#{model_type}_model", parent_file_path: model_file_path)
           model.steps = [CukeModeler::Step.new('When a step'),
                          CukeModeler::Step.new('Given a step')]
 
@@ -45,7 +45,7 @@ RSpec.describe CukeLinter::TestWithSetupStepAsFinalStepLinter do
           context 'because its steps are empty' do
 
             let(:test_model) do
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model       = send("generate_#{model_type}_model")
               model.steps = []
 
               model
@@ -58,7 +58,7 @@ RSpec.describe CukeLinter::TestWithSetupStepAsFinalStepLinter do
           context 'because its steps are nil' do
 
             let(:test_model) do
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model       = send("generate_#{model_type}_model")
               model.steps = nil
 
               model
@@ -73,7 +73,7 @@ RSpec.describe CukeLinter::TestWithSetupStepAsFinalStepLinter do
         context 'because its final step is not a setup step' do
 
           let(:test_model) do
-            model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            model       = send("generate_#{model_type}_model")
             model.steps = [CukeModeler::Step.new('Then a step')]
 
             model
@@ -90,8 +90,8 @@ RSpec.describe CukeLinter::TestWithSetupStepAsFinalStepLinter do
     describe 'configuration' do
 
       let(:test_model) do
-        CukeLinter::ModelFactory.generate_scenario_model(source_text: 'Scenario:
-                                                                         * a step')
+        generate_scenario_model(source_text: 'Scenario:
+                                                * a step')
       end
 
       context 'with configuration' do

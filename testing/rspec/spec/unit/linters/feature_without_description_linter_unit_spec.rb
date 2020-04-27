@@ -19,7 +19,7 @@ RSpec.describe CukeLinter::FeatureWithoutDescriptionLinter do
       context 'because the description is empty' do
 
         let(:test_model) do
-          model             = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path)
+          model             = generate_feature_model(parent_file_path: model_file_path)
           model.description = ''
 
           model
@@ -39,7 +39,7 @@ RSpec.describe CukeLinter::FeatureWithoutDescriptionLinter do
       context 'because the description is nil' do
 
         let(:test_model) do
-          model             = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path)
+          model             = generate_feature_model(parent_file_path: model_file_path)
           model.description = nil
 
           model
@@ -60,8 +60,8 @@ RSpec.describe CukeLinter::FeatureWithoutDescriptionLinter do
 
       let(:test_model) do
         model_source = "Feature:\n  This feature has a description"
-        CukeLinter::ModelFactory.generate_feature_model(source_text:      model_source,
-                                                        parent_file_path: 'path_to_file')
+        generate_feature_model(source_text:      model_source,
+                               parent_file_path: 'path_to_file')
       end
 
       it_should_behave_like 'a linter linting a good model'

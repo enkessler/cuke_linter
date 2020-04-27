@@ -69,4 +69,8 @@ RSpec.configure do |config|
     end
   end
 
+  config.include CukeLinter::FileHelper
+  config.include CukeLinter::FormatterFactory
+  config.include CukeLinter::LinterFactory
+  config.include CukeLinter::ModelFactory
 end

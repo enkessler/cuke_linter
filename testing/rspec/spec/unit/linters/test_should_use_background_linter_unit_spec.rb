@@ -20,17 +20,17 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
         let(:test_model) do
           step_text     = 'the step'
-          feature_model = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path,
-                                                                          source_text:      "Feature:
-                                                                                               Scenario:
-                                                                                                 * #{step_text}
-                                                                                               Scenario Outline:
-                                                                                                 * #{step_text}
-                                                                                               Examples:
-                                                                                                 | param |
-                                                                                                 | value |")
+          feature_model = generate_feature_model(parent_file_path: model_file_path,
+                                                 source_text:      "Feature:
+                                                                      Scenario:
+                                                                        * #{step_text}
+                                                                      Scenario Outline:
+                                                                        * #{step_text}
+                                                                      Examples:
+                                                                        | param |
+                                                                        | value |")
 
-          model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+          model       = send("generate_#{model_type}_model")
           model.steps = [CukeModeler::Step.new("* #{step_text}")]
 
           model.parent_model = feature_model
@@ -59,14 +59,14 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
             let(:test_model) do
               step_text     = 'the not really <parameterized> step'
-              feature_model = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path,
-                                                                              source_text:      "Feature:
-                                                                                                   Scenario:
-                                                                                                     * #{step_text}
-                                                                                                   Scenario:
-                                                                                                     * #{step_text}")
+              feature_model = generate_feature_model(parent_file_path: model_file_path,
+                                                     source_text:      "Feature:
+                                                                          Scenario:
+                                                                            * #{step_text}
+                                                                          Scenario:
+                                                                            * #{step_text}")
 
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model       = send("generate_#{model_type}_model")
               model.steps = [CukeModeler::Step.new("* #{step_text}")]
 
               model.parent_model = feature_model
@@ -96,20 +96,20 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
             let(:test_model) do
               # Whitespace is significant
               step_text     = "the step <    param_foo     >"
-              feature_model = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path,
-                                                                              source_text:      "Feature:
-                                                                                                   Scenario Outline:
-                                                                                                     * #{step_text}
-                                                                                                   Examples:
-                                                                                                     | param_foo |
-                                                                                                     | value     |
-                                                                                                   Scenario Outline:
-                                                                                                     * #{step_text}
-                                                                                                   Examples:
-                                                                                                     | param_foo |
-                                                                                                     | value     |")
+              feature_model = generate_feature_model(parent_file_path: model_file_path,
+                                                     source_text:      "Feature:
+                                                                          Scenario Outline:
+                                                                            * #{step_text}
+                                                                          Examples:
+                                                                            | param_foo |
+                                                                            | value     |
+                                                                          Scenario Outline:
+                                                                            * #{step_text}
+                                                                          Examples:
+                                                                            | param_foo |
+                                                                            | value     |")
 
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model       = send("generate_#{model_type}_model")
               model.steps = [CukeModeler::Step.new("* #{step_text}")]
 
               model.parent_model = feature_model
@@ -140,16 +140,16 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
           let(:test_model) do
             step_text     = 'the step'
-            feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
-                                                                                           Scenario:
-                                                                                             * #{step_text}
-                                                                                           Scenario Outline:
-                                                                                             * #{step_text}
-                                                                                           Examples:
-                                                                                             | param |
-                                                                                             | value |")
+            feature_model = generate_feature_model(source_text: "Feature:
+                                                                   Scenario:
+                                                                     * #{step_text}
+                                                                   Scenario Outline:
+                                                                     * #{step_text}
+                                                                   Examples:
+                                                                     | param |
+                                                                     | value |")
 
-            model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            model       = send("generate_#{model_type}_model")
             model.steps = [CukeModeler::Step.new("* #{step_text} plus extra")]
 
             model.parent_model = feature_model
@@ -168,16 +168,16 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
             let(:test_model) do
               step_text     = 'the step'
-              feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
-                                                                                           Scenario:
-                                                                                             * #{step_text}
-                                                                                           Scenario Outline:
-                                                                                             * #{step_text}
-                                                                                           Examples:
-                                                                                             | param |
-                                                                                             | value |")
+              feature_model = generate_feature_model(source_text: "Feature:
+                                                                     Scenario:
+                                                                       * #{step_text}
+                                                                     Scenario Outline:
+                                                                       * #{step_text}
+                                                                     Examples:
+                                                                       | param |
+                                                                       | value |")
 
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model       = send("generate_#{model_type}_model")
               model.steps = []
 
               model.parent_model = feature_model
@@ -194,16 +194,16 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
             let(:test_model) do
               step_text     = 'the step'
-              feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
-                                                                                           Scenario:
-                                                                                             * #{step_text}
-                                                                                           Scenario Outline:
-                                                                                             * #{step_text}
-                                                                                           Examples:
-                                                                                             | param |
-                                                                                             | value |")
+              feature_model = generate_feature_model(source_text: "Feature:
+                                                                     Scenario:
+                                                                       * #{step_text}
+                                                                     Scenario Outline:
+                                                                       * #{step_text}
+                                                                     Examples:
+                                                                       | param |
+                                                                       | value |")
 
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model       = send("generate_#{model_type}_model")
               model.steps = nil
 
               model.parent_model = feature_model
@@ -224,16 +224,16 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
             let(:test_model) do
               step_text     = 'the step'
-              feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
-                                                                                           Scenario:
-                                                                                             * #{step_text}
-                                                                                           Scenario Outline:
-                                                                                             * #{step_text}
-                                                                                           Examples:
-                                                                                             | param |
-                                                                                             | value |")
+              feature_model = generate_feature_model(source_text: "Feature:
+                                                                     Scenario:
+                                                                       * #{step_text}
+                                                                     Scenario Outline:
+                                                                       * #{step_text}
+                                                                     Examples:
+                                                                       | param |
+                                                                       | value |")
 
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model       = send("generate_#{model_type}_model")
               model.steps = [CukeModeler::Step.new("* #{step_text}")]
 
               model.parent_model              = feature_model
@@ -251,16 +251,16 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
             let(:test_model) do
               step_text     = 'the step'
-              feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
-                                                                                           Scenario:
-                                                                                             * #{step_text}
-                                                                                           Scenario Outline:
-                                                                                             * #{step_text}
-                                                                                           Examples:
-                                                                                             | param |
-                                                                                             | value |")
+              feature_model = generate_feature_model(source_text: "Feature:
+                                                                     Scenario:
+                                                                       * #{step_text}
+                                                                     Scenario Outline:
+                                                                       * #{step_text}
+                                                                     Examples:
+                                                                       | param |
+                                                                       | value |")
 
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model       = send("generate_#{model_type}_model")
               model.steps = [CukeModeler::Step.new("* #{step_text}")]
 
               model.parent_model              = feature_model
@@ -280,9 +280,9 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
           let(:test_model) do
             step_text     = 'the step'
-            feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: 'Feature:')
+            feature_model = generate_feature_model(source_text: 'Feature:')
 
-            model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            model       = send("generate_#{model_type}_model")
             model.steps = [CukeModeler::Step.new("* #{step_text}")]
 
             model.parent_model = feature_model
@@ -299,16 +299,16 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
           let(:test_model) do
             step_text     = 'the maybe <parameterized> step'
-            feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
-                                                                                            Scenario:
-                                                                                              * #{step_text}
-                                                                                            Scenario Outline:
-                                                                                              * #{step_text}
-                                                                                            Examples:
-                                                                                              | parameterized |
-                                                                                              | value         |")
+            feature_model = generate_feature_model(source_text: "Feature:
+                                                                   Scenario:
+                                                                     * #{step_text}
+                                                                   Scenario Outline:
+                                                                     * #{step_text}
+                                                                   Examples:
+                                                                     | parameterized |
+                                                                     | value         |")
 
-            model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            model       = send("generate_#{model_type}_model")
             model.steps = [CukeModeler::Step.new("* #{step_text}")]
 
             model.parent_model = feature_model
@@ -327,19 +327,19 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
                 let(:test_model) do
                   step_text     = 'the <parameterized> step'
-                  feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
-                                                                                                  Scenario Outline:
-                                                                                                    * #{step_text}
-                                                                                                  Examples:
-                                                                                                    | parameterized |
-                                                                                                    | value         |
-                                                                                                  Scenario Outline:
-                                                                                                    * #{step_text}
-                                                                                                  Examples:
-                                                                                                    | parameterized |
-                                                                                                    | value         |")
+                  feature_model = generate_feature_model(source_text: "Feature:
+                                                                         Scenario Outline:
+                                                                           * #{step_text}
+                                                                         Examples:
+                                                                           | parameterized |
+                                                                           | value         |
+                                                                         Scenario Outline:
+                                                                           * #{step_text}
+                                                                         Examples:
+                                                                           | parameterized |
+                                                                           | value         |")
 
-                  model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+                  model       = send("generate_#{model_type}_model")
                   model.steps = [CukeModeler::Step.new("* #{step_text}")]
 
                   model.parent_model = feature_model
@@ -356,19 +356,19 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
                 let(:test_model) do
                   step_text     = "the step\n | <param_foo> |"
-                  feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
-                                                                                                  Scenario Outline:
-                                                                                                    * #{step_text}
-                                                                                                  Examples:
-                                                                                                    | param_foo |
-                                                                                                    | value     |
-                                                                                                  Scenario Outline:
-                                                                                                    * #{step_text}
-                                                                                                  Examples:
-                                                                                                    | param_foo |
-                                                                                                    | value     |")
+                  feature_model = generate_feature_model(source_text: "Feature:
+                                                                         Scenario Outline:
+                                                                           * #{step_text}
+                                                                         Examples:
+                                                                           | param_foo |
+                                                                           | value     |
+                                                                         Scenario Outline:
+                                                                           * #{step_text}
+                                                                         Examples:
+                                                                           | param_foo |
+                                                                           | value     |")
 
-                  model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+                  model       = send("generate_#{model_type}_model")
                   model.steps = [CukeModeler::Step.new("* #{step_text}")]
 
                   model.parent_model = feature_model
@@ -385,19 +385,19 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
                 let(:test_model) do
                   step_text     = "the step\n \"\"\"\n <param_foo>\n \"\"\""
-                  feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
-                                                                                                  Scenario Outline:
-                                                                                                    * #{step_text}
-                                                                                                  Examples:
-                                                                                                    | param_foo |
-                                                                                                    | value     |
-                                                                                                  Scenario Outline:
-                                                                                                    * #{step_text}
-                                                                                                  Examples:
-                                                                                                    | param_foo |
-                                                                                                    | value     |")
+                  feature_model = generate_feature_model(source_text: "Feature:
+                                                                         Scenario Outline:
+                                                                           * #{step_text}
+                                                                         Examples:
+                                                                           | param_foo |
+                                                                           | value     |
+                                                                         Scenario Outline:
+                                                                           * #{step_text}
+                                                                         Examples:
+                                                                           | param_foo |
+                                                                           | value     |")
 
-                  model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+                  model       = send("generate_#{model_type}_model")
                   model.steps = [CukeModeler::Step.new("* #{step_text}")]
 
                   model.parent_model = feature_model
@@ -414,22 +414,22 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
                 let(:test_model) do
                   step_text     = "the step <param_foo>"
-                  feature_model = CukeLinter::ModelFactory.generate_feature_model(source_text: "Feature:
-                                                                                                  Scenario Outline:
-                                                                                                    * #{step_text}
-                                                                                                  Examples:
-                                                                                                    | param_foo |
-                                                                                                    | value     |
-                                                                                                  Scenario Outline:
-                                                                                                    * #{step_text}
-                                                                                                  Examples:
-                                                                                                    | param_bar |
-                                                                                                    | value     |
-                                                                                                  Examples:
-                                                                                                    | param_foo |
-                                                                                                    | value     |")
+                  feature_model = generate_feature_model(source_text: "Feature:
+                                                                         Scenario Outline:
+                                                                           * #{step_text}
+                                                                         Examples:
+                                                                           | param_foo |
+                                                                           | value     |
+                                                                         Scenario Outline:
+                                                                           * #{step_text}
+                                                                         Examples:
+                                                                           | param_bar |
+                                                                           | value     |
+                                                                         Examples:
+                                                                           | param_foo |
+                                                                           | value     |")
 
-                  model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+                  model       = send("generate_#{model_type}_model")
                   model.steps = [CukeModeler::Step.new("* #{step_text}")]
 
                   model.parent_model = feature_model

@@ -11,22 +11,34 @@ ENV['CUKE_LINTER_TEST_PROCESS'] = 'false'
 require 'simplecov'
 
 module CukeLinter
+
+  # A helper module that has methods for doing testing in parallel
+
   module ParallelHelper
 
     REPORT_FOLDER = "#{__dir__}/reports".freeze
 
+    def self.included(klass)
+      klass.include(Methods)
+    end
 
-    class << self
+    def self.extended(klass)
+      klass.extend(Methods)
+    end
+
+    module Methods
+
+      include ProcessHelper
 
       def get_discrete_specs(spec_pattern:)
         puts "Gathering specs..."
 
         temp_file = Tempfile.new
-        process   = CukeLinter::ProcessHelper.create_process('bundle', 'exec', 'rspec',
-                                                             '--pattern', "#{spec_pattern}",
-                                                             '--dry-run',
-                                                             '-r', './environments/rspec_env.rb',
-                                                             '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', temp_file.path)
+        process   = create_process('bundle', 'exec', 'rspec',
+                                   '--pattern', "#{spec_pattern}",
+                                   '--dry-run',
+                                   '-r', './environments/rspec_env.rb',
+                                   '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', temp_file.path)
         process.io.inherit!
         process.environment['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] = 'rspec_spec_gathering'
         process.environment['CUKE_LINTER_TEST_PROCESS']           = 'false'
@@ -66,11 +78,11 @@ module CukeLinter
           stdout_file_name = "std_out_#{process_count + 1}.txt"
           stdout_file_path = "#{directory}/#{stdout_file_name}"
 
-          process = CukeLinter::ProcessHelper.create_process('bundle', 'exec', 'rspec',
-                                                             '-r', './environments/rspec_env.rb',
-                                                             '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', "#{directory}/#{json_file_path}",
-                                                             '--format', 'html', '--out', "#{directory}/#{html_file_path}",
-                                                             '--format', 'p')
+          process = create_process('bundle', 'exec', 'rspec',
+                                   '-r', './environments/rspec_env.rb',
+                                   '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', "#{directory}/#{json_file_path}",
+                                   '--format', 'html', '--out', "#{directory}/#{html_file_path}",
+                                   '--format', 'p')
           FileUtils.touch(stdout_file_path)
           process.io.stdout                                         = File.new(stdout_file_path, 'w')
           process.environment['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] = process_count + 1
@@ -140,12 +152,12 @@ module CukeLinter
           stdout_file_name = "std_out_#{process_count + 1}.txt"
           stdout_file_path = "#{directory}/#{stdout_file_name}"
 
-          process = CukeLinter::ProcessHelper.create_process('bundle', 'exec', 'cucumber',
-                                                             "@#{directory}/tests_to_run_#{process_count + 1}.txt",
-                                                             '-p', 'parallel',
-                                                             '--format', 'json', '--out', "#{directory}/#{json_file_path}",
-                                                             '--format', 'html', '--out', "#{directory}/#{html_file_path}",
-                                                             '--format', 'progress')
+          process = create_process('bundle', 'exec', 'cucumber',
+                                   "@#{directory}/tests_to_run_#{process_count + 1}.txt",
+                                   '-p', 'parallel',
+                                   '--format', 'json', '--out', "#{directory}/#{json_file_path}",
+                                   '--format', 'html', '--out', "#{directory}/#{html_file_path}",
+                                   '--format', 'progress')
           FileUtils.touch(stdout_file_path)
           process.io.stdout                                         = File.new(stdout_file_path, 'w')
           process.environment['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] = process_count + 1
@@ -196,5 +208,8 @@ module CukeLinter
       end
 
     end
+
+    extend Methods
+
   end
 end

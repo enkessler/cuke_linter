@@ -23,7 +23,7 @@ RSpec.describe CukeLinter::TestWithBadNameLinter do
           ['test', 'check', 'verify'].each do |bad_word|
 
             let(:test_model) do
-              model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+              model      = send("generate_#{model_type}_model", parent_file_path: model_file_path)
               model.name = "#{bad_word} bad names are reported"
 
               model
@@ -44,7 +44,7 @@ RSpec.describe CukeLinter::TestWithBadNameLinter do
             ['Test', 'TEST'].each do |bad_word|
 
               let(:test_model) do
-                model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+                model      = send("generate_#{model_type}_model", parent_file_path: model_file_path)
                 model.name = "#{bad_word} bad names are reported"
 
                 model
@@ -69,7 +69,7 @@ RSpec.describe CukeLinter::TestWithBadNameLinter do
       context "with a #{model_type} that has does not have a bad name" do
 
         let(:test_model) do
-          model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+          model      = send("generate_#{model_type}_model")
           model.name = 'A perfectly fine name'
 
           model

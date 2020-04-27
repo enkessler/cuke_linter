@@ -6,17 +6,17 @@ RSpec.describe CukeLinter do
 
     describe 'blanket linters' do
 
-      let(:test_model_tree) { CukeLinter::ModelFactory.generate_lintable_model }
-      let(:test_linters) { [CukeLinter::LinterFactory.generate_fake_linter] }
-      let(:test_formatters) { [[CukeLinter::FormatterFactory.generate_fake_formatter, "#{CukeLinter::FileHelper::create_directory}/junk_output_file.txt"]] }
+      let(:test_model_tree) { generate_lintable_model }
+      let(:test_linters) { [generate_fake_linter] }
+      let(:test_formatters) { [[generate_fake_formatter, "#{create_directory}/junk_output_file.txt"]] }
       let(:linting_options) { { model_trees: [test_model_tree], linters: test_linters, formatters: test_formatters } }
 
 
       it 'unregisters disabled linters' do
         config             = { 'FakeLinter1' => { 'Enabled' => false } }
-        configuration_file = CukeLinter::FileHelper.create_file(name: '.cuke_linter', extension: '', text: config.to_yaml)
+        configuration_file = create_file(name: '.cuke_linter', extension: '', text: config.to_yaml)
 
-        CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter1'), name: 'FakeLinter1')
+        CukeLinter.register_linter(linter: generate_fake_linter(name: 'FakeLinter1'), name: 'FakeLinter1')
         expect(subject.registered_linters['FakeLinter1']).to_not be nil
 
         subject.load_configuration(config_file_path: configuration_file)
@@ -31,7 +31,7 @@ RSpec.describe CukeLinter do
         CukeLinter.reset_linters
 
         # Also add some custom ones
-        CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter, name: 'Foo')
+        CukeLinter.register_linter(linter: generate_fake_linter, name: 'Foo')
 
 
         subject.load_configuration(config: configuration)
@@ -43,7 +43,7 @@ RSpec.describe CukeLinter do
         configuration = { 'AllLinters'  => { 'Enabled' => false },
                           'FakeLinter1' => { 'Enabled' => true } }
 
-        CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter, name: 'FakeLinter1')
+        CukeLinter.register_linter(linter: generate_fake_linter, name: 'FakeLinter1')
         expect(subject.registered_linters['FakeLinter1']).to_not be nil
 
         subject.load_configuration(config: configuration)
@@ -53,8 +53,8 @@ RSpec.describe CukeLinter do
 
       it 'even unregisters non-configurable disabled linters' do
         config                  = { 'FakeLinter' => { 'Enabled' => false } }
-        configuration_file      = CukeLinter::FileHelper.create_file(name: '.cuke_linter', extension: '', text: config.to_yaml)
-        non_configurable_linter = CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter')
+        configuration_file      = create_file(name: '.cuke_linter', extension: '', text: config.to_yaml)
+        non_configurable_linter = generate_fake_linter(name: 'FakeLinter')
         non_configurable_linter.instance_eval('undef :configure')
 
         CukeLinter.register_linter(linter: non_configurable_linter, name: 'FakeLinter')
@@ -67,9 +67,9 @@ RSpec.describe CukeLinter do
 
       it 'uses the default configuration file in the current directory if no configuration file is provided' do
         config             = { 'FakeLinter1' => { 'Enabled' => false } }
-        configuration_file = CukeLinter::FileHelper.create_file(name: '.cuke_linter', extension: '', text: config.to_yaml)
+        configuration_file = create_file(name: '.cuke_linter', extension: '', text: config.to_yaml)
 
-        CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter1'), name: 'FakeLinter1')
+        CukeLinter.register_linter(linter: generate_fake_linter(name: 'FakeLinter1'), name: 'FakeLinter1')
         expect(subject.registered_linters['FakeLinter1']).to_not be nil
 
         Dir.chdir(File.dirname(configuration_file)) do
@@ -80,7 +80,7 @@ RSpec.describe CukeLinter do
       end
 
       it 'raises an exception if no default configuration file is found and no configuration or file is provided' do
-        some_empty_directory = CukeLinter::FileHelper.create_directory
+        some_empty_directory = create_directory
 
         Dir.chdir(File.dirname(some_empty_directory)) do
           expect { subject.load_configuration }.to raise_error('No configuration or configuration file given and no .cuke_linter file found')
@@ -91,8 +91,8 @@ RSpec.describe CukeLinter do
         config = { 'FakeLinter1' => { 'Problem' => 'My custom message for FakeLinter1' },
                    'FakeLinter2' => { 'Problem' => 'My custom message for FakeLinter2' } }
 
-        CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter1'), name: 'FakeLinter1')
-        CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter2'), name: 'FakeLinter2')
+        CukeLinter.register_linter(linter: generate_fake_linter(name: 'FakeLinter1'), name: 'FakeLinter1')
+        CukeLinter.register_linter(linter: generate_fake_linter(name: 'FakeLinter2'), name: 'FakeLinter2')
         linting_options.delete(:linters)
 
         subject.load_configuration(config: config)
@@ -104,7 +104,7 @@ RSpec.describe CukeLinter do
 
       it "does not try to configure linters that don't know how to be configured" do
         config                  = { 'FakeLinter' => { 'Problem' => 'My custom message for FakeLinter' } }
-        non_configurable_linter = CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter')
+        non_configurable_linter = generate_fake_linter(name: 'FakeLinter')
         non_configurable_linter.instance_eval('undef :configure')
 
         CukeLinter.clear_registered_linters
@@ -122,15 +122,15 @@ RSpec.describe CukeLinter do
     describe 'targeted linters' do
 
       before(:all) do
-        @targeted_linter_class             = CukeLinter::LinterFactory.generate_fake_linter_class(class_name: 'ATargetedLinterClass', name: 'ATargetedLinter')
-        @another_targeted_linter_class     = CukeLinter::LinterFactory.generate_fake_linter_class(class_name: 'AnotherTargetedLinterClass', name: 'AnotherTargetedLinter')
-        @yet_another_targeted_linter_class = CukeLinter::LinterFactory.generate_fake_linter_class(class_name: 'YetAnotherTargetedLinterClass', name: 'YetAnotherTargetedLinter')
+        @targeted_linter_class             = generate_fake_linter_class(class_name: 'ATargetedLinterClass', name: 'ATargetedLinter')
+        @another_targeted_linter_class     = generate_fake_linter_class(class_name: 'AnotherTargetedLinterClass', name: 'AnotherTargetedLinter')
+        @yet_another_targeted_linter_class = generate_fake_linter_class(class_name: 'YetAnotherTargetedLinterClass', name: 'YetAnotherTargetedLinter')
 
-        @a_non_nested_targeted_linter_class       = CukeLinter::LinterFactory.generate_fake_linter_class(module_name: nil, class_name: 'ANonNestedTargetedLinterClass', name: 'ANonNestedTargetedLinter')
-        @another_non_nested_targeted_linter_class = CukeLinter::LinterFactory.generate_fake_linter_class(module_name: nil, class_name: 'AnotherNonNestedTargetedLinterClass', name: 'AnotherNonNestedTargetedLinter')
+        @a_non_nested_targeted_linter_class       = generate_fake_linter_class(module_name: nil, class_name: 'ANonNestedTargetedLinterClass', name: 'ANonNestedTargetedLinter')
+        @another_non_nested_targeted_linter_class = generate_fake_linter_class(module_name: nil, class_name: 'AnotherNonNestedTargetedLinterClass', name: 'AnotherNonNestedTargetedLinter')
 
-        @a_nested_targeted_linter_class       = CukeLinter::LinterFactory.generate_fake_linter_class(module_name: 'Foo', class_name: 'ANestedTargetedLinterClass', name: 'ANestedTargetedLinter')
-        @another_nested_targeted_linter_class = CukeLinter::LinterFactory.generate_fake_linter_class(module_name: 'Foo', class_name: 'AnotherNestedTargetedLinterClass', name: 'AnotherNestedTargetedLinter')
+        @a_nested_targeted_linter_class       = generate_fake_linter_class(module_name: 'Foo', class_name: 'ANestedTargetedLinterClass', name: 'ANestedTargetedLinter')
+        @another_nested_targeted_linter_class = generate_fake_linter_class(module_name: 'Foo', class_name: 'AnotherNestedTargetedLinterClass', name: 'AnotherNestedTargetedLinter')
       end
 
 
@@ -159,13 +159,13 @@ RSpec.describe CukeLinter do
 
       let(:test_linters) { [targeted_linter] }
       let(:test_linter_names) { [linter_name] }
-      let(:test_formatters) { [[CukeLinter::FormatterFactory.generate_fake_formatter, "#{CukeLinter::FileHelper::create_directory}/junk_output_file.txt"]] }
+      let(:test_formatters) { [[generate_fake_formatter, "#{create_directory}/junk_output_file.txt"]] }
       let(:test_model_trees) { [CukeModeler::FeatureFile.new(linted_file)] }
 
-      let(:test_directory) { CukeLinter::FileHelper.create_directory }
-      let(:linted_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
-                                                             extension: '.feature',
-                                                             text:      file_text) }
+      let(:test_directory) { create_directory }
+      let(:linted_file) { create_file(directory: test_directory,
+                                      extension: '.feature',
+                                      text:      file_text) }
 
 
       [:provided, :registered].each do |linter_type|
@@ -235,19 +235,19 @@ RSpec.describe CukeLinter do
 
                                    # cuke_linter:disable #{linter_class_name}, #{another_linter_class_name}, #{yet_another_linter_class_name}
                                    Scenario:" }
-            let(:commas_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
-                                                                   extension: '.feature',
-                                                                   text:      commas_text,
-                                                                   name:      'commas_text') }
+            let(:commas_file) { create_file(directory: test_directory,
+                                            extension: '.feature',
+                                            text:      commas_text,
+                                            name:      'commas_text') }
 
             let(:spaces_text) { "Feature:
 
                                    # cuke_linter:disable #{linter_class_name} #{another_linter_class_name} #{yet_another_linter_class_name}
                                    Scenario:" }
-            let(:spaces_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
-                                                                   extension: '.feature',
-                                                                   text:      spaces_text,
-                                                                   name:      'spaces_text') }
+            let(:spaces_file) { create_file(directory: test_directory,
+                                            extension: '.feature',
+                                            text:      spaces_text,
+                                            name:      'spaces_text') }
 
             let(:test_model_trees) { [CukeModeler::FeatureFile.new(commas_file),
                                       CukeModeler::FeatureFile.new(spaces_file)] }
@@ -282,15 +282,15 @@ RSpec.describe CukeLinter do
 
                                      # cuke_linter:disable #{linter_class_name}
                                      Scenario:" }
-            let(:modified_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
-                                                                     extension: '.feature',
-                                                                     text:      modified_text) }
+            let(:modified_file) { create_file(directory: test_directory,
+                                              extension: '.feature',
+                                              text:      modified_text) }
             let(:unmodified_text) { "Feature:
 
                                        Scenario:" }
-            let(:unmodified_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
-                                                                       extension: '.feature',
-                                                                       text:      unmodified_text) }
+            let(:unmodified_file) { create_file(directory: test_directory,
+                                                extension: '.feature',
+                                                text:      unmodified_text) }
 
             let(:test_model_trees) { [CukeModeler::FeatureFile.new(modified_file),
                                       CukeModeler::FeatureFile.new(unmodified_file)] }
@@ -332,16 +332,16 @@ RSpec.describe CukeLinter do
 
                                              #      cuke_linter:disable       #{linter_class_name}
                                              Scenario:" }
-            let(:extra_whitespace_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
-                                                                             extension: '.feature',
-                                                                             text:      extra_whitespace_text) }
+            let(:extra_whitespace_file) { create_file(directory: test_directory,
+                                                      extension: '.feature',
+                                                      text:      extra_whitespace_text) }
             let(:minimal_whitespace_text) { "Feature:
 
                                                #cuke_linter:disable #{linter_class_name}
                                                Scenario:" }
-            let(:minimal_whitespace_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
-                                                                               extension: '.feature',
-                                                                               text:      minimal_whitespace_text) }
+            let(:minimal_whitespace_file) { create_file(directory: test_directory,
+                                                        extension: '.feature',
+                                                        text:      minimal_whitespace_text) }
 
             let(:test_model_trees) { [CukeModeler::FeatureFile.new(extra_whitespace_file),
                                       CukeModeler::FeatureFile.new(minimal_whitespace_file)] }
@@ -363,37 +363,37 @@ RSpec.describe CukeLinter do
 
                                             # cuke_linter:disable #{linter_class_name}    ,    #{another_linter_class_name} , #{yet_another_linter_class_name}
                                             Scenario:" }
-              let(:spaced_commas_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
-                                                                            extension: '.feature',
-                                                                            text:      spaced_commas_text,
-                                                                            name:      'spaced_commas_text') }
+              let(:spaced_commas_file) { create_file(directory: test_directory,
+                                                     extension: '.feature',
+                                                     text:      spaced_commas_text,
+                                                     name:      'spaced_commas_text') }
 
               let(:compact_commas_text) { "Feature:
 
                                              # cuke_linter:disable #{linter_class_name},#{another_linter_class_name},#{yet_another_linter_class_name}
                                              Scenario:" }
-              let(:compact_commas_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
-                                                                             extension: '.feature',
-                                                                             text:      compact_commas_text,
-                                                                             name:      'compact_commas_text') }
+              let(:compact_commas_file) { create_file(directory: test_directory,
+                                                      extension: '.feature',
+                                                      text:      compact_commas_text,
+                                                      name:      'compact_commas_text') }
 
               let(:spaced_space_text) { "Feature:
 
                                            # cuke_linter:disable #{linter_class_name}        #{another_linter_class_name}  #{yet_another_linter_class_name}
                                            Scenario:" }
-              let(:spaced_space_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
-                                                                           extension: '.feature',
-                                                                           text:      spaced_space_text,
-                                                                           name:      'spaced_space_text') }
+              let(:spaced_space_file) { create_file(directory: test_directory,
+                                                    extension: '.feature',
+                                                    text:      spaced_space_text,
+                                                    name:      'spaced_space_text') }
 
               let(:compact_space_text) { "Feature:
 
                                             # cuke_linter:disable #{linter_class_name} #{another_linter_class_name} #{yet_another_linter_class_name}
                                             Scenario:" }
-              let(:compact_space_file) { CukeLinter::FileHelper.create_file(directory: test_directory,
-                                                                            extension: '.feature',
-                                                                            text:      compact_space_text,
-                                                                            name:      'compact_space_text') }
+              let(:compact_space_file) { create_file(directory: test_directory,
+                                                     extension: '.feature',
+                                                     text:      compact_space_text,
+                                                     name:      'compact_space_text') }
 
               let(:test_model_trees) { [CukeModeler::FeatureFile.new(spaced_commas_file),
                                         CukeModeler::FeatureFile.new(compact_commas_file),
@@ -457,7 +457,7 @@ RSpec.describe CukeLinter do
 
               # Used so that the linting process is not entirely bypassed due to no other linters being registered/provided
               let(:baseline_linter_name) { 'BaselineLinter' }
-              let(:baseline_linter) { CukeLinter::LinterFactory.generate_fake_linter(name: baseline_linter_name) }
+              let(:baseline_linter) { generate_fake_linter(name: baseline_linter_name) }
 
               let(:test_linters) { [baseline_linter, targeted_linter] }
               let(:test_linter_names) { [baseline_linter_name, linter_name] }

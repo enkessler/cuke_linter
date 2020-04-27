@@ -2,9 +2,9 @@ require_relative '../../../../environments/rspec_env'
 
 RSpec.describe CukeLinter do
 
-  let(:test_model_tree) { CukeLinter::ModelFactory.generate_lintable_model }
-  let(:test_linters) { [CukeLinter::LinterFactory.generate_fake_linter] }
-  let(:test_formatters) { [[CukeLinter::FormatterFactory.generate_fake_formatter, "#{CukeLinter::FileHelper::create_directory}/junk_output_file.txt"]] }
+  let(:test_model_tree) { generate_lintable_model }
+  let(:test_linters) { [generate_fake_linter] }
+  let(:test_formatters) { [[generate_fake_formatter, "#{create_directory}/junk_output_file.txt"]] }
   let(:linting_options) { { model_trees: [test_model_tree], linters: test_linters, formatters: test_formatters } }
 
 
@@ -15,8 +15,8 @@ RSpec.describe CukeLinter do
   end
 
   it 'uses every formatter provided' do
-    linting_options[:formatters] = [[CukeLinter::FormatterFactory.generate_fake_formatter(name: 'Formatter1')],
-                                    [CukeLinter::FormatterFactory.generate_fake_formatter(name: 'Formatter2')]]
+    linting_options[:formatters] = [[generate_fake_formatter(name: 'Formatter1')],
+                                    [generate_fake_formatter(name: 'Formatter2')]]
 
     expect { subject.lint(linting_options) }.to output("Formatter1: FakeLinter problem: path_to_file:1\nFormatter2: FakeLinter problem: path_to_file:1\n").to_stdout
   end
@@ -33,8 +33,8 @@ RSpec.describe CukeLinter do
   end
 
   it 'outputs formatted linting data to the provided output location' do
-    output_path                  = "#{CukeLinter::FileHelper::create_directory}/output.txt"
-    linting_options[:formatters] = [[CukeLinter::FormatterFactory.generate_fake_formatter(name: 'Formatter1'),
+    output_path                  = "#{create_directory}/output.txt"
+    linting_options[:formatters] = [[generate_fake_formatter(name: 'Formatter1'),
                                      output_path]]
 
     expect { subject.lint(linting_options) }.to_not output.to_stdout
@@ -42,7 +42,7 @@ RSpec.describe CukeLinter do
   end
 
   it 'outputs formatted data to STDOUT if not location is provided' do
-    linting_options[:formatters] = [[CukeLinter::FormatterFactory.generate_fake_formatter(name: 'Formatter1')]]
+    linting_options[:formatters] = [[generate_fake_formatter(name: 'Formatter1')]]
 
     expect { subject.lint(linting_options) }.to output("Formatter1: FakeLinter problem: path_to_file:1\n").to_stdout
   end
@@ -50,10 +50,10 @@ RSpec.describe CukeLinter do
   context 'with only model trees' do
 
     before(:each) do
-      child_model      = CukeLinter::ModelFactory.generate_lintable_model(source_line: 3)
-      parent_model     = CukeLinter::ModelFactory.generate_lintable_model(source_line: 5, children: [child_model])
+      child_model      = generate_lintable_model(source_line: 3)
+      parent_model     = generate_lintable_model(source_line: 5, children: [child_model])
       multi_node_tree  = parent_model
-      single_node_tree = CukeLinter::ModelFactory.generate_lintable_model(source_line: 7)
+      single_node_tree = generate_lintable_model(source_line: 7)
 
       linting_options[:model_trees] = [single_node_tree, multi_node_tree]
       linting_options.delete(:file_paths)
@@ -72,9 +72,9 @@ RSpec.describe CukeLinter do
   context 'with only file paths' do
 
     before(:each) do
-      @a_feature_file    = CukeLinter::FileHelper::create_file(text: "\nFeature:", extension: '.feature')
-      a_non_feature_file = CukeLinter::FileHelper::create_file(text: 'Some text', extension: '.foo')
-      @a_directory       = CukeLinter::FileHelper::create_directory
+      @a_feature_file    = create_file(text: "\nFeature:", extension: '.feature')
+      a_non_feature_file = create_file(text: 'Some text', extension: '.foo')
+      @a_directory       = create_directory
       File.write("#{@a_directory}/test_feature.feature", "Feature:")
 
       linting_options[:file_paths] = [@a_feature_file, a_non_feature_file, @a_directory]
@@ -98,8 +98,8 @@ RSpec.describe CukeLinter do
   context 'with both model trees and file paths' do
 
     before(:each) do
-      a_model         = CukeLinter::ModelFactory.generate_lintable_model(source_line: 3)
-      @a_feature_file = CukeLinter::FileHelper::create_file(text: 'Feature:', extension: '.feature')
+      a_model         = generate_lintable_model(source_line: 3)
+      @a_feature_file = create_file(text: 'Feature:', extension: '.feature')
 
       linting_options[:model_trees] = [a_model]
       linting_options[:file_paths]  = [@a_feature_file]
@@ -124,7 +124,7 @@ RSpec.describe CukeLinter do
     end
 
     it 'models the current directory' do
-      test_dir = CukeLinter::FileHelper::create_directory
+      test_dir = create_directory
       File.write("#{test_dir}/test_feature.feature", "Feature:")
 
       Dir.chdir(test_dir) do
@@ -138,8 +138,8 @@ RSpec.describe CukeLinter do
   end
 
   it 'uses evey linter provided' do
-    linting_options[:linters] = [CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter1'),
-                                 CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter2')]
+    linting_options[:linters] = [generate_fake_linter(name: 'FakeLinter1'),
+                                 generate_fake_linter(name: 'FakeLinter2')]
 
     results = subject.lint(linting_options)
 
@@ -149,9 +149,9 @@ RSpec.describe CukeLinter do
 
   it 'uses all registered linters if none are provided', :linter_registration do
     CukeLinter.clear_registered_linters
-    CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter1'), name: 'FakeLinter1')
-    CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter2'), name: 'FakeLinter2')
-    CukeLinter.register_linter(linter: CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter3'), name: 'FakeLinter3')
+    CukeLinter.register_linter(linter: generate_fake_linter(name: 'FakeLinter1'), name: 'FakeLinter1')
+    CukeLinter.register_linter(linter: generate_fake_linter(name: 'FakeLinter2'), name: 'FakeLinter2')
+    CukeLinter.register_linter(linter: generate_fake_linter(name: 'FakeLinter3'), name: 'FakeLinter3')
 
     begin
       linting_options.delete(:linters)
@@ -166,8 +166,8 @@ RSpec.describe CukeLinter do
   end
 
   it 'includes the name of the linter in the linting data' do
-    linting_options[:linters] = [CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter1'),
-                                 CukeLinter::LinterFactory.generate_fake_linter(name: 'FakeLinter2')]
+    linting_options[:linters] = [generate_fake_linter(name: 'FakeLinter1'),
+                                 generate_fake_linter(name: 'FakeLinter2')]
 
     results = subject.lint(linting_options)
 
@@ -217,7 +217,7 @@ RSpec.describe CukeLinter do
 
     original_names        = CukeLinter.registered_linters.keys
     original_linter_types = CukeLinter.registered_linters.values.map(&:class)
-    new_linter            = CukeLinter::LinterFactory.generate_fake_linter
+    new_linter            = generate_fake_linter
 
     CukeLinter.register_linter(linter: new_linter, name: 'FakeLinter')
     expect(CukeLinter.registered_linters.keys).to include('FakeLinter')
@@ -237,8 +237,8 @@ RSpec.describe CukeLinter do
   end
 
   it 'can handle a mixture of problematic and non-problematic models' do
-    linting_options[:linters] = [CukeLinter::LinterFactory.generate_fake_linter(finds_problems: true),
-                                 CukeLinter::LinterFactory.generate_fake_linter(finds_problems: false)]
+    linting_options[:linters] = [generate_fake_linter(finds_problems: true),
+                                 generate_fake_linter(finds_problems: false)]
 
     expect { subject.lint(linting_options) }.to_not raise_error
   end

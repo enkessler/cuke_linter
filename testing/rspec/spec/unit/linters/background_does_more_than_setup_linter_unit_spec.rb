@@ -18,9 +18,9 @@ RSpec.describe CukeLinter::BackgroundDoesMoreThanSetupLinter do
     context 'a background with action steps' do
 
       let(:test_model) do
-        CukeLinter::ModelFactory.generate_background_model(parent_file_path: model_file_path,
-                                                           source_text:      'Background:
-                                                                                When something')
+        generate_background_model(parent_file_path: model_file_path,
+                                  source_text:      'Background:
+                                                       When something')
       end
 
       it_should_behave_like 'a linter linting a bad model'
@@ -37,9 +37,9 @@ RSpec.describe CukeLinter::BackgroundDoesMoreThanSetupLinter do
     context 'a background with verification steps' do
 
       let(:test_model) do
-        CukeLinter::ModelFactory.generate_background_model(parent_file_path: model_file_path,
-                                                           source_text:      'Background:
-                                                                                Then something')
+        generate_background_model(parent_file_path: model_file_path,
+                                  source_text:      'Background:
+                                                       Then something')
       end
 
       it_should_behave_like 'a linter linting a bad model'
@@ -60,7 +60,7 @@ RSpec.describe CukeLinter::BackgroundDoesMoreThanSetupLinter do
                        Given something
                        * (plus something)'
 
-        CukeLinter::ModelFactory.generate_background_model(source_text: gherkin)
+        generate_background_model(source_text: gherkin)
       end
 
       it_should_behave_like 'a linter linting a good model'
@@ -71,7 +71,7 @@ RSpec.describe CukeLinter::BackgroundDoesMoreThanSetupLinter do
     describe 'configuration' do
 
       let(:test_model) do
-        CukeLinter::ModelFactory.generate_background_model
+        generate_background_model
       end
 
       context 'with configuration' do

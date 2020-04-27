@@ -19,7 +19,7 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
       context 'because the tests are empty' do
 
         let(:test_model) do
-          model       = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path)
+          model       = generate_feature_model(parent_file_path: model_file_path)
           model.tests = []
 
           model
@@ -38,7 +38,7 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
       context 'because the tests are nil' do
 
         let(:test_model) do
-          model       = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path)
+          model       = generate_feature_model(parent_file_path: model_file_path)
           model.tests = nil
 
           model
@@ -65,7 +65,7 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
 
                      Scenario:'
 
-          CukeLinter::ModelFactory.generate_feature_model(source_text: gherkin)
+          generate_feature_model(source_text: gherkin)
         end
 
         it_should_behave_like 'a linter linting a good model'
@@ -82,7 +82,7 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
                      Examples:
                        | param |'
 
-          CukeLinter::ModelFactory.generate_feature_model(source_text: gherkin)
+          generate_feature_model(source_text: gherkin)
         end
 
         it_should_behave_like 'a linter linting a good model'

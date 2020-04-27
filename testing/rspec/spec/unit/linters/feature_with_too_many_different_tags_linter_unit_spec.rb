@@ -18,7 +18,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
     context 'with a feature that contains too many different tags' do
 
       let(:test_model) do
-        model      = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path)
+        model      = generate_feature_model(parent_file_path: model_file_path)
         model.tags = [CukeModeler::Tag.new('@1'),
                       CukeModeler::Tag.new('@2'),
                       CukeModeler::Tag.new('@3'),
@@ -54,7 +54,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
       end
 
       it 'only counts unique tags' do
-        model      = CukeLinter::ModelFactory.generate_feature_model
+        model      = generate_feature_model
         model.tags = []
         100.times { model.tags << CukeModeler::Tag.new('@A') }
 
@@ -66,7 +66,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
       context 'with child models' do
 
         let(:test_model) do
-          model      = CukeLinter::ModelFactory.generate_feature_model
+          model      = generate_feature_model
           model.tags = [CukeModeler::Tag.new('@1'),
                         CukeModeler::Tag.new('@2'),
                         CukeModeler::Tag.new('@3'),
@@ -93,7 +93,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
           context 'that have tags' do
 
             let(:child_model) do
-              model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+              model      = send("generate_#{model_type}_model")
               model.tags = [CukeModeler::Tag.new('@12'),
                             CukeModeler::Tag.new('@13'),
                             CukeModeler::Tag.new('@14')]
@@ -113,7 +113,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
             context 'because their tags are empty' do
 
               let(:child_model) do
-                model      = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+                model      = send("generate_#{model_type}_model")
                 model.tags = []
 
                 model
@@ -139,7 +139,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
       context 'because it contains 10 different tags' do
 
         let(:test_model) do
-          model      = CukeLinter::ModelFactory.generate_feature_model
+          model      = generate_feature_model
           model.tags = [CukeModeler::Tag.new('@1'),
                         CukeModeler::Tag.new('@2'),
                         CukeModeler::Tag.new('@3'),
@@ -161,7 +161,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
       context 'because it contains fewer than 10 different tags' do
 
         let(:test_model) do
-          model      = CukeLinter::ModelFactory.generate_feature_model
+          model      = generate_feature_model
           model.tags = [CukeModeler::Tag.new('@1')]
 
           model
@@ -176,7 +176,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
         context 'because its tags are empty' do
 
           let(:test_model) do
-            model      = CukeLinter::ModelFactory.generate_feature_model
+            model      = generate_feature_model
             model.tags = []
 
             model
@@ -210,7 +210,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
           context 'because configuration never happened' do
 
             let(:unconfigured_test_model) do
-              model      = CukeLinter::ModelFactory.generate_feature_model
+              model      = generate_feature_model
               model.tags = []
               (default_tag_threshold + 1).times { |count| model.tags << CukeModeler::Tag.new("@#{count}") }
 
@@ -229,7 +229,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
 
             let(:configuration) { {} }
             let(:test_model) do
-              model      = CukeLinter::ModelFactory.generate_feature_model
+              model      = generate_feature_model
               model.tags = []
               (default_tag_threshold + 1).times { |count| model.tags << CukeModeler::Tag.new("@#{count}") }
 
@@ -260,7 +260,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
           end
 
           let(:test_model) do
-            model      = CukeLinter::ModelFactory.generate_feature_model
+            model      = generate_feature_model
             model.tags = []
             (tag_threshold + 1).times { |count| model.tags << CukeModeler::Tag.new("@#{count}") }
 

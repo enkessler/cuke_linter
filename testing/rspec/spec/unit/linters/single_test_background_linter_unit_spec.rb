@@ -21,13 +21,13 @@ RSpec.describe CukeLinter::SingleTestBackgroundLinter do
         context "and that test is a #{model_type}" do
 
           let(:test_model) do
-            background_model = CukeLinter::ModelFactory.generate_feature_model(parent_file_path: model_file_path,
-                                                                               source_text:      'Feature:
-                                                                                                    Background:
-                                                                                                      * a step').background
+            background_model = generate_feature_model(parent_file_path: model_file_path,
+                                                      source_text:      'Feature:
+                                                                           Background:
+                                                                             * a step').background
 
             background_model.parent_model.tests.clear
-            background_model.parent_model.tests << CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            background_model.parent_model.tests << send("generate_#{model_type}_model")
 
             background_model
           end
@@ -50,15 +50,15 @@ RSpec.describe CukeLinter::SingleTestBackgroundLinter do
     context 'with a background that affects multiple tests' do
 
       let(:test_model) do
-        CukeLinter::ModelFactory.generate_feature_model(source_text: 'Feature:
-                                                                        Background:
-                                                                          * a step
-                                                                        Scenario:
-                                                                        Scenario Outline:
-                                                                          * a step
-                                                                        Examples:
-                                                                          |param|
-                                                                          |value|').background
+        generate_feature_model(source_text: 'Feature:
+                                               Background:
+                                                 * a step
+                                               Scenario:
+                                               Scenario Outline:
+                                                 * a step
+                                               Examples:
+                                                 |param|
+                                                 |value|').background
       end
 
       it_should_behave_like 'a linter linting a good model'
@@ -68,9 +68,9 @@ RSpec.describe CukeLinter::SingleTestBackgroundLinter do
     context 'with a background that affects no tests' do
 
       let(:test_model) do
-        CukeLinter::ModelFactory.generate_feature_model(source_text: 'Feature:
-                                                                        Background:
-                                                                          * a step').background
+        generate_feature_model(source_text: 'Feature:
+                                               Background:
+                                                 * a step').background
       end
 
       it_should_behave_like 'a linter linting a good model'

@@ -11,7 +11,7 @@ end
 
 When(/^(?:the feature|the model|it) is linted$/) do
   options           = { model_trees: [@model],
-                        formatters:  [[CukeLinter::FormatterFactory.generate_fake_formatter, "#{CukeLinter::FileHelper::create_directory}/junk_output_file.txt"]] }
+                        formatters:  [[generate_fake_formatter, "#{create_directory}/junk_output_file.txt"]] }
   options[:linters] = [@linter] if @linter
 
   @results = CukeLinter.lint(options)
@@ -23,7 +23,7 @@ end
 
 And(/^the following code is used:$/) do |code|
   code.sub!('<path_to>', @root_test_directory)
-  code.sub!('<code_to_generate_a_new_linter_instance>', 'CukeLinter::LinterFactory.generate_fake_linter')
+  code.sub!('<code_to_generate_a_new_linter_instance>', 'generate_fake_linter')
 
   if @working_directory
     Dir.chdir(@working_directory) do
@@ -53,10 +53,10 @@ end
 
 When(/^the executable finds linting problems$/) do
   # This should be a problematic feature file
-  CukeLinter::FileHelper.create_file(directory: @root_test_directory,
-                                     name:      'pretty_empty',
-                                     extension: '.feature',
-                                     text:      'Feature: ')
+  create_file(directory: @root_test_directory,
+              name:      'pretty_empty',
+              extension: '.feature',
+              text:      'Feature: ')
 
 
   command = "bundle exec ruby #{PROJECT_ROOT}/exe/cuke_linter"

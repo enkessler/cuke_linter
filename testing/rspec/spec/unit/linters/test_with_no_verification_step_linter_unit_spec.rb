@@ -24,7 +24,7 @@ RSpec.describe CukeLinter::TestWithNoVerificationStepLinter do
           context 'because its steps are empty' do
 
             let(:test_model) do
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+              model       = send("generate_#{model_type}_model", parent_file_path: model_file_path)
               model.steps = []
 
               model
@@ -44,7 +44,7 @@ RSpec.describe CukeLinter::TestWithNoVerificationStepLinter do
           context 'because its steps are nil' do
 
             let(:test_model) do
-              model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+              model       = send("generate_#{model_type}_model", parent_file_path: model_file_path)
               model.steps = nil
 
               model
@@ -66,7 +66,7 @@ RSpec.describe CukeLinter::TestWithNoVerificationStepLinter do
         context 'because none of its steps is a verification step' do
 
           let(:test_model) do
-            model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model", parent_file_path: model_file_path)
+            model       = send("generate_#{model_type}_model", parent_file_path: model_file_path)
             model.steps = [CukeModeler::Step.new('* not a verification step')]
 
             model
@@ -90,7 +90,7 @@ RSpec.describe CukeLinter::TestWithNoVerificationStepLinter do
         context 'that comes from its background' do
 
           let(:test_model) do
-            model                         = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            model                         = send("generate_#{model_type}_model")
             model.steps                   = []
             background_model              = CukeModeler::Background.new
             background_model.steps        = [CukeModeler::Step.new('Then a verification step')]
@@ -106,7 +106,7 @@ RSpec.describe CukeLinter::TestWithNoVerificationStepLinter do
         context 'that is part of itself' do
 
           let(:test_model) do
-            model       = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+            model       = send("generate_#{model_type}_model")
             model.steps = [CukeModeler::Step.new('Then a verification step')]
 
             model
@@ -125,7 +125,7 @@ RSpec.describe CukeLinter::TestWithNoVerificationStepLinter do
       context "with a #{model_type} that has a related background" do
 
         let(:test_model) do
-          model                         = CukeLinter::ModelFactory.send("generate_#{model_type}_model")
+          model                         = send("generate_#{model_type}_model")
           model.parent_model.background = background_model
 
           model
@@ -172,8 +172,8 @@ RSpec.describe CukeLinter::TestWithNoVerificationStepLinter do
     describe 'configuration' do
 
       let(:test_model) do
-        CukeLinter::ModelFactory.generate_scenario_model(source_text: 'Scenario:
-                                                                         Then a step')
+        generate_scenario_model(source_text: 'Scenario:
+                                                Then a step')
       end
 
       context 'with configuration' do

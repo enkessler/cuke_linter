@@ -2,9 +2,20 @@ require 'tmpdir'
 
 
 module CukeLinter
+
+  # A helper module that generates files and directories for use in testing
+
   module FileHelper
 
-    class << self
+    def self.included(klass)
+      klass.include(Methods)
+    end
+
+    def self.extended(klass)
+      klass.extend(Methods)
+    end
+
+    module Methods
 
       def created_directories
         @created_directories ||= []
@@ -36,6 +47,8 @@ module CukeLinter
       end
 
     end
+
+    extend Methods
 
   end
 end
