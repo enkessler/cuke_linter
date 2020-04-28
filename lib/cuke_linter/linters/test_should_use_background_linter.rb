@@ -46,8 +46,8 @@ module CukeLinter
         parameter_string = "<#{parameter}>"
 
         parameterized_text?(step_model, parameter_string) ||
-            parameterized_doc_string?(step_model, parameter_string) ||
-            parameterized_table?(step_model, parameter_string)
+          parameterized_doc_string?(step_model, parameter_string) ||
+          parameterized_table?(step_model, parameter_string)
       end
     end
 

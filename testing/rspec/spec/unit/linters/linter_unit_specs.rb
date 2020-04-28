@@ -41,7 +41,7 @@ shared_examples_for 'a linter linting a bad model' do
 
   it 'correctly records the location of the problem' do
     if test_model.is_a?(CukeModeler::FeatureFile)
-      result                 = subject.lint(test_model)
+      result = subject.lint(test_model)
       expect(result[:location]).to eq("#{model_file_path}")
     else
       test_model.source_line = 1

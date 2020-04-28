@@ -27,7 +27,7 @@ module CukeLinter
     private
 
     def given_keywords
-       @given_keywords || [DEFAULT_GIVEN_KEYWORD]
+      @given_keywords || [DEFAULT_GIVEN_KEYWORD]
     end
 
   end

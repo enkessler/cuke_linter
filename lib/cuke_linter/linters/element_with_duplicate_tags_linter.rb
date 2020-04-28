@@ -12,10 +12,9 @@ module CukeLinter
     # The rule used to determine if a model has a problem
     def rule(model)
       return false unless model.is_a?(CukeModeler::Feature) ||
-          model.is_a?(CukeModeler::Scenario) ||
-          model.is_a?(CukeModeler::Outline) ||
-          model.is_a?(CukeModeler::Example)
-
+                          model.is_a?(CukeModeler::Scenario) ||
+                          model.is_a?(CukeModeler::Outline) ||
+                          model.is_a?(CukeModeler::Example)
 
       @linted_model_class = model.class
 

@@ -21,15 +21,6 @@ Gemspec/RequiredRubyVersion:
   Exclude:
     - 'cuke_linter.gemspec'
 
-# Offense count: 122
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedHashRocketStyle, EnforcedColonStyle, EnforcedLastArgumentHashStyle.
-# SupportedHashRocketStyles: key, separator, table
-# SupportedColonStyles: key, separator, table
-# SupportedLastArgumentHashStyles: always_inspect, always_ignore, ignore_implicit, ignore_explicit
-Layout/AlignHash:
-  Enabled: false
-
 # Offense count: 62
 # Cop supports --auto-correct.
 Layout/BlockEndNewline:
@@ -39,21 +30,6 @@ Layout/BlockEndNewline:
     - 'testing/rspec/spec/unit/linters/linter_unit_spec.rb'
     - 'testing/rspec/spec/unit/linters/step_with_too_many_characters_linter_unit_spec.rb'
     - 'testing/rspec/spec/unit/linters/test_with_too_many_steps_linter_unit_spec.rb'
-
-# Offense count: 18
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentOneStep, IndentationWidth.
-# SupportedStyles: case, end
-Layout/CaseIndentation:
-  Exclude:
-    - 'lib/cuke_linter.rb'
-    - 'testing/rspec/spec/unit/linters/element_with_common_tags_linter_unit_spec.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Layout/CommentIndentation:
-  Exclude:
-    - 'lib/cuke_linter.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
@@ -104,26 +80,6 @@ Layout/EndOfLine:
   Exclude:
     - 'bin/console'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment, ForceEqualSignAlignment.
-Layout/ExtraSpacing:
-  Exclude:
-    - 'testing/rspec/spec/unit/linters/linter_unit_specs.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: Width, IgnoredPatterns.
-Layout/IndentationWidth:
-  Exclude:
-    - 'lib/cuke_linter/linters/test_with_setup_step_as_final_step_linter.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Layout/LeadingBlankLines:
-  Exclude:
-    - 'cuke_linter.gemspec'
-
 # Offense count: 62
 # Cop supports --auto-correct.
 Layout/MultilineBlockLayout:
@@ -133,25 +89,6 @@ Layout/MultilineBlockLayout:
     - 'testing/rspec/spec/unit/linters/linter_unit_spec.rb'
     - 'testing/rspec/spec/unit/linters/step_with_too_many_characters_linter_unit_spec.rb'
     - 'testing/rspec/spec/unit/linters/test_with_too_many_steps_linter_unit_spec.rb'
-
-# Offense count: 10
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: aligned, indented
-Layout/MultilineOperationIndentation:
-  Exclude:
-    - 'lib/cuke_linter/linters/element_with_duplicate_tags_linter.rb'
-    - 'lib/cuke_linter/linters/element_with_too_many_tags_linter.rb'
-    - 'lib/cuke_linter/linters/test_should_use_background_linter.rb'
-    - 'lib/cuke_linter/linters/test_with_bad_name_linter.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment.
-Layout/SpaceAroundOperators:
-  Exclude:
-    - 'testing/rspec/spec/unit/linters/linter_unit_specs.rb'
-    - 'testing/rspec/spec/unit/linters/step_with_too_many_characters_linter_unit_spec.rb'
 
 # Offense count: 1
 Lint/ShadowingOuterLocalVariable:

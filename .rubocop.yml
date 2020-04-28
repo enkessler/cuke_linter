@@ -12,6 +12,7 @@ Layout/EmptyLinesAroundClassBody:
 Naming/VariableNumber:
   EnforcedStyle: snake_case
 
+# Helps with readability
 Layout/EmptyLines:
   Enabled: false
 
@@ -20,3 +21,11 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   Max: 15
+
+Layout/AlignHash:
+  EnforcedColonStyle: table
+  EnforcedHashRocketStyle: table
+
+# Helps with readability
+Layout/CaseIndentation:
+  Enabled: false

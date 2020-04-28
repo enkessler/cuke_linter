@@ -1,5 +1,5 @@
 if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
-  part_number                               = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']
+  part_number                               = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] # rubocop:disable Layout/SpaceAroundOperators, Metrics/LineLength
   ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] ||= "rspec_tests_part_#{part_number}"
   ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  ||= "testing/reports/rspec/part_#{part_number}/coverage"
 else

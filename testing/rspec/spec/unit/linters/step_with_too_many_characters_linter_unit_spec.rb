@@ -40,7 +40,7 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
         expect(result[:problem]).to eq("Step is too long. #{character_count} characters found (max 80)")
 
         test_model.text += 'x'
-        result          = subject.lint(test_model)
+        result          = subject.lint(test_model) # rubocop:disable Layout/SpaceAroundOperators
         expect(result[:problem]).to eq("Step is too long. #{character_count + 1} characters found (max 80)")
       end
 

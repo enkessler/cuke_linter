@@ -905,8 +905,7 @@ RSpec.describe CukeLinter do
                 # Tweaking the linter objects that will already exist so that any linter
                 # created from the same class will be noticeably different
                 provided_linter   = test_linters.find { |linter| linter.is_a?(Kernel.const_get(linter_class_name)) }
-                registered_linter = CukeLinter.registered_linters.values
-                                      .find { |linter| linter.is_a?(Kernel.const_get(linter_class_name)) }
+                registered_linter = CukeLinter.registered_linters.values.find { |linter| linter.is_a?(Kernel.const_get(linter_class_name)) } # rubocop:disable Metrics/LineLength
 
                 if provided_linter
                   def provided_linter.name
