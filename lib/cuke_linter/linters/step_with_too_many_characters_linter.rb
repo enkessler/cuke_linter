@@ -15,8 +15,8 @@ module CukeLinter
     # The rule used to determine if a model has a problem
     def rule(model)
       return false unless model.is_a?(CukeModeler::Step)
-        
-      @linted_step_length = model.text&.length || 0
+
+      @linted_step_length = model.text.nil? ? 0 : model.text.length
 
       @linted_step_length > step_length_threshold
     end
