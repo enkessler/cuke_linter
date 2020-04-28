@@ -80,7 +80,7 @@ module CukeLinter
 
           process = create_process('bundle', 'exec', 'rspec',
                                    '-r', './environments/rspec_env.rb',
-                                   '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', "#{directory}/#{json_file_path}",
+                                   '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', "#{directory}/#{json_file_path}", # rubocop:disable Metrics/LineLength
                                    '--format', 'html', '--out', "#{directory}/#{html_file_path}",
                                    '--format', 'p')
           FileUtils.touch(stdout_file_path)
@@ -113,8 +113,6 @@ module CukeLinter
 
           raise(Rainbow("RSpec tests encountered problems! (see reports for groups #{problem_process_groups}").red)
         end
-
-        # raise(Rainbow("RSpec tests encountered problems! (see reports for groups #{problem_process_groups}").red) if problem_process_groups.any?
 
         puts Rainbow('All RSpec tests passing. :)').green
       end

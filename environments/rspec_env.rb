@@ -1,6 +1,7 @@
 if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
-  ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] ||= "rspec_tests_part_#{ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']}"
-  ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  ||= "testing/reports/rspec/part_#{ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']}/coverage"
+  part_number                               = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']
+  ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] ||= "rspec_tests_part_#{part_number}"
+  ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  ||= "testing/reports/rspec/part_#{part_number}/coverage"
 else
   ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] ||= 'rspec_tests'
   ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  ||= 'coverage'
@@ -50,11 +51,13 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
-    # Using a global variable instead of an instance variable because instance variables are not compatible with :suite hooks
+    # Using a global variable instead of an instance variable because instance variables
+    # are not compatible with :suite hooks
     $default_linters = Marshal.load(Marshal.dump(CukeLinter.registered_linters))
   end
 
-  # Restore the original linters after any test that modifies them so that other tests can rely on them being only the default ones
+  # Restore the original linters after any test that modifies them so that other tests can
+  # rely on them being only the default ones
   config.after(:example, :linter_registration) do
     CukeLinter.clear_registered_linters
 

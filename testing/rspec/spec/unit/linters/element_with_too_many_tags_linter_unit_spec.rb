@@ -43,11 +43,13 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
         it 'includes the number of tags found in the problem record' do
           tag_count = test_model.tags.count
           result    = subject.lint(test_model)
-          expect(result[:problem]).to eq("#{model_type.capitalize} has too many tags. #{tag_count} tags found (max 5).")
+          expect(result[:problem])
+            .to eq("#{model_type.capitalize} has too many tags. #{tag_count} tags found (max 5).")
 
           test_model.tags << :another_tag
           result = subject.lint(test_model)
-          expect(result[:problem]).to eq("#{model_type.capitalize} has too many tags. #{tag_count + 1} tags found (max 5).")
+          expect(result[:problem])
+            .to eq("#{model_type.capitalize} has too many tags. #{tag_count + 1} tags found (max 5).")
         end
 
       end
@@ -137,9 +139,12 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
               end
 
               it 'defaults to a tag threshold of 5 tags' do
-                result = subject.lint(unconfigured_test_model)
+                result         = subject.lint(unconfigured_test_model)
+                expected_count = unconfigured_test_model.tags.count
+                model_class    = model_type.capitalize
 
-                expect(result[:problem]).to eq("#{model_type.capitalize} has too many tags. #{unconfigured_test_model.tags.count} tags found (max 5).")
+                expect(result[:problem])
+                  .to eq("#{model_class} has too many tags. #{expected_count} tags found (max 5).")
               end
 
             end
@@ -160,9 +165,12 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
               end
 
               it 'defaults to a tag threshold of 5 tags' do
-                result = subject.lint(test_model)
+                result         = subject.lint(test_model)
+                expected_count = test_model.tags.count
+                model_class    = model_type.capitalize
 
-                expect(result[:problem]).to eq("#{model_type.capitalize} has too many tags. #{test_model.tags.count} tags found (max 5).")
+                expect(result[:problem])
+                  .to eq("#{model_class} has too many tags. #{expected_count} tags found (max 5).")
               end
 
             end
@@ -187,9 +195,12 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
             end
 
             it 'the tag threshold used is the configured value' do
-              result = subject.lint(test_model)
+              result         = subject.lint(test_model)
+              expected_count = test_model.tags.count
+              model_class    = model_type.capitalize
 
-              expect(result[:problem]).to eq("#{model_type.capitalize} has too many tags. #{test_model.tags.count} tags found (max #{tag_threshold}).")
+              expect(result[:problem])
+                .to eq("#{model_class} has too many tags. #{expected_count} tags found (max #{tag_threshold}).")
             end
 
           end
@@ -254,10 +265,14 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
               let(:configuration) { { 'CountInheritedTags' => true } }
 
               it 'does include inherited tags' do
-                result = subject.lint(test_model_with_inherited_tags)
+                result         = subject.lint(test_model_with_inherited_tags)
+                expected_count = test_model_with_inherited_tags.all_tags.count
+                model_class    = model_type.capitalize
+                threshold      = default_tag_threshold
 
                 expect(result).to_not be_nil
-                expect(result[:problem]).to eq("#{model_type.capitalize} has too many tags. #{test_model_with_inherited_tags.all_tags.count} tags found (max #{default_tag_threshold}).")
+                expect(result[:problem])
+                  .to eq("#{model_class} has too many tags. #{expected_count} tags found (max #{threshold}).")
               end
 
             end

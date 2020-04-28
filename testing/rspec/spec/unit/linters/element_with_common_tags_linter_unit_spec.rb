@@ -47,9 +47,11 @@ RSpec.describe CukeLinter::ElementWithCommonTagsLinter do
 
           case model_type
             when 'feature'
-              expect(result[:problem]).to match(/^All tests in Feature have tag '@\w+'\. Move tag to Feature level\.$/)
+              expect(result[:problem])
+                .to match(/^All tests in Feature have tag '@\w+'\. Move tag to Feature level\.$/)
             when 'outline'
-              expect(result[:problem]).to match(/^All Examples in Outline have tag '@\w+'\. Move tag to Outline level\.$/)
+              expect(result[:problem])
+                .to match(/^All Examples in Outline have tag '@\w+'\. Move tag to Outline level\.$/)
             else
               raise(ArgumentError, "Don't know how to verify a '#{model_type}'. Add a new case?")
           end

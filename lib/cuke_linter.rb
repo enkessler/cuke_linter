@@ -42,6 +42,8 @@ module CukeLinter
   # The default keyword that is considered a 'Then' keyword
   DEFAULT_THEN_KEYWORD = 'Then'.freeze
 
+  # Long names inherently result in long lines
+  # rubocop:disable Metrics/LineLength
   @original_linters = { 'BackgroundDoesMoreThanSetupLinter'            => BackgroundDoesMoreThanSetupLinter.new,
                         'ElementWithCommonTagsLinter'                  => ElementWithCommonTagsLinter.new,
                         'ElementWithDuplicateTagsLinter'               => ElementWithDuplicateTagsLinter.new,
@@ -67,15 +69,18 @@ module CukeLinter
                         'TestWithSetupStepAfterVerificationStepLinter' => TestWithSetupStepAfterVerificationStepLinter.new,
                         'TestWithSetupStepAsFinalStepLinter'           => TestWithSetupStepAsFinalStepLinter.new,
                         'TestWithTooManyStepsLinter'                   => TestWithTooManyStepsLinter.new }
+  # rubocop:enable Metrics/LineLength
 
 
   # Configures linters based on the given options
   def self.load_configuration(config_file_path: nil, config: nil)
-    # TODO: define what happens if both a configuration file and a configuration are provided. Merge them or have direct config take precedence? Both?
+    # TODO: define what happens if both a configuration file and a configuration are
+    # provided. Merge them or have direct config take precedence? Both?
 
     unless config || config_file_path
       config_file_path = "#{Dir.pwd}/.cuke_linter"
-      raise 'No configuration or configuration file given and no .cuke_linter file found' unless File.exist?(config_file_path)
+      message          = 'No configuration or configuration file given and no .cuke_linter file found'
+      raise message unless File.exist?(config_file_path)
     end
 
     config = config || YAML.load_file(config_file_path)
@@ -123,8 +128,13 @@ module CukeLinter
     self.registered_linters.clear
   end
 
-  # Lints the given model trees and file paths using the given linting objects and formatting the results with the given formatters and their respective output locations
-  def self.lint(file_paths: [], model_trees: [], linters: self.registered_linters.values, formatters: [[CukeLinter::PrettyFormatter.new]])
+  # Lints the given model trees and file paths using the given linting objects and formatting
+  # the results with the given formatters and their respective output locations
+  def self.lint(file_paths: nil, model_trees: nil, linters: nil, formatters: nil)
+    file_paths  ||= []
+    model_trees ||= []
+    linters     ||= registered_linters.values
+    formatters  ||= [[CukeLinter::PrettyFormatter.new]]
 
     # TODO: Test this?
     # Because directive memoization is based on a model's `#object_id` and Ruby reuses object IDs over the
@@ -186,7 +196,8 @@ module CukeLinter
   def self.relevant_linters_for_model(base_linters, model)
     feature_file_model = model.get_ancestor(:feature_file)
 
-    # Linter directives are not applicable for directory and feature file models. Every other model type should have a feature file ancestor from which to grab linter directive comments.
+    # Linter directives are not applicable for directory and feature file models. Every other
+    # model type should have a feature file ancestor from which to grab linter directive comments.
     return base_linters if feature_file_model.nil?
 
     linter_modifications_for_model = {}
@@ -214,10 +225,11 @@ module CukeLinter
 
   def self.linter_directives_for_feature_file(feature_file_model)
     # IMPORTANT ASSUMPTION: Models never change during the life of a linting, so data only has to be gathered once
-    return @directives_for_feature_file[feature_file_model.object_id] if @directives_for_feature_file[feature_file_model.object_id]
+    existing_directives = @directives_for_feature_file[feature_file_model.object_id]
 
+    return existing_directives if existing_directives
 
-    @directives_for_feature_file[feature_file_model.object_id] = []
+    directives = []
 
     feature_file_model.comments.each do |comment|
       pieces = comment.text.match(/#\s*cuke_linter:(disable|enable)\s+(.*)/)
@@ -225,17 +237,16 @@ module CukeLinter
 
       linter_classes = pieces[2].gsub(',', ' ').split(' ')
       linter_classes.each do |clazz|
-        @directives_for_feature_file[feature_file_model.object_id] << { linter_class:   Kernel.const_get(clazz),
-                                                                        enabled_status: pieces[1] != 'disable',
-                                                                        source_line:    comment.source_line }
+        directives << { linter_class:   Kernel.const_get(clazz),
+                        enabled_status: pieces[1] != 'disable',
+                        source_line:    comment.source_line }
       end
     end
 
     # Make sure that the directives are in the same order as they appear in the source file
-    @directives_for_feature_file[feature_file_model.object_id] = @directives_for_feature_file[feature_file_model.object_id].sort { |a, b| a[:source_line] <=> b[:source_line] }
+    directives = directives.sort { |a, b| a[:source_line] <=> b[:source_line] }
 
-
-    @directives_for_feature_file[feature_file_model.object_id]
+    @directives_for_feature_file[feature_file_model.object_id] = directives
   end
 
   private_class_method(:linter_directives_for_feature_file)
@@ -251,11 +262,11 @@ module CukeLinter
   private_class_method(:dynamic_linters)
 
 
-# #   def self.relevant_model?(linter, model)
-# #     model_classes = linter.class.target_model_types.map { |type| CukeModeler.const_get(type.to_s.capitalize.chop) }
-# #     model_classes.any? { |clazz| model.is_a?(clazz) }
-# #   end
-# #
-# #   private_class_method(:relevant_model?)
+  #   def self.relevant_model?(linter, model)
+  #     model_classes = linter.class.target_model_types.map { |type| CukeModeler.const_get(type.to_s.capitalize.chop) }
+  #     model_classes.any? { |clazz| model.is_a?(clazz) }
+  #   end
+  #
+  #   private_class_method(:relevant_model?)
 
 end

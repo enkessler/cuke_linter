@@ -18,7 +18,11 @@ module CukeLinter
         linter = Object.new
 
         linter.define_singleton_method('lint') do |model|
-          location = model.respond_to?(:source_line) ? "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" : model.path
+          location = if model.respond_to?(:source_line)
+                       "#{model.get_ancestor(:feature_file).path}:#{model.source_line}"
+                     else
+                       model.path
+                     end
           problem  = @problem || "#{name} problem"
 
           if finds_problems
@@ -41,17 +45,28 @@ module CukeLinter
         linter
       end
 
-      def generate_fake_linter_class(module_name: nil, class_name: 'FakeLinter', name: 'Some Name', finds_problems: true)
+      def generate_fake_linter_class(module_name: nil, class_name: nil, linter_name: nil, finds_problems: nil)
+        class_name     ||= 'FakeLinter'
+        linter_name    ||= 'Some Name'
+        finds_problems ||= true
 
         if module_name
-          parent_module = Kernel.const_defined?(module_name) ? Kernel.const_get(module_name) : Kernel.const_set(module_name, Module.new)
+          parent_module = if Kernel.const_defined?(module_name)
+                            Kernel.const_get(module_name)
+                          else
+                            Kernel.const_set(module_name, Module.new)
+                          end
         end
 
         (parent_module || Kernel).const_set(class_name, Class.new do
 
           define_method('lint') do |model|
-            location = model.respond_to?(:source_line) ? "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" : model.path
-            problem  = @problem || "#{name} problem"
+            location = if model.respond_to?(:source_line)
+                         "#{model.get_ancestor(:feature_file).path}:#{model.source_line}"
+                       else
+                         model.path
+                       end
+            problem  = @problem || "#{linter_name} problem"
 
             if finds_problems
               { problem:  problem,
@@ -62,7 +77,7 @@ module CukeLinter
           end
 
           define_method('name') do
-            name
+            linter_name
           end
 
         end)

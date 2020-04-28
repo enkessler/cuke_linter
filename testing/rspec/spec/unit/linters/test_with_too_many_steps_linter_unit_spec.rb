@@ -124,7 +124,8 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
             it 'defaults to a step threshold of 10 steps' do
               result = subject.lint(unconfigured_test_model)
 
-              expect(result[:problem]).to match(/^Test has too many steps. #{unconfigured_test_model.steps.count} steps found \(max 10\)/)
+              expect(result[:problem])
+                .to match(/^Test has too many steps. #{unconfigured_test_model.steps.count} steps found \(max 10\)/)
             end
 
           end
@@ -144,7 +145,8 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
             it 'defaults to a step threshold of 10 steps' do
               result = subject.lint(configured_test_model)
 
-              expect(result[:problem]).to match(/^Test has too many steps. #{configured_test_model.steps.count} steps found \(max 10\)/)
+              expect(result[:problem])
+                .to match(/^Test has too many steps. #{configured_test_model.steps.count} steps found \(max 10\)/)
             end
 
           end
@@ -172,7 +174,8 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
           it 'the step threshold used is the configured value' do
             result = subject.lint(test_model)
 
-            expect(result[:problem]).to match(/^Test has too many steps. #{test_model.steps.count} steps found \(max #{step_threshhold}\)/)
+            expect(result[:problem])
+              .to match(/^Test has too many steps. #{test_model.steps.count} steps found \(max #{step_threshhold}\)/)
           end
 
         end

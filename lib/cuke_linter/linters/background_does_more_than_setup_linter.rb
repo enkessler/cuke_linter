@@ -14,7 +14,7 @@ module CukeLinter
     def rule(model)
       return false unless model.is_a?(CukeModeler::Background)
 
-      model.steps.collect(&:keyword).any? { |keyword| when_keywords.include?(keyword) || then_keywords.include?(keyword) }
+      model.steps.map(&:keyword).any? { |keyword| when_keywords.include?(keyword) || then_keywords.include?(keyword) }
     end
 
     # The message used to describe the problem that has been found

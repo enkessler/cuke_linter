@@ -18,7 +18,7 @@ RSpec.describe CukeLinter do
     linting_options[:formatters] = [[generate_fake_formatter(name: 'Formatter1')],
                                     [generate_fake_formatter(name: 'Formatter2')]]
 
-    expect { subject.lint(linting_options) }.to output("Formatter1: FakeLinter problem: path_to_file:1\nFormatter2: FakeLinter problem: path_to_file:1\n").to_stdout
+    expect { subject.lint(linting_options) }.to output("Formatter1: FakeLinter problem: path_to_file:1\nFormatter2: FakeLinter problem: path_to_file:1\n").to_stdout # rubocop:disable Metrics/LineLength
   end
 
   it "uses the 'pretty' formatter if none are provided" do
@@ -62,9 +62,15 @@ RSpec.describe CukeLinter do
     it 'lints every model in each model tree' do
       results = subject.lint(linting_options)
 
-      expect(results).to match_array([{ linter: 'FakeLinter', location: 'path_to_file:3', problem: 'FakeLinter problem' },
-                                      { linter: 'FakeLinter', location: 'path_to_file:5', problem: 'FakeLinter problem' },
-                                      { linter: 'FakeLinter', location: 'path_to_file:7', problem: 'FakeLinter problem' }])
+      expect(results).to match_array([{ linter:   'FakeLinter',
+                                        location: 'path_to_file:3',
+                                        problem:  'FakeLinter problem' },
+                                      { linter:   'FakeLinter',
+                                        location: 'path_to_file:5',
+                                        problem:  'FakeLinter problem' },
+                                      { linter:   'FakeLinter',
+                                        location: 'path_to_file:7',
+                                        problem:  'FakeLinter problem' }])
     end
 
   end
@@ -81,16 +87,27 @@ RSpec.describe CukeLinter do
       linting_options.delete(:model_trees)
     end
 
-    # TODO: add a negative test that makes sure that non-included paths aren't linted when paths are explicitly included
+    # TODO: add a negative test that makes sure that non-included paths
+    # aren't linted when paths are explicitly included
 
     it 'lints every model in each path' do
       results = subject.lint(linting_options)
 
-      expect(results).to match_array([{ linter: 'FakeLinter', location: @a_directory, problem: 'FakeLinter problem' },
-                                      { linter: 'FakeLinter', location: "#{@a_directory}/test_feature.feature", problem: 'FakeLinter problem' },
-                                      { linter: 'FakeLinter', location: "#{@a_directory}/test_feature.feature:1", problem: 'FakeLinter problem' },
-                                      { linter: 'FakeLinter', location: @a_feature_file, problem: 'FakeLinter problem' },
-                                      { linter: 'FakeLinter', location: "#{@a_feature_file}:2", problem: 'FakeLinter problem' }])
+      expect(results).to match_array([{ linter:   'FakeLinter',
+                                        location: @a_directory,
+                                        problem:  'FakeLinter problem' },
+                                      { linter:   'FakeLinter',
+                                        location: "#{@a_directory}/test_feature.feature",
+                                        problem:  'FakeLinter problem' },
+                                      { linter:   'FakeLinter',
+                                        location: "#{@a_directory}/test_feature.feature:1",
+                                        problem:  'FakeLinter problem' },
+                                      { linter:   'FakeLinter',
+                                        location: @a_feature_file,
+                                        problem:  'FakeLinter problem' },
+                                      { linter:   'FakeLinter',
+                                        location: "#{@a_feature_file}:2",
+                                        problem:  'FakeLinter problem' }])
     end
 
   end
@@ -109,9 +126,15 @@ RSpec.describe CukeLinter do
     it 'lints every model in each model tree and file path' do
       results = subject.lint(linting_options)
 
-      expect(results).to match_array([{ linter: 'FakeLinter', location: 'path_to_file:3', problem: 'FakeLinter problem' },
-                                      { linter: 'FakeLinter', location: @a_feature_file, problem: 'FakeLinter problem' },
-                                      { linter: 'FakeLinter', location: "#{@a_feature_file}:1", problem: 'FakeLinter problem' }])
+      expect(results).to match_array([{ linter:   'FakeLinter',
+                                        location: 'path_to_file:3',
+                                        problem:  'FakeLinter problem' },
+                                      { linter:   'FakeLinter',
+                                        location: @a_feature_file,
+                                        problem:  'FakeLinter problem' },
+                                      { linter:   'FakeLinter',
+                                        location: "#{@a_feature_file}:1",
+                                        problem:  'FakeLinter problem' }])
     end
 
   end
@@ -143,8 +166,12 @@ RSpec.describe CukeLinter do
 
     results = subject.lint(linting_options)
 
-    expect(results).to match_array([{ linter: 'FakeLinter1', location: 'path_to_file:1', problem: 'FakeLinter1 problem' },
-                                    { linter: 'FakeLinter2', location: 'path_to_file:1', problem: 'FakeLinter2 problem' }])
+    expect(results).to match_array([{ linter:   'FakeLinter1',
+                                      location: 'path_to_file:1',
+                                      problem:  'FakeLinter1 problem' },
+                                    { linter:   'FakeLinter2',
+                                      location: 'path_to_file:1',
+                                      problem:  'FakeLinter2 problem' }])
   end
 
   it 'uses all registered linters if none are provided', :linter_registration do
@@ -157,9 +184,15 @@ RSpec.describe CukeLinter do
       linting_options.delete(:linters)
       results = subject.lint(linting_options)
 
-      expect(results).to match_array([{ linter: 'FakeLinter1', location: 'path_to_file:1', problem: 'FakeLinter1 problem' },
-                                      { linter: 'FakeLinter2', location: 'path_to_file:1', problem: 'FakeLinter2 problem' },
-                                      { linter: 'FakeLinter3', location: 'path_to_file:1', problem: 'FakeLinter3 problem' }])
+      expect(results).to match_array([{ linter:   'FakeLinter1',
+                                        location: 'path_to_file:1',
+                                        problem:  'FakeLinter1 problem' },
+                                      { linter:   'FakeLinter2',
+                                        location: 'path_to_file:1',
+                                        problem:  'FakeLinter2 problem' },
+                                      { linter:   'FakeLinter3',
+                                        location: 'path_to_file:1',
+                                        problem:  'FakeLinter3 problem' }])
     ensure
       CukeLinter.reset_linters
     end
@@ -171,8 +204,12 @@ RSpec.describe CukeLinter do
 
     results = subject.lint(linting_options)
 
-    expect(results).to match_array([{ linter: 'FakeLinter1', location: 'path_to_file:1', problem: 'FakeLinter1 problem' },
-                                    { linter: 'FakeLinter2', location: 'path_to_file:1', problem: 'FakeLinter2 problem' }])
+    expect(results).to match_array([{ linter:   'FakeLinter1',
+                                      location: 'path_to_file:1',
+                                      problem:  'FakeLinter1 problem' },
+                                    { linter:   'FakeLinter2',
+                                      location: 'path_to_file:1',
+                                      problem:  'FakeLinter2 problem' }])
   end
 
   it 'has a default set of registered linters' do

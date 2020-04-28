@@ -46,11 +46,13 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
       it 'includes the number of different tags found in the problem record' do
         unique_tag_count = test_model.tags.count
         result           = subject.lint(test_model)
-        expect(result[:problem]).to eq("Feature contains too many different tags. #{unique_tag_count} tags found (max 10).")
+        expect(result[:problem])
+          .to eq("Feature contains too many different tags. #{unique_tag_count} tags found (max 10).")
 
         test_model.tags << CukeModeler::Tag.new('@had_better_be_unique')
         result = subject.lint(test_model)
-        expect(result[:problem]).to eq("Feature contains too many different tags. #{unique_tag_count + 1} tags found (max 10).")
+        expect(result[:problem])
+          .to eq("Feature contains too many different tags. #{unique_tag_count + 1} tags found (max 10).")
       end
 
       it 'only counts unique tags' do
@@ -218,9 +220,11 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
             end
 
             it 'defaults to a tag threshold of 10 tags' do
-              result = subject.lint(unconfigured_test_model)
+              result         = subject.lint(unconfigured_test_model)
+              expected_count = unconfigured_test_model.tags.count
 
-              expect(result[:problem]).to eq("Feature contains too many different tags. #{unconfigured_test_model.tags.count} tags found (max 10).")
+              expect(result[:problem])
+                .to eq("Feature contains too many different tags. #{expected_count} tags found (max 10).")
             end
 
           end
@@ -243,7 +247,8 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
             it 'defaults to a tag threshold of 10 tags' do
               result = subject.lint(test_model)
 
-              expect(result[:problem]).to eq("Feature contains too many different tags. #{test_model.tags.count} tags found (max 10).")
+              expect(result[:problem])
+                .to eq("Feature contains too many different tags. #{test_model.tags.count} tags found (max 10).")
             end
 
           end
@@ -268,9 +273,11 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
           end
 
           it 'the tag threshold used is the configured value' do
-            result = subject.lint(test_model)
+            result         = subject.lint(test_model)
+            expected_count = test_model.tags.count
 
-            expect(result[:problem]).to eq("Feature contains too many different tags. #{test_model.tags.count} tags found (max #{tag_threshold}).")
+            expect(result[:problem])
+              .to eq("Feature contains too many different tags. #{expected_count} tags found (max #{tag_threshold}).")
           end
 
         end

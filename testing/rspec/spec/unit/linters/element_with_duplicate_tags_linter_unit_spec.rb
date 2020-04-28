@@ -112,7 +112,8 @@ RSpec.describe CukeLinter::ElementWithDuplicateTagsLinter do
             distant_ancestor_model.tags = [generate_tag_model(source_text: '@same')]
             ancestor_model              = generate_lintable_model
 
-            # Adding an extra ancestor in the chain in order to make sure that the linter isn't just checking the parent model
+            # Adding an extra ancestor in the chain in order to make sure that the linter
+            # isn't just checking the parent model
             ancestor_model.parent_model = distant_ancestor_model
             test_model.parent_model     = ancestor_model
 

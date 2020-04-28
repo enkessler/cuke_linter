@@ -29,6 +29,8 @@ RSpec.describe 'the Command Line Interface' do
                   end
 
                   { std_out: std_out, std_err: std_err, status: status } }
+
+  # rubocop:disable Metrics/LineLength
   let(:expected_help_text) { ['Usage: cuke_linter [options]',
                               '    -p, --path PATH                The file path that should be linted. Can be a file or directory.',
                               '                                   This option can be specified multiple times in order to lint',
@@ -51,6 +53,7 @@ RSpec.describe 'the Command Line Interface' do
                               '    -h, --help                     Display the help that you are reading now.',
                               '    -v, --version                  Display the version of the gem being used.',
                               ''].join("\n") }
+  # rubocop:enable Metrics/LineLength
 
   context 'with no additional arguments' do
 
@@ -165,7 +168,8 @@ RSpec.describe 'the Command Line Interface' do
             let(:file_2_directory) { File.dirname(file_2) }
             let(:command) { "bundle exec ruby #{executable_path} #{flag} #{file_1_path} #{flag} #{file_2_directory}" }
 
-            # TODO: add a negative test that makes sure that non-included paths aren't linted when paths are explicitly included
+            # TODO: add a negative test that makes sure that non-included paths
+            # aren't linted when paths are explicitly included
 
             it "lints that locations specified by '#{path_flag}'" do
               expect(results[:std_out]).to eq(['FeatureWithoutDescriptionLinter',
@@ -210,6 +214,7 @@ RSpec.describe 'the Command Line Interface' do
           let(:flag) { formatter_flag }
 
           context 'with formatter arguments' do
+            # rubocop:disable Metrics/LineLength
             let(:linted_file) { create_file(name:      'some_feature',
                                             extension: '.feature',
                                             text:      'Feature: Some feature
@@ -233,11 +238,12 @@ RSpec.describe 'the Command Line Interface' do
                                                                              end
                                                                            end') }
             let(:command) { "bundle exec ruby #{executable_path} #{flag} #{formatter_class} #{flag} #{formatter_class_in_module} -p #{linted_file} -r #{formatter_class_file} -r #{formatter_class_in_module_file}" }
+            # rubocop:enable Metrics/LineLength
 
 
             it "uses the formatters specified by '#{formatter_flag}'" do
               expect(results[:std_out]).to eq(['AFakeFormatter: Feature has no description: <path_to_file>:1',
-                                               'CukeLinter::AnotherFakeFormatter: Feature has no description: <path_to_file>:1',
+                                               'CukeLinter::AnotherFakeFormatter: Feature has no description: <path_to_file>:1', # rubocop:disable Metrics/LineLength
                                                ''].join("\n").gsub('<path_to_file>', linted_file))
             end
 
@@ -296,7 +302,7 @@ RSpec.describe 'the Command Line Interface' do
                                                                      "Formatting done by #{self.class}"
                                                                    end
                                                                  end') }
-            let(:command) { "bundle exec ruby #{executable_path} -f #{formatter_class_1} -f #{formatter_class_2} #{flag} #{output_location} #{flag} #{other_output_location} -p #{linted_file} -r #{formatter_class_file}" }
+            let(:command) { "bundle exec ruby #{executable_path} -f #{formatter_class_1} -f #{formatter_class_2} #{flag} #{output_location} #{flag} #{other_output_location} -p #{linted_file} -r #{formatter_class_file}" } # rubocop:disable Metrics/LineLength
 
 
             it 'matches output locations to formatters in the same order that they are specified' do
@@ -320,7 +326,7 @@ RSpec.describe 'the Command Line Interface' do
                                                           '  Feature has no description',
                                                           '    <path_to_file>:1',
                                                           '',
-                                                          '1 issues found'].join("\n").gsub('<path_to_file>', linted_file))
+                                                          '1 issues found'].join("\n").gsub('<path_to_file>', linted_file)) # rubocop:disable Metrics/LineLength
               end
 
               it 'does not output to STDOUT' do
@@ -335,13 +341,13 @@ RSpec.describe 'the Command Line Interface' do
                                                           '  Feature has no description',
                                                           '    <path_to_file>:1',
                                                           '',
-                                                          '1 issues found'].join("\n").gsub('<path_to_file>', linted_file))
+                                                          '1 issues found'].join("\n").gsub('<path_to_file>', linted_file)) # rubocop:disable Metrics/LineLength
               end
 
             end
 
             context 'with unmatched formatter arguments' do
-              let(:command) { "bundle exec ruby #{executable_path} #{flag} #{output_location} -f #{formatter_class_1} -f #{formatter_class_2} -p #{linted_file} -r #{formatter_class_file}" }
+              let(:command) { "bundle exec ruby #{executable_path} #{flag} #{output_location} -f #{formatter_class_1} -f #{formatter_class_2} -p #{linted_file} -r #{formatter_class_file}" } # rubocop:disable Metrics/LineLength
 
 
               it "outputs to the location specified by '#{output_flag}' for the matched formatters" do

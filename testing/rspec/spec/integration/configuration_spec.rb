@@ -83,7 +83,8 @@ RSpec.describe CukeLinter do
         some_empty_directory = create_directory
 
         Dir.chdir(File.dirname(some_empty_directory)) do
-          expect { subject.load_configuration }.to raise_error('No configuration or configuration file given and no .cuke_linter file found')
+          expect { subject.load_configuration }
+            .to raise_error('No configuration or configuration file given and no .cuke_linter file found')
         end
       end
 
@@ -98,8 +99,12 @@ RSpec.describe CukeLinter do
         subject.load_configuration(config: config)
         results = subject.lint(linting_options)
 
-        expect(results).to match_array([{ linter: 'FakeLinter1', location: 'path_to_file:1', problem: 'My custom message for FakeLinter1' },
-                                        { linter: 'FakeLinter2', location: 'path_to_file:1', problem: 'My custom message for FakeLinter2' }])
+        expect(results).to match_array([{ linter:   'FakeLinter1',
+                                          location: 'path_to_file:1',
+                                          problem:  'My custom message for FakeLinter1' },
+                                        { linter:   'FakeLinter2',
+                                          location: 'path_to_file:1',
+                                          problem:  'My custom message for FakeLinter2' }])
       end
 
       it "does not try to configure linters that don't know how to be configured" do
@@ -114,24 +119,38 @@ RSpec.describe CukeLinter do
         subject.load_configuration(config: config)
         results = subject.lint(linting_options)
 
-        expect(results).to match_array([{ linter: 'FakeLinter', location: 'path_to_file:1', problem: 'FakeLinter problem' }])
+        expect(results).to match_array([{ linter:   'FakeLinter',
+                                          location: 'path_to_file:1',
+                                          problem:  'FakeLinter problem' }])
       end
 
     end
 
     describe 'targeted linters' do
-
+      # rubocop:disable Metrics/LineLength
       before(:all) do
-        @targeted_linter_class             = generate_fake_linter_class(class_name: 'ATargetedLinterClass', name: 'ATargetedLinter')
-        @another_targeted_linter_class     = generate_fake_linter_class(class_name: 'AnotherTargetedLinterClass', name: 'AnotherTargetedLinter')
-        @yet_another_targeted_linter_class = generate_fake_linter_class(class_name: 'YetAnotherTargetedLinterClass', name: 'YetAnotherTargetedLinter')
+        @targeted_linter_class             = generate_fake_linter_class(class_name:  'ATargetedLinterClass',
+                                                                        linter_name: 'ATargetedLinter')
+        @another_targeted_linter_class     = generate_fake_linter_class(class_name:  'AnotherTargetedLinterClass',
+                                                                        linter_name: 'AnotherTargetedLinter')
+        @yet_another_targeted_linter_class = generate_fake_linter_class(class_name:  'YetAnotherTargetedLinterClass',
+                                                                        linter_name: 'YetAnotherTargetedLinter')
 
-        @a_non_nested_targeted_linter_class       = generate_fake_linter_class(module_name: nil, class_name: 'ANonNestedTargetedLinterClass', name: 'ANonNestedTargetedLinter')
-        @another_non_nested_targeted_linter_class = generate_fake_linter_class(module_name: nil, class_name: 'AnotherNonNestedTargetedLinterClass', name: 'AnotherNonNestedTargetedLinter')
+        @a_non_nested_targeted_linter_class       = generate_fake_linter_class(module_name: nil,
+                                                                               class_name:  'ANonNestedTargetedLinterClass',
+                                                                               linter_name: 'ANonNestedTargetedLinter')
+        @another_non_nested_targeted_linter_class = generate_fake_linter_class(module_name: nil,
+                                                                               class_name:  'AnotherNonNestedTargetedLinterClass',
+                                                                               linter_name: 'AnotherNonNestedTargetedLinter')
 
-        @a_nested_targeted_linter_class       = generate_fake_linter_class(module_name: 'Foo', class_name: 'ANestedTargetedLinterClass', name: 'ANestedTargetedLinter')
-        @another_nested_targeted_linter_class = generate_fake_linter_class(module_name: 'Foo', class_name: 'AnotherNestedTargetedLinterClass', name: 'AnotherNestedTargetedLinter')
+        @a_nested_targeted_linter_class       = generate_fake_linter_class(module_name: 'Foo',
+                                                                           class_name:  'ANestedTargetedLinterClass',
+                                                                           linter_name: 'ANestedTargetedLinter')
+        @another_nested_targeted_linter_class = generate_fake_linter_class(module_name: 'Foo',
+                                                                           class_name:  'AnotherNestedTargetedLinterClass',
+                                                                           linter_name: 'AnotherNestedTargetedLinter')
       end
+      # rubocop:enable Metrics/LineLength
 
 
       let(:linter_name) { 'ATargetedLinter' }
@@ -173,14 +192,18 @@ RSpec.describe CukeLinter do
         context "using #{linter_type} linters" do
 
           if linter_type == :provided
-            let(:linting_options) { { model_trees: test_model_trees, linters: test_linters, formatters: test_formatters } }
+            let(:linting_options) { { model_trees: test_model_trees,
+                                      linters:     test_linters,
+                                      formatters:  test_formatters } }
           else
-            let(:linting_options) { { model_trees: test_model_trees, formatters: test_formatters } }
+            let(:linting_options) { { model_trees: test_model_trees,
+                                      formatters:  test_formatters } }
 
             before(:each) do
               subject.clear_registered_linters
 
-              test_linters.each_with_index { |linter, index| subject.register_linter(linter: linter, name: test_linter_names[index]) }
+              test_linters.each_with_index { |linter, index| subject.register_linter(linter: linter,
+                                                                                     name:   test_linter_names[index]) }
             end
           end
 
@@ -200,9 +223,15 @@ RSpec.describe CukeLinter do
             it 'handles the directives correctly' do
               results = subject.lint(linting_options)
 
-              expect(results).to match_array([{ linter: non_nested_linter_name, location: linted_file, problem: "#{non_nested_linter_name} problem" },
-                                              { linter: non_nested_linter_name, location: "#{linted_file}:1", problem: "#{non_nested_linter_name} problem" },
-                                              { linter: another_non_nested_linter_name, location: "#{linted_file}:5", problem: "#{another_non_nested_linter_name} problem" }])
+              expect(results).to match_array([{ linter:   non_nested_linter_name,
+                                                location: linted_file,
+                                                problem:  "#{non_nested_linter_name} problem" },
+                                              { linter:   non_nested_linter_name,
+                                                location: "#{linted_file}:1",
+                                                problem:  "#{non_nested_linter_name} problem" },
+                                              { linter:   another_non_nested_linter_name,
+                                                location: "#{linted_file}:5",
+                                                problem:  "#{another_non_nested_linter_name} problem" }])
             end
 
           end
@@ -222,15 +251,21 @@ RSpec.describe CukeLinter do
             it 'handles the directives correctly' do
               results = subject.lint(linting_options)
 
-              expect(results).to match_array([{ linter: nested_linter_name, location: linted_file, problem: "#{nested_linter_name} problem" },
-                                              { linter: nested_linter_name, location: "#{linted_file}:1", problem: "#{nested_linter_name} problem" },
-                                              { linter: another_nested_linter_name, location: "#{linted_file}:5", problem: "#{another_nested_linter_name} problem" }])
+              expect(results).to match_array([{ linter:   nested_linter_name,
+                                                location: linted_file,
+                                                problem:  "#{nested_linter_name} problem" },
+                                              { linter:   nested_linter_name,
+                                                location: "#{linted_file}:1",
+                                                problem:  "#{nested_linter_name} problem" },
+                                              { linter:   another_nested_linter_name,
+                                                location: "#{linted_file}:5",
+                                                problem:  "#{another_nested_linter_name} problem" }])
             end
 
           end
 
           context 'with multiple linters in the directive' do
-
+            # rubocop:disable Metrics/LineLength
             let(:commas_text) { "Feature:
 
                                    # cuke_linter:disable #{linter_class_name}, #{another_linter_class_name}, #{yet_another_linter_class_name}
@@ -254,24 +289,48 @@ RSpec.describe CukeLinter do
 
             let(:test_linters) { [targeted_linter, another_targeted_linter, yet_another_targeted_linter] }
             let(:test_linter_names) { [linter_name, another_linter_name, yet_another_linter_name] }
-
+            # rubocop:enable Metrics/LineLength
 
             it 'handles the directives correctly' do
               results = subject.lint(linting_options)
 
-              expect(results).to match_array([{ linter: linter_name, location: spaces_file, problem: "#{linter_name} problem" },
-                                              { linter: linter_name, location: "#{spaces_file}:1", problem: "#{linter_name} problem" },
-                                              { linter: another_linter_name, location: spaces_file, problem: "#{another_linter_name} problem" },
-                                              { linter: another_linter_name, location: "#{spaces_file}:1", problem: "#{another_linter_name} problem" },
-                                              { linter: yet_another_linter_name, location: spaces_file, problem: "#{yet_another_linter_name} problem" },
-                                              { linter: yet_another_linter_name, location: "#{spaces_file}:1", problem: "#{yet_another_linter_name} problem" },
+              expect(results).to match_array([{ linter:   linter_name,
+                                                location: spaces_file,
+                                                problem:  "#{linter_name} problem" },
+                                              { linter:   linter_name,
+                                                location: "#{spaces_file}:1",
+                                                problem:  "#{linter_name} problem" },
+                                              { linter:   another_linter_name,
+                                                location: spaces_file,
+                                                problem:  "#{another_linter_name} problem" },
+                                              { linter:   another_linter_name,
+                                                location: "#{spaces_file}:1",
+                                                problem:  "#{another_linter_name} problem" },
+                                              { linter:   yet_another_linter_name,
+                                                location: spaces_file,
+                                                problem:  "#{yet_another_linter_name} problem" },
+                                              { linter:   yet_another_linter_name,
+                                                location: "#{spaces_file}:1",
+                                                problem:  "#{yet_another_linter_name} problem" },
 
-                                              { linter: linter_name, location: commas_file, problem: "#{linter_name} problem" },
-                                              { linter: linter_name, location: "#{commas_file}:1", problem: "#{linter_name} problem" },
-                                              { linter: another_linter_name, location: commas_file, problem: "#{another_linter_name} problem" },
-                                              { linter: another_linter_name, location: "#{commas_file}:1", problem: "#{another_linter_name} problem" },
-                                              { linter: yet_another_linter_name, location: commas_file, problem: "#{yet_another_linter_name} problem" },
-                                              { linter: yet_another_linter_name, location: "#{commas_file}:1", problem: "#{yet_another_linter_name} problem" }])
+                                              { linter:   linter_name,
+                                                location: commas_file,
+                                                problem:  "#{linter_name} problem" },
+                                              { linter:   linter_name,
+                                                location: "#{commas_file}:1",
+                                                problem:  "#{linter_name} problem" },
+                                              { linter:   another_linter_name,
+                                                location: commas_file,
+                                                problem:  "#{another_linter_name} problem" },
+                                              { linter:   another_linter_name,
+                                                location: "#{commas_file}:1",
+                                                problem:  "#{another_linter_name} problem" },
+                                              { linter:   yet_another_linter_name,
+                                                location: commas_file,
+                                                problem:  "#{yet_another_linter_name} problem" },
+                                              { linter:   yet_another_linter_name,
+                                                location: "#{commas_file}:1",
+                                                problem:  "#{yet_another_linter_name} problem" }])
             end
 
           end
@@ -298,11 +357,21 @@ RSpec.describe CukeLinter do
             it 'does not use targeted linting changes outside of the file in which they occur' do
               results = subject.lint(linting_options)
 
-              expect(results).to match_array([{ linter: linter_name, location: modified_file, problem: "#{linter_name} problem" },
-                                              { linter: linter_name, location: "#{modified_file}:1", problem: "#{linter_name} problem" },
-                                              { linter: linter_name, location: unmodified_file, problem: "#{linter_name} problem" },
-                                              { linter: linter_name, location: "#{unmodified_file}:1", problem: "#{linter_name} problem" },
-                                              { linter: linter_name, location: "#{unmodified_file}:3", problem: "#{linter_name} problem" }])
+              expect(results).to match_array([{ linter:   linter_name,
+                                                location: modified_file,
+                                                problem:  "#{linter_name} problem" },
+                                              { linter:   linter_name,
+                                                location: "#{modified_file}:1",
+                                                problem:  "#{linter_name} problem" },
+                                              { linter:   linter_name,
+                                                location: unmodified_file,
+                                                problem:  "#{linter_name} problem" },
+                                              { linter:   linter_name,
+                                                location: "#{unmodified_file}:1",
+                                                problem:  "#{linter_name} problem" },
+                                              { linter:   linter_name,
+                                                location: "#{unmodified_file}:3",
+                                                problem:  "#{linter_name} problem" }])
             end
 
           end
@@ -320,8 +389,12 @@ RSpec.describe CukeLinter do
             it 'handles the directive correctly' do
               results = subject.lint(linting_options)
 
-              expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
-                                              { linter: linter_name, location: "#{linted_file}:2", problem: "#{linter_name} problem" }])
+              expect(results).to match_array([{ linter:   linter_name,
+                                                location: linted_file,
+                                                problem:  "#{linter_name} problem" },
+                                              { linter:   linter_name,
+                                                location: "#{linted_file}:2",
+                                                problem:  "#{linter_name} problem" }])
             end
 
           end
@@ -350,15 +423,24 @@ RSpec.describe CukeLinter do
             it 'handles the directives correctly' do
               results = subject.lint(linting_options)
 
-              expect(results).to match_array([{ linter: linter_name, location: extra_whitespace_file, problem: "#{linter_name} problem" },
-                                              { linter: linter_name, location: "#{extra_whitespace_file}:1", problem: "#{linter_name} problem" },
-                                              { linter: linter_name, location: minimal_whitespace_file, problem: "#{linter_name} problem" },
-                                              { linter: linter_name, location: "#{minimal_whitespace_file}:1", problem: "#{linter_name} problem" }])
+              expect(results).to match_array([{ linter:   linter_name,
+                                                location: extra_whitespace_file,
+                                                problem:  "#{linter_name} problem" },
+                                              { linter:   linter_name,
+                                                location: "#{extra_whitespace_file}:1",
+                                                problem:  "#{linter_name} problem" },
+                                              { linter:   linter_name,
+                                                location: minimal_whitespace_file,
+                                                problem:  "#{linter_name} problem" },
+                                              { linter:   linter_name,
+                                                location: "#{minimal_whitespace_file}:1",
+                                                problem:  "#{linter_name} problem" }])
             end
 
 
             context 'and multiple targeted linters' do
 
+              # rubocop:disable Metrics/LineLength
               let(:spaced_commas_text) { "Feature:
 
                                             # cuke_linter:disable #{linter_class_name}    ,    #{another_linter_class_name} , #{yet_another_linter_class_name}
@@ -402,38 +484,87 @@ RSpec.describe CukeLinter do
 
               let(:test_linters) { [targeted_linter, another_targeted_linter, yet_another_targeted_linter] }
               let(:test_linter_names) { [linter_name, another_linter_name, yet_another_linter_name] }
+              # rubocop:enable Metrics/LineLength
 
 
               it 'handles the directives correctly' do
                 results = subject.lint(linting_options)
 
-                expect(results).to match_array([{ linter: linter_name, location: spaced_commas_file, problem: "#{linter_name} problem" },
-                                                { linter: linter_name, location: "#{spaced_commas_file}:1", problem: "#{linter_name} problem" },
-                                                { linter: another_linter_name, location: spaced_commas_file, problem: "#{another_linter_name} problem" },
-                                                { linter: another_linter_name, location: "#{spaced_commas_file}:1", problem: "#{another_linter_name} problem" },
-                                                { linter: yet_another_linter_name, location: spaced_commas_file, problem: "#{yet_another_linter_name} problem" },
-                                                { linter: yet_another_linter_name, location: "#{spaced_commas_file}:1", problem: "#{yet_another_linter_name} problem" },
+                expect(results).to match_array([{ linter:   linter_name,
+                                                  location: spaced_commas_file,
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   linter_name,
+                                                  location: "#{spaced_commas_file}:1",
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   another_linter_name,
+                                                  location: spaced_commas_file,
+                                                  problem:  "#{another_linter_name} problem" },
+                                                { linter:   another_linter_name,
+                                                  location: "#{spaced_commas_file}:1",
+                                                  problem:  "#{another_linter_name} problem" },
+                                                { linter:   yet_another_linter_name,
+                                                  location: spaced_commas_file,
+                                                  problem:  "#{yet_another_linter_name} problem" },
+                                                { linter:   yet_another_linter_name,
+                                                  location: "#{spaced_commas_file}:1",
+                                                  problem:  "#{yet_another_linter_name} problem" },
 
-                                                { linter: linter_name, location: compact_commas_file, problem: "#{linter_name} problem" },
-                                                { linter: linter_name, location: "#{compact_commas_file}:1", problem: "#{linter_name} problem" },
-                                                { linter: another_linter_name, location: compact_commas_file, problem: "#{another_linter_name} problem" },
-                                                { linter: another_linter_name, location: "#{compact_commas_file}:1", problem: "#{another_linter_name} problem" },
-                                                { linter: yet_another_linter_name, location: compact_commas_file, problem: "#{yet_another_linter_name} problem" },
-                                                { linter: yet_another_linter_name, location: "#{compact_commas_file}:1", problem: "#{yet_another_linter_name} problem" },
+                                                { linter:   linter_name,
+                                                  location: compact_commas_file,
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   linter_name,
+                                                  location: "#{compact_commas_file}:1",
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   another_linter_name,
+                                                  location: compact_commas_file,
+                                                  problem:  "#{another_linter_name} problem" },
+                                                { linter:   another_linter_name,
+                                                  location: "#{compact_commas_file}:1",
+                                                  problem:  "#{another_linter_name} problem" },
+                                                { linter:   yet_another_linter_name,
+                                                  location: compact_commas_file,
+                                                  problem:  "#{yet_another_linter_name} problem" },
+                                                { linter:   yet_another_linter_name,
+                                                  location: "#{compact_commas_file}:1",
+                                                  problem:  "#{yet_another_linter_name} problem" },
 
-                                                { linter: linter_name, location: spaced_space_file, problem: "#{linter_name} problem" },
-                                                { linter: linter_name, location: "#{spaced_space_file}:1", problem: "#{linter_name} problem" },
-                                                { linter: another_linter_name, location: spaced_space_file, problem: "#{another_linter_name} problem" },
-                                                { linter: another_linter_name, location: "#{spaced_space_file}:1", problem: "#{another_linter_name} problem" },
-                                                { linter: yet_another_linter_name, location: spaced_space_file, problem: "#{yet_another_linter_name} problem" },
-                                                { linter: yet_another_linter_name, location: "#{spaced_space_file}:1", problem: "#{yet_another_linter_name} problem" },
+                                                { linter:   linter_name,
+                                                  location: spaced_space_file,
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   linter_name,
+                                                  location: "#{spaced_space_file}:1",
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   another_linter_name,
+                                                  location: spaced_space_file,
+                                                  problem:  "#{another_linter_name} problem" },
+                                                { linter:   another_linter_name,
+                                                  location: "#{spaced_space_file}:1",
+                                                  problem:  "#{another_linter_name} problem" },
+                                                { linter:   yet_another_linter_name,
+                                                  location: spaced_space_file,
+                                                  problem:  "#{yet_another_linter_name} problem" },
+                                                { linter:   yet_another_linter_name,
+                                                  location: "#{spaced_space_file}:1",
+                                                  problem:  "#{yet_another_linter_name} problem" },
 
-                                                { linter: linter_name, location: compact_space_file, problem: "#{linter_name} problem" },
-                                                { linter: linter_name, location: "#{compact_space_file}:1", problem: "#{linter_name} problem" },
-                                                { linter: another_linter_name, location: compact_space_file, problem: "#{another_linter_name} problem" },
-                                                { linter: another_linter_name, location: "#{compact_space_file}:1", problem: "#{another_linter_name} problem" },
-                                                { linter: yet_another_linter_name, location: compact_space_file, problem: "#{yet_another_linter_name} problem" },
-                                                { linter: yet_another_linter_name, location: "#{compact_space_file}:1", problem: "#{yet_another_linter_name} problem" }])
+                                                { linter:   linter_name,
+                                                  location: compact_space_file,
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   linter_name,
+                                                  location: "#{compact_space_file}:1",
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   another_linter_name,
+                                                  location: compact_space_file,
+                                                  problem:  "#{another_linter_name} problem" },
+                                                { linter:   another_linter_name,
+                                                  location: "#{compact_space_file}:1",
+                                                  problem:  "#{another_linter_name} problem" },
+                                                { linter:   yet_another_linter_name,
+                                                  location: compact_space_file,
+                                                  problem:  "#{yet_another_linter_name} problem" },
+                                                { linter:   yet_another_linter_name,
+                                                  location: "#{compact_space_file}:1",
+                                                  problem:  "#{yet_another_linter_name} problem" }])
               end
 
             end
@@ -455,7 +586,8 @@ RSpec.describe CukeLinter do
 
             context 'that is explicitly disabled' do
 
-              # Used so that the linting process is not entirely bypassed due to no other linters being registered/provided
+              # Used so that the linting process is not entirely bypassed due to
+              # no other linters being registered/provided
               let(:baseline_linter_name) { 'BaselineLinter' }
               let(:baseline_linter) { generate_fake_linter(name: baseline_linter_name) }
 
@@ -468,9 +600,15 @@ RSpec.describe CukeLinter do
                                    # cuke_linter:disable #{linter_class_name}
                                    Scenario:" }
 
-              let(:baseline_linter_results) { [{ linter: baseline_linter_name, location: linted_file, problem: "#{baseline_linter_name} problem" },
-                                               { linter: baseline_linter_name, location: "#{linted_file}:1", problem: "#{baseline_linter_name} problem" },
-                                               { linter: baseline_linter_name, location: "#{linted_file}:4", problem: "#{baseline_linter_name} problem" }] }
+              let(:baseline_linter_results) { [{ linter:   baseline_linter_name,
+                                                 location: linted_file,
+                                                 problem:  "#{baseline_linter_name} problem" },
+                                               { linter:   baseline_linter_name,
+                                                 location: "#{linted_file}:1",
+                                                 problem:  "#{baseline_linter_name} problem" },
+                                               { linter:   baseline_linter_name,
+                                                 location: "#{linted_file}:4",
+                                                 problem:  "#{baseline_linter_name} problem" }] }
 
 
               it 'does not use the linter' do
@@ -527,7 +665,9 @@ RSpec.describe CukeLinter do
               it 'uses the linter' do
                 results = subject.lint(linting_options)
 
-                expect(results).to match_array([{ linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
+                expect(results).to match_array([{ linter:   linter_name,
+                                                  location: "#{linted_file}:4",
+                                                  problem:  "#{linter_name} problem" }])
               end
 
               context 'multiple times' do
@@ -542,13 +682,17 @@ RSpec.describe CukeLinter do
                   it 'uses the linter' do
                     results = subject.lint(linting_options)
 
-                    expect(results).to match_array([{ linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
+                    expect(results).to match_array([{ linter:   linter_name,
+                                                      location: "#{linted_file}:4",
+                                                      problem:  "#{linter_name} problem" }])
                   end
 
                   it 'does not include redundant linting results' do
                     results = subject.lint(linting_options)
 
-                    expect(results).to match_array([{ linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
+                    expect(results).to match_array([{ linter:   linter_name,
+                                                      location: "#{linted_file}:4",
+                                                      problem:  "#{linter_name} problem" }])
                   end
 
                 end
@@ -563,13 +707,17 @@ RSpec.describe CukeLinter do
                   it 'uses the linter' do
                     results = subject.lint(linting_options)
 
-                    expect(results).to match_array([{ linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
+                    expect(results).to match_array([{ linter:   linter_name,
+                                                      location: "#{linted_file}:4",
+                                                      problem:  "#{linter_name} problem" }])
                   end
 
                   it 'does not include redundant linting results' do
                     results = subject.lint(linting_options)
 
-                    expect(results).to match_array([{ linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
+                    expect(results).to match_array([{ linter:   linter_name,
+                                                      location: "#{linted_file}:4",
+                                                      problem:  "#{linter_name} problem" }])
                   end
 
                 end
@@ -588,7 +736,9 @@ RSpec.describe CukeLinter do
                 it 'ceases using the linter' do
                   results = subject.lint(linting_options)
 
-                  expect(results).to match_array([{ linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
+                  expect(results).to match_array([{ linter:   linter_name,
+                                                    location: "#{linted_file}:4",
+                                                    problem:  "#{linter_name} problem" }])
                 end
 
               end
@@ -621,8 +771,12 @@ RSpec.describe CukeLinter do
               it 'does not use the linter' do
                 results = subject.lint(linting_options)
 
-                expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
-                                                { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" }])
+                expect(results).to match_array([{ linter:   linter_name,
+                                                  location: linted_file,
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   linter_name,
+                                                  location: "#{linted_file}:1",
+                                                  problem:  "#{linter_name} problem" }])
               end
 
               context 'multiple times' do
@@ -638,8 +792,12 @@ RSpec.describe CukeLinter do
                   it 'does not use the linter' do
                     results = subject.lint(linting_options)
 
-                    expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
-                                                    { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" }])
+                    expect(results).to match_array([{ linter:   linter_name,
+                                                      location: linted_file,
+                                                      problem:  "#{linter_name} problem" },
+                                                    { linter:   linter_name,
+                                                      location: "#{linted_file}:1",
+                                                      problem:  "#{linter_name} problem" }])
                   end
 
                 end
@@ -654,8 +812,12 @@ RSpec.describe CukeLinter do
                   it 'does not use the linter' do
                     results = subject.lint(linting_options)
 
-                    expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
-                                                    { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" }])
+                    expect(results).to match_array([{ linter:   linter_name,
+                                                      location: linted_file,
+                                                      problem:  "#{linter_name} problem" },
+                                                    { linter:   linter_name,
+                                                      location: "#{linted_file}:1",
+                                                      problem:  "#{linter_name} problem" }])
                   end
                 end
 
@@ -674,17 +836,29 @@ RSpec.describe CukeLinter do
                 it 'resumes using the linter' do
                   results = subject.lint(linting_options)
 
-                  expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
-                                                  { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
-                                                  { linter: linter_name, location: "#{linted_file}:6", problem: "#{linter_name} problem" }])
+                  expect(results).to match_array([{ linter:   linter_name,
+                                                    location: linted_file,
+                                                    problem:  "#{linter_name} problem" },
+                                                  { linter:   linter_name,
+                                                    location: "#{linted_file}:1",
+                                                    problem:  "#{linter_name} problem" },
+                                                  { linter:   linter_name,
+                                                    location: "#{linted_file}:6",
+                                                    problem:  "#{linter_name} problem" }])
                 end
 
                 it 'does not include redundant linting results' do
                   results = subject.lint(linting_options)
 
-                  expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
-                                                  { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
-                                                  { linter: linter_name, location: "#{linted_file}:6", problem: "#{linter_name} problem" }])
+                  expect(results).to match_array([{ linter:   linter_name,
+                                                    location: linted_file,
+                                                    problem:  "#{linter_name} problem" },
+                                                  { linter:   linter_name,
+                                                    location: "#{linted_file}:1",
+                                                    problem:  "#{linter_name} problem" },
+                                                  { linter:   linter_name,
+                                                    location: "#{linted_file}:6",
+                                                    problem:  "#{linter_name} problem" }])
                 end
 
               end
@@ -702,24 +876,37 @@ RSpec.describe CukeLinter do
               it 'uses the linter' do
                 results = subject.lint(linting_options)
 
-                expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
-                                                { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
-                                                { linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
+                expect(results).to match_array([{ linter:   linter_name,
+                                                  location: linted_file,
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   linter_name,
+                                                  location: "#{linted_file}:1",
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   linter_name,
+                                                  location: "#{linted_file}:4",
+                                                  problem:  "#{linter_name} problem" }])
               end
 
               it 'does not include redundant linting results' do
                 results = subject.lint(linting_options)
 
-                expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
-                                                { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
-                                                { linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
+                expect(results).to match_array([{ linter:   linter_name,
+                                                  location: linted_file,
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   linter_name,
+                                                  location: "#{linted_file}:1",
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   linter_name,
+                                                  location: "#{linted_file}:4",
+                                                  problem:  "#{linter_name} problem" }])
               end
 
               it 'prefers the provided (or registered) linter over having to make a new one' do
-
-                # Tweaking the linter objects that will already exist so that any linter created from the same class will be noticeably different
+                # Tweaking the linter objects that will already exist so that any linter
+                # created from the same class will be noticeably different
                 provided_linter   = test_linters.find { |linter| linter.is_a?(Kernel.const_get(linter_class_name)) }
-                registered_linter = CukeLinter.registered_linters.values.find { |linter| linter.is_a?(Kernel.const_get(linter_class_name)) }
+                registered_linter = CukeLinter.registered_linters.values
+                                      .find { |linter| linter.is_a?(Kernel.const_get(linter_class_name)) }
 
                 if provided_linter
                   def provided_linter.name
@@ -736,9 +923,15 @@ RSpec.describe CukeLinter do
 
                 results = subject.lint(linting_options)
 
-                expect(results).to match_array([{ linter: 'Pre-existing Linter', location: linted_file, problem: "#{linter_name} problem" },
-                                                { linter: 'Pre-existing Linter', location: "#{linted_file}:1", problem: "#{linter_name} problem" },
-                                                { linter: 'Pre-existing Linter', location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
+                expect(results).to match_array([{ linter:   'Pre-existing Linter',
+                                                  location: linted_file,
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   'Pre-existing Linter',
+                                                  location: "#{linted_file}:1",
+                                                  problem:  "#{linter_name} problem" },
+                                                { linter:   'Pre-existing Linter',
+                                                  location: "#{linted_file}:4",
+                                                  problem:  "#{linter_name} problem" }])
               end
 
 
@@ -754,17 +947,29 @@ RSpec.describe CukeLinter do
                   it 'uses the linter' do
                     results = subject.lint(linting_options)
 
-                    expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
-                                                    { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
-                                                    { linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
+                    expect(results).to match_array([{ linter:   linter_name,
+                                                      location: linted_file,
+                                                      problem:  "#{linter_name} problem" },
+                                                    { linter:   linter_name,
+                                                      location: "#{linted_file}:1",
+                                                      problem:  "#{linter_name} problem" },
+                                                    { linter:   linter_name,
+                                                      location: "#{linted_file}:4",
+                                                      problem:  "#{linter_name} problem" }])
                   end
 
                   it 'does not include redundant linting results' do
                     results = subject.lint(linting_options)
 
-                    expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
-                                                    { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
-                                                    { linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
+                    expect(results).to match_array([{ linter:   linter_name,
+                                                      location: linted_file,
+                                                      problem:  "#{linter_name} problem" },
+                                                    { linter:   linter_name,
+                                                      location: "#{linted_file}:1",
+                                                      problem:  "#{linter_name} problem" },
+                                                    { linter:   linter_name,
+                                                      location: "#{linted_file}:4",
+                                                      problem:  "#{linter_name} problem" }])
                   end
 
                 end
@@ -779,17 +984,29 @@ RSpec.describe CukeLinter do
                   it 'uses the linter' do
                     results = subject.lint(linting_options)
 
-                    expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
-                                                    { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
-                                                    { linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
+                    expect(results).to match_array([{ linter:   linter_name,
+                                                      location: linted_file,
+                                                      problem:  "#{linter_name} problem" },
+                                                    { linter:   linter_name,
+                                                      location: "#{linted_file}:1",
+                                                      problem:  "#{linter_name} problem" },
+                                                    { linter:   linter_name,
+                                                      location: "#{linted_file}:4",
+                                                      problem:  "#{linter_name} problem" }])
                   end
 
                   it 'does not include redundant linting results' do
                     results = subject.lint(linting_options)
 
-                    expect(results).to match_array([{ linter: linter_name, location: linted_file, problem: "#{linter_name} problem" },
-                                                    { linter: linter_name, location: "#{linted_file}:1", problem: "#{linter_name} problem" },
-                                                    { linter: linter_name, location: "#{linted_file}:4", problem: "#{linter_name} problem" }])
+                    expect(results).to match_array([{ linter:   linter_name,
+                                                      location: linted_file,
+                                                      problem:  "#{linter_name} problem" },
+                                                    { linter:   linter_name,
+                                                      location: "#{linted_file}:1",
+                                                      problem:  "#{linter_name} problem" },
+                                                    { linter:   linter_name,
+                                                      location: "#{linted_file}:4",
+                                                      problem:  "#{linter_name} problem" }])
                   end
 
                 end

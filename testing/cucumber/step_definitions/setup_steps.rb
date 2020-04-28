@@ -90,43 +90,53 @@ Given(/^a linter for features with too many different tags$/) do
 end
 
 Given(/^a linter for elements with too many tags has been registered$/) do
-  CukeLinter.register_linter(linter: CukeLinter::ElementWithTooManyTagsLinter.new, name: 'ElementWithTooManyTagsLinter')
+  CukeLinter.register_linter(linter: CukeLinter::ElementWithTooManyTagsLinter.new,
+                             name:   'ElementWithTooManyTagsLinter')
 end
 
 Given(/^a linter for elements with duplicate tags has been registered$/) do
-  CukeLinter.register_linter(linter: CukeLinter::ElementWithDuplicateTagsLinter.new, name: 'ElementWithDuplicateTagsLinter')
+  CukeLinter.register_linter(linter: CukeLinter::ElementWithDuplicateTagsLinter.new,
+                             name:   'ElementWithDuplicateTagsLinter')
 end
 
 Given(/^a linter for tests with too many steps has been registered$/) do
-  CukeLinter.register_linter(linter: CukeLinter::TestWithTooManyStepsLinter.new, name: 'TestWithTooManyStepsLinter')
+  CukeLinter.register_linter(linter: CukeLinter::TestWithTooManyStepsLinter.new,
+                             name:   'TestWithTooManyStepsLinter')
 end
 
 Given(/^a linter for backgrounds that do more than setup has been registered$/) do
-  CukeLinter.register_linter(linter: CukeLinter::BackgroundDoesMoreThanSetupLinter.new, name: 'BackgroundDoesMoreThanSetupLinter')
+  CukeLinter.register_linter(linter: CukeLinter::BackgroundDoesMoreThanSetupLinter.new,
+                             name:   'BackgroundDoesMoreThanSetupLinter')
 end
 
 Given(/^a linter for tests with an action step as the final step has been registered$/) do
-  CukeLinter.register_linter(linter: CukeLinter::TestWithActionStepAsFinalStepLinter.new, name: 'TestWithActionStepAsFinalStepLinter')
+  CukeLinter.register_linter(linter: CukeLinter::TestWithActionStepAsFinalStepLinter.new,
+                             name:   'TestWithActionStepAsFinalStepLinter')
 end
 
 Given(/^a linter for tests with no action step has been registered$/) do
-  CukeLinter.register_linter(linter: CukeLinter::TestWithNoActionStepLinter.new, name: 'TestWithNoActionStepLinter')
+  CukeLinter.register_linter(linter: CukeLinter::TestWithNoActionStepLinter.new,
+                             name:   'TestWithNoActionStepLinter')
 end
 
 Given(/^a linter for tests with no verification step has been registered$/) do
-  CukeLinter.register_linter(linter: CukeLinter::TestWithNoVerificationStepLinter.new, name: 'TestWithNoVerificationStepLinter')
+  CukeLinter.register_linter(linter: CukeLinter::TestWithNoVerificationStepLinter.new,
+                             name:   'TestWithNoVerificationStepLinter')
 end
 
 Given(/^a linter for tests with a setup step after an action step has been registered$/) do
-  CukeLinter.register_linter(linter: CukeLinter::TestWithSetupStepAfterActionStepLinter.new, name: 'TestWithSetupStepAfterActionStepLinter')
+  CukeLinter.register_linter(linter: CukeLinter::TestWithSetupStepAfterActionStepLinter.new,
+                             name:   'TestWithSetupStepAfterActionStepLinter')
 end
 
 Given(/^a linter for tests with a setup step after a verification step has been registered$/) do
-  CukeLinter.register_linter(linter: CukeLinter::TestWithSetupStepAfterVerificationStepLinter.new, name: 'TestWithSetupStepAfterVerificationStepLinter')
+  CukeLinter.register_linter(linter: CukeLinter::TestWithSetupStepAfterVerificationStepLinter.new,
+                             name:   'TestWithSetupStepAfterVerificationStepLinter')
 end
 
 Given(/^a linter for tests with a setup step as the final step has been registered$/) do
-  CukeLinter.register_linter(linter: CukeLinter::TestWithSetupStepAsFinalStepLinter.new, name: 'TestWithSetupStepAsFinalStepLinter')
+  CukeLinter.register_linter(linter: CukeLinter::TestWithSetupStepAsFinalStepLinter.new,
+                             name:   'TestWithSetupStepAsFinalStepLinter')
 end
 
 Given("a linter for features without a description") do
@@ -166,11 +176,13 @@ Given(/^a linter for elements with common tags$/) do
 end
 
 Given(/^a linter for test steps with too many characters has been registered$/) do
-  CukeLinter.register_linter(linter: CukeLinter::StepWithTooManyCharactersLinter.new, name: 'StepWithTooManyCharactersLinter')
+  CukeLinter.register_linter(linter: CukeLinter::StepWithTooManyCharactersLinter.new,
+                             name:   'StepWithTooManyCharactersLinter')
 end
 
 Given(/^a linter for features with too many different tags has been registered$/) do
-  CukeLinter.register_linter(linter: CukeLinter::FeatureWithTooManyDifferentTagsLinter.new, name: 'FeatureWithTooManyDifferentTagsLinter')
+  CukeLinter.register_linter(linter: CukeLinter::FeatureWithTooManyDifferentTagsLinter.new,
+                             name:   'FeatureWithTooManyDifferentTagsLinter')
 end
 
 Given(/^the following configuration file(?: "([^"]*)")?:$/) do |file_name, text|

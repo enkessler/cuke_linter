@@ -1,6 +1,7 @@
 if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
-  ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] = "cucumber_tests_part_#{ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']}"
-  ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  = "testing/reports/cucumber/part_#{ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']}/coverage"
+  part_number                               = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']
+  ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] = "cucumber_tests_part_#{part_number}"
+  ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  = "testing/reports/cucumber/part_#{part_number}/coverage"
 else
   ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] = 'cucumber_tests'
   ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  = 'coverage'
