@@ -3,6 +3,10 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   TargetRubyVersion: 2.2
 
+# RuboCop does not support as old a Ruby version as this gem does
+Gemspec/RequiredRubyVersion:
+  Enabled: false
+
 Layout/EmptyLinesAroundModuleBody:
   Enabled: false
 
