@@ -7,6 +7,9 @@ AllCops:
 Gemspec/RequiredRubyVersion:
   Enabled: false
 
+Style/RescueStandardError:
+  EnforcedStyle: implicit
+
 Layout/EmptyLinesAroundModuleBody:
   Enabled: false
 

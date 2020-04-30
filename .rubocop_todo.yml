@@ -198,21 +198,12 @@ Style/GlobalVars:
   Exclude:
     - 'environments/rspec_env.rb'
 
-# Offense count: 1
-# Configuration parameters: MinBodyLength.
-Style/GuardClause:
-  Exclude:
-    - 'Rakefile'
-
 # Offense count: 10
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, UseHashRocketsWithSymbolValues, PreferHashRocketsForNonAlnumEndingSymbols.
 # SupportedStyles: ruby19, hash_rockets, no_mixed_keys, ruby19_no_mixed_keys
 Style/HashSyntax:
   Exclude:
-    - 'Rakefile'
-    - 'rakefiles/reporting_tasks.rb'
-    - 'rakefiles/testing_tasks.rb'
     - 'testing/gemfiles/cuke_modeler1.gemfile'
     - 'testing/gemfiles/cuke_modeler2.gemfile'
 
@@ -272,15 +263,6 @@ Style/RedundantSelf:
   Exclude:
     - 'lib/cuke_linter.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: implicit, explicit
-Style/RescueStandardError:
-  Exclude:
-    - 'Rakefile'
-    - 'rakefiles/testing_tasks.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/SelfAssignment:
@@ -331,12 +313,6 @@ Style/TrailingCommaInHashLiteral:
 Style/TrivialAccessors:
   Exclude:
     - 'lib/cuke_linter/linters/linter.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/UnlessElse:
-  Exclude:
-    - 'rakefiles/testing_tasks.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.

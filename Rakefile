@@ -15,18 +15,16 @@ namespace 'cuke_linter' do
     output = `rdoc lib -C`
     puts output
 
-    if output =~ /100.00% documented/
-      puts Rainbow('All code documented').green
-    else
-      raise Rainbow('Parts of the gem are undocumented').red
-    end
+    raise Rainbow('Parts of the gem are undocumented').red unless output =~ /100.00% documented/
+
+    puts Rainbow('All code documented').green
   end
 
   # Creates coveralls:push task
   Coveralls::RakeTask.new
 
   desc 'The task that CI will run. Do not run locally.'
-  task :ci_build => ['cuke_linter:test_everything', 'coveralls:push']
+  task :ci_build => ['cuke_linter:test_everything', 'coveralls:push'] # rubocop:disable Style/HashSyntax
 
   desc 'Check that things look good before trying to release'
   task :prerelease_check do
@@ -51,4 +49,4 @@ namespace 'cuke_linter' do
 end
 
 
-task :default => 'cuke_linter:test_everything'
+task :default => 'cuke_linter:test_everything' # rubocop:disable Style/HashSyntax

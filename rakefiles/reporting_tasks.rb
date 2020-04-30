@@ -23,6 +23,6 @@ namespace 'cuke_linter' do
   end
 
   desc 'Removes existing test results and code coverage'
-  task :clear_old_results => [:clear_report_directory, :clear_coverage]
+  task :clear_old_results => [:clear_report_directory, :clear_coverage] # rubocop:disable Style/HashSyntax
 
 end
