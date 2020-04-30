@@ -35,7 +35,7 @@ module CukeLinter
 
         temp_file = Tempfile.new
         process   = create_process('bundle', 'exec', 'rspec',
-                                   '--pattern', "#{spec_pattern}",
+                                   '--pattern', spec_pattern,
                                    '--dry-run',
                                    '-r', './environments/rspec_env.rb',
                                    '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', temp_file.path)
@@ -51,66 +51,20 @@ module CukeLinter
       end
 
       def run_rspec_in_parallel(spec_list:, parallel_count: Parallel.processor_count)
-        # Round-robin split so that long-running tests in the specs (either evening distributed
-        # or in clusters) are less likely to be grouped in the split files
-        process_spec_lists = Array.new(parallel_count) { [] }
-
-        spec_list.each_with_index do |spec, index|
-          process_spec_lists[index % parallel_count] << spec
-        end
-
-        process_spec_lists.each_with_index do |spec_list, index|
-          directory = "#{REPORT_FOLDER}/rspec/part_#{index + 1}"
-          file_path = "spec_file_#{index + 1}.txt"
-          FileUtils.mkpath(directory)
-          File.write("#{directory}/#{file_path}", spec_list.join("\n"))
-        end
-
-        processes              = []
-        problem_process_groups = []
+        create_process_test_files(spec_list, parallel_count, 'rspec')
 
         Kernel.puts "Running #{spec_list.count} specs across #{parallel_count} processes..."
 
-        parallel_count.times do |process_count|
-          directory        = "#{REPORT_FOLDER}/rspec/part_#{process_count + 1}"
-          json_file_path   = "results_#{process_count + 1}.json"
-          html_file_path   = "results_#{process_count + 1}.html"
-          stdout_file_name = "std_out_#{process_count + 1}.txt"
-          stdout_file_path = "#{directory}/#{stdout_file_name}"
-
-          process = create_process('bundle', 'exec', 'rspec',
-                                   '-r', './environments/rspec_env.rb',
-                                   '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', "#{directory}/#{json_file_path}", # rubocop:disable Metrics/LineLength
-                                   '--format', 'html', '--out', "#{directory}/#{html_file_path}",
-                                   '--format', 'p')
-          FileUtils.touch(stdout_file_path)
-          process.io.stdout                                         = File.new(stdout_file_path, 'w')
-          process.environment['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] = process_count + 1
-          process.environment['CUKE_LINTER_TEST_PROCESS']           = 'true'
-          process.start
-          processes << process
-        end
+        processes              = generate_processes(parallel_count, 'rspec')
+        problem_process_groups = []
 
         processes.each_with_index do |process, index|
           process.wait
           problem_process_groups << index + 1 unless process.exit_code.zero?
         end
 
-
         if problem_process_groups.any?
-          puts Rainbow('Dumping output for errored processes...').yellow
-
-          problem_process_groups.each do |process_number|
-            puts Rainbow("Dumping output for process #{process_number}...").yellow
-
-            directory        = "#{REPORT_FOLDER}/rspec/part_#{process_number}"
-            stdout_file_name = "std_out_#{process_number}.txt"
-            stdout_file_path = "#{directory}/#{stdout_file_name}"
-
-            process_output = File.read(stdout_file_path)
-            puts Rainbow(process_output).cyan
-          end
-
+          display_problems(problem_process_groups, 'rspec')
           raise(Rainbow("RSpec tests encountered problems! (see reports for groups #{problem_process_groups}").red)
         end
 
@@ -123,46 +77,12 @@ module CukeLinter
       end
 
       def run_cucumber_in_parallel(scenario_list:, parallel_count: Parallel.processor_count)
-        # Round-robin split so that long-running tests in the specs (either evening distributed
-        # or in clusters) are less likely to be grouped in the split files
-        process_scenario_lists = Array.new(parallel_count) { [] }
-
-        scenario_list.each_with_index do |scenario, index|
-          process_scenario_lists[index % parallel_count] << scenario
-        end
-
-        process_scenario_lists.each_with_index do |list, index|
-          directory = "#{REPORT_FOLDER}/cucumber/part_#{index + 1}"
-          file_path = "tests_to_run_#{index + 1}.txt"
-          FileUtils.mkpath(directory)
-          File.write("#{directory}/#{file_path}", list.join("\n"))
-        end
-
-        processes              = []
-        problem_process_groups = []
+        create_process_test_files(scenario_list, parallel_count, 'cucumber')
 
         puts "Running #{scenario_list.count} scenarios across #{parallel_count} processes..."
 
-        parallel_count.times do |process_count|
-          directory        = "#{REPORT_FOLDER}/cucumber/part_#{process_count + 1}"
-          json_file_path   = "results_#{process_count + 1}.json"
-          html_file_path   = "results_#{process_count + 1}.html"
-          stdout_file_name = "std_out_#{process_count + 1}.txt"
-          stdout_file_path = "#{directory}/#{stdout_file_name}"
-
-          process = create_process('bundle', 'exec', 'cucumber',
-                                   "@#{directory}/tests_to_run_#{process_count + 1}.txt",
-                                   '-p', 'parallel',
-                                   '--format', 'json', '--out', "#{directory}/#{json_file_path}",
-                                   '--format', 'html', '--out', "#{directory}/#{html_file_path}",
-                                   '--format', 'progress')
-          FileUtils.touch(stdout_file_path)
-          process.io.stdout                                         = File.new(stdout_file_path, 'w')
-          process.environment['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] = process_count + 1
-          process.environment['CUKE_LINTER_TEST_PROCESS']           = 'true'
-          process.start
-          processes << process
-        end
+        processes              = generate_processes(parallel_count, 'cucumber')
+        problem_process_groups = []
 
         processes.each_with_index do |process, index|
           process.wait
@@ -170,19 +90,7 @@ module CukeLinter
         end
 
         if problem_process_groups.any?
-          puts Rainbow('Dumping output for errored processes...').yellow
-
-          problem_process_groups.each do |process_number|
-            puts Rainbow("Dumping output for process #{process_number}...").yellow
-
-            directory        = "#{REPORT_FOLDER}/cucumber/part_#{process_number}"
-            stdout_file_name = "std_out_#{process_number}.txt"
-            stdout_file_path = "#{directory}/#{stdout_file_name}"
-
-            process_output = File.read(stdout_file_path)
-            puts Rainbow(process_output).cyan
-          end
-
+          display_problems(problem_process_groups, 'cucumber')
           raise(Rainbow("Cucumber tests encountered problems! (see reports for groups #{problem_process_groups}").red)
         end
 
@@ -203,6 +111,92 @@ module CukeLinter
 
         # Creates the finalized JSON file that Coveralls will need
         SimpleCov::ResultMerger.store_result(merged_result)
+      end
+
+
+      private
+
+
+      def create_process_test_files(test_list, parallel_count, test_type)
+        # Round-robin split so that long-running tests in the suite (either evening distributed
+        # or in clusters) are less likely to be grouped in the split files
+        process_test_lists = Array.new(parallel_count) { [] }
+
+        test_list.each_with_index do |test, index|
+          process_test_lists[index % parallel_count] << test
+        end
+
+        process_test_lists.each_with_index do |process_test_list, index|
+          directory = "#{REPORT_FOLDER}/#{test_type}/part_#{index + 1}"
+          file_path = "test_list_#{index + 1}.txt"
+          FileUtils.mkpath(directory)
+          File.write("#{directory}/#{file_path}", process_test_list.join("\n"))
+        end
+      end
+
+      # It's readable enough
+      # rubocop:disable Metrics/MethodLength
+      def generate_processes(parallel_count, test_type)
+        [].tap do |processes|
+          parallel_count.times do |process_count|
+            directory        = "#{REPORT_FOLDER}/#{test_type}/part_#{process_count + 1}"
+            stdout_file_name = "std_out_#{process_count + 1}.txt"
+            stdout_file_path = "#{directory}/#{stdout_file_name}"
+
+            process = if test_type == 'rspec'
+                        create_parallel_rspec_process(process_count, directory)
+                      else
+                        create_parallel_cucumber_process(process_count, directory)
+                      end
+
+            FileUtils.touch(stdout_file_path)
+            process.io.stdout                                         = File.new(stdout_file_path, 'w')
+            process.environment['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] = process_count + 1
+            process.environment['CUKE_LINTER_TEST_PROCESS']           = 'true'
+            process.start
+            processes << process
+          end
+        end
+      end
+
+      # rubocop:enable Metrics/MethodLength
+
+      def create_parallel_rspec_process(process_count, directory)
+        json_file_path = "results_#{process_count + 1}.json"
+        html_file_path = "results_#{process_count + 1}.html"
+
+        create_process('bundle', 'exec', 'rspec',
+                       '-r', './environments/rspec_env.rb',
+                       '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', "#{directory}/#{json_file_path}", # rubocop:disable Metrics/LineLength
+                       '--format', 'html', '--out', "#{directory}/#{html_file_path}",
+                       '--format', 'p')
+      end
+
+      def create_parallel_cucumber_process(process_count, directory)
+        json_file_path = "results_#{process_count + 1}.json"
+        html_file_path = "results_#{process_count + 1}.html"
+
+        create_process('bundle', 'exec', 'cucumber',
+                       "@#{directory}/test_list_#{process_count + 1}.txt",
+                       '-p', 'parallel',
+                       '--format', 'json', '--out', "#{directory}/#{json_file_path}",
+                       '--format', 'html', '--out', "#{directory}/#{html_file_path}",
+                       '--format', 'progress')
+      end
+
+      def display_problems(problem_process_groups, test_type)
+        puts Rainbow('Dumping output for errored processes...').yellow
+
+        problem_process_groups.each do |process_number|
+          puts Rainbow("Dumping output for process #{process_number}...").yellow
+
+          directory        = "#{REPORT_FOLDER}/#{test_type}/part_#{process_number}"
+          stdout_file_name = "std_out_#{process_number}.txt"
+          stdout_file_path = "#{directory}/#{stdout_file_name}"
+
+          process_output = File.read(stdout_file_path)
+          puts Rainbow(process_output).cyan
+        end
       end
 
     end

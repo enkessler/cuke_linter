@@ -30,7 +30,7 @@ RSpec.configure do |config|
 
   if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
     process_count    = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']
-    source_file      = "testing/reports/rspec/part_#{process_count}/spec_file_#{process_count}.txt"
+    source_file      = "testing/reports/rspec/part_#{process_count}/test_list_#{process_count}.txt"
     persistence_file = "testing/reports/rspec/part_#{process_count}/.rspec_status_#{process_count}"
     spec_list        = File.read(source_file).split("\n")
     config.instance_variable_set(:@files_or_directories_to_run, spec_list)

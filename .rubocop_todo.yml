@@ -75,11 +75,6 @@ Layout/MultilineBlockLayout:
     - 'testing/rspec/spec/unit/linters/step_with_too_many_characters_linter_unit_spec.rb'
     - 'testing/rspec/spec/unit/linters/test_with_too_many_steps_linter_unit_spec.rb'
 
-# Offense count: 1
-Lint/ShadowingOuterLocalVariable:
-  Exclude:
-    - 'testing/parallel_helper.rb'
-
 # Offense count: 10
 Metrics/AbcSize:
   Max: 56
@@ -151,12 +146,6 @@ Style/BracesAroundHashParameters:
     - 'testing/cucumber/step_definitions/verification_steps.rb'
     - 'testing/rspec/spec/unit/cuke_linter_unit_spec.rb'
     - 'testing/rspec/spec/unit/linters/linter_unit_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/ColonMethodCall:
-  Exclude:
-    - 'testing/file_helper.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -319,7 +308,6 @@ Style/TrivialAccessors:
 Style/UnneededInterpolation:
   Exclude:
     - 'lib/cuke_linter/linters/linter.rb'
-    - 'testing/parallel_helper.rb'
     - 'testing/rspec/spec/unit/linters/linter_unit_specs.rb'
 
 # Offense count: 19
