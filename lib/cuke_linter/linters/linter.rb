@@ -4,16 +4,14 @@ module CukeLinter
 
   class Linter
 
+    # Returns the name of the linter
+    attr_reader :name
+
     # Creates a new linter object
     def initialize(name: nil, message: nil, rule: nil)
       @name    = name || self.class.name.split('::').last
       @message = message || "#{self.name} problem detected"
       @rule    = rule
-    end
-
-    # Returns the name of the linter
-    def name
-      @name
     end
 
     # Lints the given model and returns linting data about said model
@@ -25,14 +23,12 @@ module CukeLinter
       if problem_found
         problem_message = respond_to?(:message) ? message : @message
 
-        if model.is_a?(CukeModeler::FeatureFile)
-          { problem: problem_message, location: "#{model.path}" }
-        else
-          { problem: problem_message, location: "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" }
-        end
-      else
-        nil
+        return { problem: problem_message, location: model.path } if model.is_a?(CukeModeler::FeatureFile)
+
+        return { problem: problem_message, location: "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" }
       end
+
+      nil
     end
 
   end

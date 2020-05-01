@@ -19,12 +19,11 @@ module CukeLinter
 
       @linted_model_class   = model.class
       @linted_tag_threshold = @tag_threshold || 5
-
-      if @tag_inheritance
-        @linted_tag_count = model.all_tags.count
-      else
-        @linted_tag_count = model.tags.nil? ? 0 : model.tags.count
-      end
+      @linted_tag_count     = if @tag_inheritance
+                                model.all_tags.count
+                              else
+                                model.tags.nil? ? 0 : model.tags.count
+                              end
 
       @linted_tag_count > @linted_tag_threshold
     end

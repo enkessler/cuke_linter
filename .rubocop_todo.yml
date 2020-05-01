@@ -20,15 +20,7 @@ Layout/BlockEndNewline:
 # Cop supports --auto-correct.
 Layout/EmptyLineAfterGuardClause:
   Exclude:
-    - 'lib/cuke_linter/linters/test_should_use_background_linter.rb'
     - 'testing/rspec/spec/unit/cuke_linter_unit_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAdjacentOneLineDefs, NumberOfEmptyLines.
-Layout/EmptyLineBetweenDefs:
-  Exclude:
-    - 'lib/cuke_linter.rb'
 
 # Offense count: 927
 # Cop supports --auto-correct.
@@ -50,12 +42,6 @@ Layout/EmptyLinesAroundClassBody:
 Layout/EmptyLinesAroundExceptionHandlingKeywords:
   Exclude:
     - 'testing/rspec/spec/unit/cuke_linter_unit_spec.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-Layout/EmptyLinesAroundMethodBody:
-  Exclude:
-    - 'lib/cuke_linter.rb'
 
 # Offense count: 1
 # Configuration parameters: EnforcedStyle.
@@ -102,18 +88,6 @@ Metrics/ModuleLength:
 Metrics/PerceivedComplexity:
   Max: 10
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Performance/CompareWithBlock:
-  Exclude:
-    - 'lib/cuke_linter.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Performance/StringReplacement:
-  Exclude:
-    - 'lib/cuke_linter.rb'
-
 # Offense count: 6
 Security/Eval:
   Exclude:
@@ -146,33 +120,9 @@ Style/BracesAroundHashParameters:
     - 'testing/rspec/spec/unit/cuke_linter_unit_spec.rb'
     - 'testing/rspec/spec/unit/linters/linter_unit_spec.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SingleLineConditionsOnly, IncludeTernaryExpressions.
-# SupportedStyles: assign_to_condition, assign_inside_condition
-Style/ConditionalAssignment:
-  Exclude:
-    - 'lib/cuke_linter/linters/element_with_duplicate_tags_linter.rb'
-    - 'lib/cuke_linter/linters/element_with_too_many_tags_linter.rb'
-
 # Offense count: 39
 Style/Documentation:
   Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/EmptyCaseCondition:
-  Exclude:
-    - 'lib/cuke_linter.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty, nil, both
-Style/EmptyElse:
-  Exclude:
-    - 'lib/cuke_linter.rb'
-    - 'lib/cuke_linter/linters/linter.rb'
 
 # Offense count: 2
 Style/EvalWithLocation:
@@ -190,23 +140,11 @@ Style/HashSyntax:
 
 # Offense count: 1
 # Cop supports --auto-correct.
-Style/IfUnlessModifier:
-  Exclude:
-    - 'lib/cuke_linter/linters/feature_with_too_many_different_tags_linter.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: line_count_dependent, lambda, literal
 Style/Lambda:
   Exclude:
     - 'testing/rspec/spec/unit/linters/linter_unit_spec.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/MutableConstant:
-  Exclude:
-    - 'lib/cuke_linter/version.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -235,18 +173,6 @@ Style/ParenthesesAroundCondition:
 Style/RedundantParentheses:
   Exclude:
     - 'testing/rspec/spec/unit/linters/element_with_too_many_tags_linter_unit_spec.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/RedundantSelf:
-  Exclude:
-    - 'lib/cuke_linter.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/SelfAssignment:
-  Exclude:
-    - 'lib/cuke_linter.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -285,19 +211,10 @@ Style/TrailingCommaInHashLiteral:
   Exclude:
     - 'testing/rspec/spec/unit/cuke_linter_unit_spec.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: ExactNameMatch, AllowPredicates, AllowDSLWriters, IgnoreClassMethods, Whitelist.
-# Whitelist: to_ary, to_a, to_c, to_enum, to_h, to_hash, to_i, to_int, to_io, to_open, to_path, to_proc, to_r, to_regexp, to_str, to_s, to_sym
-Style/TrivialAccessors:
-  Exclude:
-    - 'lib/cuke_linter/linters/linter.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 Style/UnneededInterpolation:
   Exclude:
-    - 'lib/cuke_linter/linters/linter.rb'
     - 'testing/rspec/spec/unit/linters/linter_unit_specs.rb'
 
 # Offense count: 19

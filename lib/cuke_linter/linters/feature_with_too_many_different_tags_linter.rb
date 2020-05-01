@@ -16,9 +16,7 @@ module CukeLinter
       tags = model.tags
 
       model.each_descendant do |descendant_model|
-        if descendant_model.respond_to?(:tags)
-          tags.concat(descendant_model.tags)
-        end
+        tags.concat(descendant_model.tags) if descendant_model.respond_to?(:tags)
       end
 
       tags = tags.collect(&:name).uniq

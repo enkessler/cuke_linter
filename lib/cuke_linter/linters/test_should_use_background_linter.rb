@@ -14,20 +14,8 @@ module CukeLinter
 
       return false unless parent_feature_model.tests.count > 1
 
-      matching_steps = parent_feature_model.tests.all? do |test|
-        test_steps = test.steps || []
-        test_steps.first == model_steps.first
-      end
-
-      none_parameterized = parent_feature_model.tests.none? do |test|
-        next false if test.is_a?(CukeModeler::Scenario)
-
-        test_steps          = test.steps || []
-        params_used_by_test = test.examples.map(&:parameters).flatten.uniq
-
-        next false unless test_steps.any?
-        parameterized_step?(test_steps.first, parameters: params_used_by_test)
-      end
+      matching_steps     = all_first_steps_match?(parent_feature_model, model_steps)
+      none_parameterized = no_parameterized_steps?(parent_feature_model)
 
       matching_steps && none_parameterized
     end
@@ -40,6 +28,26 @@ module CukeLinter
 
     private
 
+
+    def all_first_steps_match?(feature_model, model_steps)
+      feature_model.tests.all? do |test|
+        test_steps = test.steps || []
+        test_steps.first == model_steps.first
+      end
+    end
+
+    def no_parameterized_steps?(feature_model)
+      feature_model.tests.none? do |test|
+        next false if test.is_a?(CukeModeler::Scenario)
+
+        test_steps          = test.steps || []
+        params_used_by_test = test.examples.map(&:parameters).flatten.uniq
+
+        next false unless test_steps.any?
+
+        parameterized_step?(test_steps.first, parameters: params_used_by_test)
+      end
+    end
 
     def parameterized_step?(step_model, parameters:)
       parameters.any? do |parameter|

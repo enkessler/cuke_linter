@@ -18,14 +18,12 @@ module CukeLinter
 
       @linted_model_class = model.class
 
-      if @tag_inheritance
-        relevant_tags = model.all_tags
-      else
-        relevant_tags = model.tags || []
-      end
-
-
-      tag_names = relevant_tags.map(&:name)
+      relevant_tags = if @tag_inheritance
+                        model.all_tags
+                      else
+                        model.tags || []
+                      end
+      tag_names     = relevant_tags.map(&:name)
 
       @duplicate_tag = tag_names.find { |tag| tag_names.count(tag) > 1 }
 
