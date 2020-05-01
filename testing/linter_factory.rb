@@ -14,6 +14,8 @@ module CukeLinter
 
     module Methods
 
+      # Dynamically defining a objects is not going to be short
+      # rubocop:disable Metrics/MethodLength
       def generate_fake_linter(name: 'FakeLinter', finds_problems: true)
         linter = Object.new
 
@@ -25,12 +27,9 @@ module CukeLinter
                      end
           problem  = @problem || "#{name} problem"
 
-          if finds_problems
-            { problem:  problem,
-              location: location }
-          else
-            nil
-          end
+          return { problem: problem, location: location } if finds_problems
+
+          nil
         end
 
         linter.define_singleton_method('name') do
@@ -41,10 +40,13 @@ module CukeLinter
           @problem = options['Problem'] if options['Problem']
         end
 
-
         linter
       end
 
+      # rubocop:enable Metrics/MethodLength
+
+      # Dynamically defining a class is not going to be short
+      # rubocop:disable Metrics/MethodLength
       def generate_fake_linter_class(module_name: nil, class_name: nil, linter_name: nil, finds_problems: nil)
         class_name     ||= 'FakeLinter'
         linter_name    ||= 'Some Name'
@@ -68,12 +70,9 @@ module CukeLinter
                        end
             problem  = @problem || "#{linter_name} problem"
 
-            if finds_problems
-              { problem:  problem,
-                location: location }
-            else
-              nil
-            end
+            return { problem: problem, location: location } if finds_problems
+
+            nil
           end
 
           define_method('name') do
@@ -81,8 +80,8 @@ module CukeLinter
           end
 
         end)
-
       end
+      # rubocop:enable Metrics/MethodLength
 
     end
 

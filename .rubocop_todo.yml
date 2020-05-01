@@ -56,7 +56,6 @@ Layout/EmptyLinesAroundExceptionHandlingKeywords:
 Layout/EmptyLinesAroundMethodBody:
   Exclude:
     - 'lib/cuke_linter.rb'
-    - 'testing/linter_factory.rb'
 
 # Offense count: 1
 # Configuration parameters: EnforcedStyle.
@@ -174,7 +173,6 @@ Style/EmptyElse:
   Exclude:
     - 'lib/cuke_linter.rb'
     - 'lib/cuke_linter/linters/linter.rb'
-    - 'testing/linter_factory.rb'
 
 # Offense count: 2
 Style/EvalWithLocation:
