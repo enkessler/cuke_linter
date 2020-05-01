@@ -9,4 +9,4 @@ require_relative '../testing/linter_factory'
 require_relative '../testing/formatter_factory'
 require_relative '../testing/file_helper'
 
-PROJECT_ROOT = "#{__dir__}/.."
+PROJECT_ROOT = "#{__dir__}/..".freeze

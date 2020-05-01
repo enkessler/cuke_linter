@@ -23,8 +23,8 @@ require_relative '../testing/rspec/spec/integration/formatters/formatter_integra
 require_relative '../testing/rspec/spec/integration/linters/linter_integration_specs'
 
 # Convenient constants, just in case what kinds of elements are taggable ever changes
-TAGGABLE_ELEMENTS               = ['feature', 'scenario', 'outline', 'example']
-ELEMENTS_WITH_TAGGABLE_CHILDREN = ['feature', 'outline']
+TAGGABLE_ELEMENTS               = ['feature', 'scenario', 'outline', 'example'].freeze
+ELEMENTS_WITH_TAGGABLE_CHILDREN = ['feature', 'outline'].freeze
 
 RSpec.configure do |config|
 
@@ -51,9 +51,7 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
-    # Using a global variable instead of an instance variable because instance variables
-    # are not compatible with :suite hooks
-    $default_linters = Marshal.load(Marshal.dump(CukeLinter.registered_linters))
+    DEFAULT_LINTERS = Marshal.load(Marshal.dump(CukeLinter.registered_linters)).freeze
   end
 
   # Restore the original linters after any test that modifies them so that other tests can
@@ -61,7 +59,7 @@ RSpec.configure do |config|
   config.after(:example, :linter_registration) do
     CukeLinter.clear_registered_linters
 
-    $default_linters.each_pair do |name, linter|
+    DEFAULT_LINTERS.each_pair do |name, linter|
       CukeLinter.register_linter(name: name, linter: linter)
     end
   end

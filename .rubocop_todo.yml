@@ -179,12 +179,6 @@ Style/EvalWithLocation:
   Exclude:
     - 'testing/rspec/spec/integration/configuration_spec.rb'
 
-# Offense count: 2
-# Configuration parameters: AllowedVariables.
-Style/GlobalVars:
-  Exclude:
-    - 'environments/rspec_env.rb'
-
 # Offense count: 10
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, UseHashRocketsWithSymbolValues, PreferHashRocketsForNonAlnumEndingSymbols.
@@ -212,8 +206,6 @@ Style/Lambda:
 # Cop supports --auto-correct.
 Style/MutableConstant:
   Exclude:
-    - 'environments/common_env.rb'
-    - 'environments/rspec_env.rb'
     - 'lib/cuke_linter/version.rb'
 
 # Offense count: 1
