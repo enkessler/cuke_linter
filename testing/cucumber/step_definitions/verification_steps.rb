@@ -24,11 +24,11 @@ Then(/^an error is reported:$/) do |table|
   end
 
   table.hashes.each do |error_record|
-    expect(@results).to include({ linter:   error_record['linter'],
-                                  problem:  error_record['problem'],
-                                  location: error_record['location']
-                                              .sub('<path_to_file>', model_path)
-                                              .sub('<model_line_number>', model_source_line) })
+    expect(@results).to include(linter:   error_record['linter'],
+                                problem:  error_record['problem'],
+                                location: error_record['location']
+                                            .sub('<path_to_file>', model_path)
+                                            .sub('<model_line_number>', model_source_line))
   end
 end
 
@@ -44,11 +44,11 @@ Then(/^the following problems are( not)? reported:$/) do |exclude, table|
   end
 
   table.hashes.each do |error_record|
-    expect(@results).send(assertion_method, include({ linter:   error_record['linter'],
-                                                      problem:  error_record['problem'],
-                                                      location: error_record['location']
-                                                                  .sub('<path_to_file>', feature_file_model.path)
-                                                                  .sub('<model_line_number>', source_line) }))
+    expect(@results).send(assertion_method, include(linter:   error_record['linter'],
+                                                    problem:  error_record['problem'],
+                                                    location: error_record['location']
+                                                                .sub('<path_to_file>', feature_file_model.path)
+                                                                .sub('<model_line_number>', source_line)))
   end
 end
 

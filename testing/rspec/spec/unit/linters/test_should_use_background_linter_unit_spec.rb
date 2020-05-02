@@ -52,7 +52,7 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
       context 'with parameters that are not really parameters' do
 
-        if (model_type == 'scenario')
+        if model_type == 'scenario'
 
           # Scenarios don't actually have parameters, even if they look like they do
           context 'because they are in scenarios' do

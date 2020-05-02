@@ -76,7 +76,7 @@ RSpec.describe CukeLinter::TestWithSetupStepAfterVerificationStepLinter do
           let(:test_model) do
             model       = send("generate_#{model_type}_model")
             model.steps = [CukeModeler::Step.new('Given a step'),
-                           CukeModeler::Step.new('Then a step'),]
+                           CukeModeler::Step.new('Then a step')]
 
             model
           end

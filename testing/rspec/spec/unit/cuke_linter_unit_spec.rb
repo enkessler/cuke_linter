@@ -4,7 +4,7 @@ require_relative '../../../../environments/rspec_env'
 RSpec.describe 'the gem' do
 
   let(:root_dir) { "#{__dir__}/../../../.." }
-  let(:gemspec) { eval(File.read "#{root_dir}/cuke_linter.gemspec") }
+  let(:gemspec) { eval(File.read("#{root_dir}/cuke_linter.gemspec")) }
   let(:lib_folder) { "#{root_dir}/lib" }
   let(:exe_folder) { "#{root_dir}/exe" }
   let(:features_folder) { "#{root_dir}/testing/cucumber/features" }
@@ -55,6 +55,7 @@ RSpec.describe 'the gem' do
         expect(gemspec.files).to include(*lib_files)
       rescue RSpec::Expectations::ExpectationNotMetError => e
         raise e if retries > 2
+
         retries += 1
         sleep 2
         retry
@@ -73,8 +74,8 @@ RSpec.describe 'the gem' do
 
         expect(gemspec.files).to include(*exe_files)
       rescue RSpec::Expectations::ExpectationNotMetError => e
-
         raise e if retries > 2
+
         retries += 1
         sleep 2
         retry
@@ -94,6 +95,7 @@ RSpec.describe 'the gem' do
         expect(gemspec.files).to include(*feature_files)
       rescue RSpec::Expectations::ExpectationNotMetError => e
         raise e if retries > 2
+
         retries += 1
         sleep 2
         retry
@@ -190,8 +192,8 @@ RSpec.describe CukeLinter do
 
     CukeLinter.unregister_linter('bar')
 
-    expect(CukeLinter.registered_linters).to eq({ 'foo' => :linter_1,
-                                                  'baz' => :linter_3, })
+    expect(CukeLinter.registered_linters).to eq('foo' => :linter_1,
+                                                'baz' => :linter_3)
   end
 
   it 'can clear all of its currently registered linters', :linter_registration do

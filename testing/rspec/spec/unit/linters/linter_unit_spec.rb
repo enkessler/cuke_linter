@@ -7,7 +7,7 @@ RSpec.describe CukeLinter::Linter do
 
   let(:linter_name) { 'FooLinter' }
   let(:linter_message) { 'Foo!' }
-  let(:linter_rule) { lambda { |model| !model.is_a?(CukeModeler::Example) } }
+  let(:linter_rule) { ->(model) { !model.is_a?(CukeModeler::Example) } }
   let(:linter_options) { { name: linter_name, message: linter_message, rule: linter_rule } }
 
   let(:good_data) { generate_example_model }
@@ -18,7 +18,7 @@ RSpec.describe CukeLinter::Linter do
 
   context 'with a linting rule' do
 
-    subject { CukeLinter::Linter.new(linter_options.merge({ rule: linter_rule })) }
+    subject { CukeLinter::Linter.new(linter_options.merge(rule: linter_rule)) }
 
     context 'with a good model' do
 
@@ -62,22 +62,23 @@ RSpec.describe CukeLinter::Linter do
 
   context 'with custom methods' do
 
-    subject { linter = CukeLinter::Linter.new
+    subject do
+      linter = CukeLinter::Linter.new
 
-              linter.define_singleton_method('rule') do |model|
-                !model.is_a?(CukeModeler::Example)
-              end
+      linter.define_singleton_method('rule') do |model|
+        !model.is_a?(CukeModeler::Example)
+      end
 
-              linter.define_singleton_method('name') do
-                'FooLinter'
-              end
+      linter.define_singleton_method('name') do
+        'FooLinter'
+      end
 
-              linter.define_singleton_method('message') do
-                'Foo!'
-              end
+      linter.define_singleton_method('message') do
+        'Foo!'
+      end
 
-
-              linter }
+      linter
+    end
 
 
     it 'uses the provided #name' do
@@ -107,22 +108,23 @@ RSpec.describe CukeLinter::Linter do
       generate_example_model
     end
 
-    subject { linter = CukeLinter::Linter.new(linter_options)
+    subject do
+      linter = CukeLinter::Linter.new(linter_options)
 
-              linter.define_singleton_method('rule') do |model|
-                model.is_a?(CukeModeler::Example)
-              end
+      linter.define_singleton_method('rule') do |model|
+        model.is_a?(CukeModeler::Example)
+      end
 
-              linter.define_singleton_method('name') do
-                'Method Linter'
-              end
+      linter.define_singleton_method('name') do
+        'Method Linter'
+      end
 
-              linter.define_singleton_method('message') do
-                'Method Foo!'
-              end
+      linter.define_singleton_method('message') do
+        'Method Foo!'
+      end
 
-
-              linter }
+      linter
+    end
 
 
     it 'uses #name instead of the provided name' do
@@ -155,7 +157,8 @@ RSpec.describe CukeLinter::Linter do
     it 'has a default name based on its class' do
       expect(subject.name).to eq('Linter')
 
-      class CustomLinter < CukeLinter::Linter;
+      class CustomLinter < CukeLinter::Linter
+
       end
 
       expect(CustomLinter.new.name).to eq('CustomLinter')
@@ -179,10 +182,12 @@ RSpec.describe CukeLinter::Linter do
       expect(result[:problem]).to eq('Value name problem detected')
 
       # Method name
-      class CustomLinter < CukeLinter::Linter;
+      class CustomLinter < CukeLinter::Linter
+
         def name
           'Method name'
         end
+
       end
 
       linter_options[:name] = nil

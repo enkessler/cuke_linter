@@ -9,51 +9,54 @@ RSpec.describe 'the Command Line Interface' do
 
   # A minimal fake test suite that should be available for every spec
   let!(:test_directory) { create_directory }
-  let!(:linted_file) { create_file(directory: test_directory,
-                                   name:      'lacking_a_description',
-                                   extension: '.feature',
-                                   text:      'Feature:
-                                                 Scenario: A scenario
-                                                   When a step
-                                                   Then a step') }
+  let!(:linted_file) do
+    create_file(directory: test_directory,
+                name:      'lacking_a_description',
+                extension: '.feature',
+                text:      'Feature:
+                              Scenario: A scenario
+                                When a step
+                                Then a step')
+  end
 
   # Stuff that is not always needed and so can be lazy instantiated
   let(:executable_directory) { "#{PROJECT_ROOT}/exe" }
   let(:executable_name) { 'cuke_linter' }
   let(:executable_path) { "#{executable_directory}/#{executable_name}" }
   let(:command) { "bundle exec ruby #{executable_path}" }
-  let(:results) { std_out, std_err, status = [nil, nil, nil]
+  let(:results) do
+    std_out = std_err = status = nil
 
-                  Dir.chdir(test_directory) do
-                    std_out, std_err, status = Open3.capture3(command)
-                  end
+    Dir.chdir(test_directory) do
+      std_out, std_err, status = Open3.capture3(command)
+    end
 
-                  { std_out: std_out, std_err: std_err, status: status } }
-
-  # rubocop:disable Metrics/LineLength
-  let(:expected_help_text) { ['Usage: cuke_linter [options]',
-                              '    -p, --path PATH                The file path that should be linted. Can be a file or directory.',
-                              '                                   This option can be specified multiple times in order to lint',
-                              '                                   multiple, unconnected locations.',
-                              '    -f, --formatter FORMATTER      The formatter used for generating linting output. This option',
-                              '                                   can be specified multiple times in order to use more than one',
-                              '                                   formatter. Formatters must be specified using their fully',
-                              '                                   qualified class name (e.g CukeLinter::PrettyFormatter). Uses',
-                              '                                   the default formatter if none are specified.',
-                              '    -o, --out OUT                  The file path to which linting results are output. Can be specified',
-                              '                                   multiple times. Specified files are matched to formatters in the',
-                              '                                   same order that the formatters are specified. Any formatter without',
-                              '                                   a corresponding file path will output to STDOUT instead.',
-                              '    -r, --require FILEPATH         A file that will be required before further processing. Likely',
-                              '                                   needed when using custom linters or formatters in order to ensure',
-                              '                                   that the specified classes have been read into memory. This option',
-                              '                                   can be specified multiple times in order to load more than one file.',
-                              '    -c, --config FILEPATH          The configuration file that will be used. Will use the default',
-                              '                                   configuration file (if present) if this option is not specified.',
-                              '    -h, --help                     Display the help that you are reading now.',
-                              '    -v, --version                  Display the version of the gem being used.',
-                              ''].join("\n") }
-  # rubocop:enable Metrics/LineLength
+    { std_out: std_out, std_err: std_err, status: status }
+  end
+  let(:expected_help_text) do
+    ['Usage: cuke_linter [options]',
+     '    -p, --path PATH                The file path that should be linted. Can be a file or directory.',
+     '                                   This option can be specified multiple times in order to lint',
+     '                                   multiple, unconnected locations.',
+     '    -f, --formatter FORMATTER      The formatter used for generating linting output. This option',
+     '                                   can be specified multiple times in order to use more than one',
+     '                                   formatter. Formatters must be specified using their fully',
+     '                                   qualified class name (e.g CukeLinter::PrettyFormatter). Uses',
+     '                                   the default formatter if none are specified.',
+     '    -o, --out OUT                  The file path to which linting results are output. Can be specified',
+     '                                   multiple times. Specified files are matched to formatters in the',
+     '                                   same order that the formatters are specified. Any formatter without',
+     '                                   a corresponding file path will output to STDOUT instead.',
+     '    -r, --require FILEPATH         A file that will be required before further processing. Likely',
+     '                                   needed when using custom linters or formatters in order to ensure',
+     '                                   that the specified classes have been read into memory. This option',
+     '                                   can be specified multiple times in order to load more than one file.',
+     '    -c, --config FILEPATH          The configuration file that will be used. Will use the default',
+     '                                   configuration file (if present) if this option is not specified.',
+     '    -h, --help                     Display the help that you are reading now.',
+     '    -v, --version                  Display the version of the gem being used.',
+     ''].join("\n")
+  end
 
   context 'with no additional arguments' do
 
@@ -99,14 +102,16 @@ RSpec.describe 'the Command Line Interface' do
 
     context 'when no problems are found' do
       # This file does not have any problems with the current linter set
-      let!(:linted_file) { create_file(directory: test_directory,
-                                       name:      'nothing_wrong',
-                                       extension: '.feature',
-                                       text:      'Feature: Nothing wrong
-                                                     A description
-                                                     Scenario: A scenario
-                                                       When a step
-                                                       Then a step') }
+      let!(:linted_file) do
+        create_file(directory: test_directory,
+                    name:      'nothing_wrong',
+                    extension: '.feature',
+                    text:      'Feature: Nothing wrong
+                                  A description
+                                  Scenario: A scenario
+                                    When a step
+                                    Then a step')
+      end
 
       it 'returns a zero exit code' do
         expect(results[:status].exitstatus).to eq(0)
@@ -116,10 +121,12 @@ RSpec.describe 'the Command Line Interface' do
 
     context 'when linting problems are found' do
       # This should be a problematic feature file
-      let!(:linted_file) { create_file(directory: test_directory,
-                                       name:      'pretty_empty',
-                                       extension: '.feature',
-                                       text:      'Feature: ') }
+      let!(:linted_file) do
+        create_file(directory: test_directory,
+                    name:      'pretty_empty',
+                    extension: '.feature',
+                    text:      'Feature: ')
+      end
 
       it 'returns a non-zero exit code' do
         expect(results[:status].exitstatus).to eq(1)
@@ -150,20 +157,24 @@ RSpec.describe 'the Command Line Interface' do
           let(:flag) { path_flag }
 
           context 'with path arguments' do
-            let(:file_1) { create_file(directory: test_directory,
-                                       name:      'some_feature',
-                                       extension: '.feature',
-                                       text:      'Feature: Some feature
-                                                     Scenario: A scenario
-                                                       When a step
-                                                       Then a step') }
-            let(:file_2) { create_file(directory: test_directory,
-                                       name:      'a_directory/with/some_feature',
-                                       extension: '.feature',
-                                       text:      'Feature: Some feature
-                                                     Scenario: A scenario
-                                                       When a step
-                                                       Then a step') }
+            let(:file_1) do
+              create_file(directory: test_directory,
+                          name:      'some_feature',
+                          extension: '.feature',
+                          text:      'Feature: Some feature
+                                        Scenario: A scenario
+                                          When a step
+                                          Then a step')
+            end
+            let(:file_2) do
+              create_file(directory: test_directory,
+                          name:      'a_directory/with/some_feature',
+                          extension: '.feature',
+                          text:      'Feature: Some feature
+                                        Scenario: A scenario
+                                          When a step
+                                          Then a step')
+            end
             let(:file_1_path) { file_1 }
             let(:file_2_directory) { File.dirname(file_2) }
             let(:command) { "bundle exec ruby #{executable_path} #{flag} #{file_1_path} #{flag} #{file_2_directory}" }
@@ -215,28 +226,34 @@ RSpec.describe 'the Command Line Interface' do
 
           context 'with formatter arguments' do
             # rubocop:disable Metrics/LineLength
-            let(:linted_file) { create_file(name:      'some_feature',
-                                            extension: '.feature',
-                                            text:      'Feature: Some feature
-                                                          Scenario: A scenario
-                                                            When a step
-                                                            Then a step') }
+            let(:linted_file) do
+              create_file(name:      'some_feature',
+                          extension: '.feature',
+                          text:      'Feature: Some feature
+                                        Scenario: A scenario
+                                          When a step
+                                          Then a step')
+            end
             let(:formatter_class) { 'AFakeFormatter' }
             let(:formatter_class_in_module) { 'CukeLinter::AnotherFakeFormatter' }
-            let(:formatter_class_file) { create_file(extension: '.rb',
-                                                     text:      'class AFakeFormatter
-                                                                   def format(data)
-                                                                     data.reduce("#{self.class}: ") { |final, lint_error| final << "#{lint_error[:problem]}: #{lint_error[:location]}\n" }
-                                                                   end
-                                                                 end') }
-            let(:formatter_class_in_module_file) { create_file(extension: '.rb',
-                                                               text:      'module CukeLinter
-                                                                             class AnotherFakeFormatter
-                                                                               def format(data)
-                                                                                 data.reduce("#{self.class}: ") { |final, lint_error| final << "#{lint_error[:problem]}: #{lint_error[:location]}\n" }
-                                                                               end
-                                                                             end
-                                                                           end') }
+            let(:formatter_class_file) do
+              create_file(extension: '.rb',
+                          text:      'class AFakeFormatter
+                                        def format(data)
+                                          data.reduce("#{self.class}: ") { |final, lint_error| final << "#{lint_error[:problem]}: #{lint_error[:location]}\n" }
+                                        end
+                                      end')
+            end
+            let(:formatter_class_in_module_file) do
+              create_file(extension: '.rb',
+                          text:      'module CukeLinter
+                                        class AnotherFakeFormatter
+                                         def format(data)
+                                           data.reduce("#{self.class}: ") { |final, lint_error| final << "#{lint_error[:problem]}: #{lint_error[:location]}\n" }
+                                         end
+                                       end
+                                     end')
+            end
             let(:command) { "bundle exec ruby #{executable_path} #{flag} #{formatter_class} #{flag} #{formatter_class_in_module} -p #{linted_file} -r #{formatter_class_file} -r #{formatter_class_in_module_file}" }
             # rubocop:enable Metrics/LineLength
 
@@ -282,26 +299,30 @@ RSpec.describe 'the Command Line Interface' do
           context 'with output arguments' do
             let(:output_location) { "#{create_directory}/output.txt" }
             let(:other_output_location) { "#{create_directory}/other_output.txt" }
-            let(:linted_file) { create_file(name:      'some_feature',
-                                            extension: '.feature',
-                                            text:      'Feature: Some feature
-                                                          Scenario: A scenario
-                                                            When a step
-                                                            Then a step') }
+            let(:linted_file) do
+              create_file(name:      'some_feature',
+                          extension: '.feature',
+                          text:      'Feature: Some feature
+                                        Scenario: A scenario
+                                          When a step
+                                          Then a step')
+            end
             let(:formatter_class_1) { 'AFakeFormatter' }
             let(:formatter_class_2) { 'AnotherFakeFormatter' }
-            let(:formatter_class_file) { create_file(extension: '.rb',
-                                                     text:      'class AFakeFormatter
-                                                                   def format(data)
-                                                                     "Formatting done by #{self.class}"
-                                                                   end
-                                                                 end
+            let(:formatter_class_file) do
+              create_file(extension: '.rb',
+                          text:      'class AFakeFormatter
+                                        def format(data)
+                                          "Formatting done by #{self.class}"
+                                        end
+                                      end
 
-                                                                 class AnotherFakeFormatter
-                                                                   def format(data)
-                                                                     "Formatting done by #{self.class}"
-                                                                   end
-                                                                 end') }
+                                      class AnotherFakeFormatter
+                                        def format(data)
+                                          "Formatting done by #{self.class}"
+                                        end
+                                      end')
+            end
             let(:command) { "bundle exec ruby #{executable_path} -f #{formatter_class_1} -f #{formatter_class_2} #{flag} #{output_location} #{flag} #{other_output_location} -p #{linted_file} -r #{formatter_class_file}" } # rubocop:disable Metrics/LineLength
 
 
@@ -397,11 +418,15 @@ RSpec.describe 'the Command Line Interface' do
           let(:flag) { require_flag }
 
           context 'with require arguments' do
-            let(:file_1) { create_file(extension: '.rb',
-                                       text:      "puts 'This file was loaded'") }
+            let(:file_1) do
+              create_file(extension: '.rb',
+                          text:      "puts 'This file was loaded'")
+            end
             let(:file_1_path) { file_1 }
-            let(:file_2) { create_file(extension: '.rb',
-                                       text:      "puts 'This file was also loaded'") }
+            let(:file_2) do
+              create_file(extension: '.rb',
+                          text:      "puts 'This file was also loaded'")
+            end
             let(:file_2_path) { file_2 }
             let(:command) { "bundle exec ruby #{executable_path} #{flag} #{file_1_path} #{flag} #{file_2_path}" }
 
@@ -445,10 +470,12 @@ RSpec.describe 'the Command Line Interface' do
 
           context 'with a single config argument' do
 
-            let(:config_file) { create_file(name:      'my_config_file',
-                                            extension: '.yml',
-                                            text:      'AllLinters:
-                                                          Enabled: false') }
+            let(:config_file) do
+              create_file(name:      'my_config_file',
+                          extension: '.yml',
+                          text:      'AllLinters:
+                                        Enabled: false')
+            end
             let(:command) { "bundle exec ruby #{executable_path} #{flag} #{config_file}" }
 
             it "uses the configuration file specified by '#{config_flag}'" do

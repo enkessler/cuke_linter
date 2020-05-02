@@ -6,22 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 62
-# Cop supports --auto-correct.
-Layout/BlockEndNewline:
-  Exclude:
-    - 'testing/rspec/spec/integration/cli_integration_spec.rb'
-    - 'testing/rspec/spec/integration/configuration_spec.rb'
-    - 'testing/rspec/spec/unit/linters/linter_unit_spec.rb'
-    - 'testing/rspec/spec/unit/linters/step_with_too_many_characters_linter_unit_spec.rb'
-    - 'testing/rspec/spec/unit/linters/test_with_too_many_steps_linter_unit_spec.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-Layout/EmptyLineAfterGuardClause:
-  Exclude:
-    - 'testing/rspec/spec/unit/cuke_linter_unit_spec.rb'
-
 # Offense count: 927
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
@@ -29,36 +13,12 @@ Layout/EmptyLineAfterGuardClause:
 Layout/EmptyLinesAroundBlockBody:
   Enabled: false
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines, beginning_only, ending_only
-Layout/EmptyLinesAroundClassBody:
-  Exclude:
-    - 'testing/rspec/spec/unit/linters/linter_unit_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Layout/EmptyLinesAroundExceptionHandlingKeywords:
-  Exclude:
-    - 'testing/rspec/spec/unit/cuke_linter_unit_spec.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: native, lf, crlf
 Layout/EndOfLine:
   Exclude:
     - 'bin/console'
-
-# Offense count: 62
-# Cop supports --auto-correct.
-Layout/MultilineBlockLayout:
-  Exclude:
-    - 'testing/rspec/spec/integration/cli_integration_spec.rb'
-    - 'testing/rspec/spec/integration/configuration_spec.rb'
-    - 'testing/rspec/spec/unit/linters/linter_unit_spec.rb'
-    - 'testing/rspec/spec/unit/linters/step_with_too_many_characters_linter_unit_spec.rb'
-    - 'testing/rspec/spec/unit/linters/test_with_too_many_steps_linter_unit_spec.rb'
 
 # Offense count: 10
 Metrics/AbcSize:
@@ -88,98 +48,9 @@ Metrics/ModuleLength:
 Metrics/PerceivedComplexity:
   Max: 10
 
-# Offense count: 6
-Security/Eval:
-  Exclude:
-    - 'testing/cucumber/step_definitions/action_steps.rb'
-    - 'testing/cucumber/step_definitions/setup_steps.rb'
-    - 'testing/rspec/spec/unit/cuke_linter_unit_spec.rb'
-
-# Offense count: 62
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, ProceduralMethods, FunctionalMethods, IgnoredMethods.
-# SupportedStyles: line_count_based, semantic, braces_for_chaining
-# ProceduralMethods: benchmark, bm, bmbm, create, each_with_object, measure, new, realtime, tap, with_object
-# FunctionalMethods: let, let!, subject, watch
-# IgnoredMethods: lambda, proc, it
-Style/BlockDelimiters:
-  Exclude:
-    - 'testing/rspec/spec/integration/cli_integration_spec.rb'
-    - 'testing/rspec/spec/integration/configuration_spec.rb'
-    - 'testing/rspec/spec/unit/linters/linter_unit_spec.rb'
-    - 'testing/rspec/spec/unit/linters/step_with_too_many_characters_linter_unit_spec.rb'
-    - 'testing/rspec/spec/unit/linters/test_with_too_many_steps_linter_unit_spec.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: braces, no_braces, context_dependent
-Style/BracesAroundHashParameters:
-  Exclude:
-    - 'testing/cucumber/step_definitions/verification_steps.rb'
-    - 'testing/rspec/spec/unit/cuke_linter_unit_spec.rb'
-    - 'testing/rspec/spec/unit/linters/linter_unit_spec.rb'
-
 # Offense count: 39
 Style/Documentation:
   Enabled: false
-
-# Offense count: 2
-Style/EvalWithLocation:
-  Exclude:
-    - 'testing/rspec/spec/integration/configuration_spec.rb'
-
-# Offense count: 10
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, UseHashRocketsWithSymbolValues, PreferHashRocketsForNonAlnumEndingSymbols.
-# SupportedStyles: ruby19, hash_rockets, no_mixed_keys, ruby19_no_mixed_keys
-Style/HashSyntax:
-  Exclude:
-    - 'testing/gemfiles/cuke_modeler1.gemfile'
-    - 'testing/gemfiles/cuke_modeler2.gemfile'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: line_count_dependent, lambda, literal
-Style/Lambda:
-  Exclude:
-    - 'testing/rspec/spec/unit/linters/linter_unit_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: Whitelist.
-# Whitelist: be, be_a, be_an, be_between, be_falsey, be_kind_of, be_instance_of, be_truthy, be_within, eq, eql, end_with, include, match, raise_error, respond_to, start_with
-Style/NestedParenthesizedCalls:
-  Exclude:
-    - 'testing/rspec/spec/unit/cuke_linter_unit_spec.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/ParallelAssignment:
-  Exclude:
-    - 'testing/cucumber/step_definitions/action_steps.rb'
-    - 'testing/rspec/spec/integration/cli_integration_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowSafeAssignment, AllowInMultilineConditions.
-Style/ParenthesesAroundCondition:
-  Exclude:
-    - 'testing/rspec/spec/unit/linters/test_should_use_background_linter_unit_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/RedundantParentheses:
-  Exclude:
-    - 'testing/rspec/spec/unit/linters/element_with_too_many_tags_linter_unit_spec.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAsExpressionSeparator.
-Style/Semicolon:
-  Exclude:
-    - 'testing/rspec/spec/unit/linters/linter_unit_spec.rb'
 
 # Offense count: 50
 # Cop supports --auto-correct.
@@ -194,28 +65,6 @@ Style/StringLiterals:
 # SupportedStyles: percent, brackets
 Style/SymbolArray:
   EnforcedStyle: brackets
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, no_comma
-Style/TrailingCommaInArrayLiteral:
-  Exclude:
-    - 'testing/rspec/spec/unit/linters/test_with_setup_step_after_verification_step_linter_unit_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, no_comma
-Style/TrailingCommaInHashLiteral:
-  Exclude:
-    - 'testing/rspec/spec/unit/cuke_linter_unit_spec.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/UnneededInterpolation:
-  Exclude:
-    - 'testing/rspec/spec/unit/linters/linter_unit_specs.rb'
 
 # Offense count: 19
 # Cop supports --auto-correct.

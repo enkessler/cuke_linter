@@ -1,5 +1,6 @@
 require_relative '../../../../environments/rspec_env'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe CukeLinter do
 
   describe 'configuration' do
@@ -55,7 +56,7 @@ RSpec.describe CukeLinter do
         config                  = { 'FakeLinter' => { 'Enabled' => false } }
         configuration_file      = create_file(name: '.cuke_linter', extension: '', text: config.to_yaml)
         non_configurable_linter = generate_fake_linter(name: 'FakeLinter')
-        non_configurable_linter.instance_eval('undef :configure')
+        non_configurable_linter.instance_eval('undef :configure', __FILE__, __LINE__)
 
         CukeLinter.register_linter(linter: non_configurable_linter, name: 'FakeLinter')
         expect(subject.registered_linters['FakeLinter']).to_not be nil
@@ -110,7 +111,7 @@ RSpec.describe CukeLinter do
       it "does not try to configure linters that don't know how to be configured" do
         config                  = { 'FakeLinter' => { 'Problem' => 'My custom message for FakeLinter' } }
         non_configurable_linter = generate_fake_linter(name: 'FakeLinter')
-        non_configurable_linter.instance_eval('undef :configure')
+        non_configurable_linter.instance_eval('undef :configure', __FILE__, __LINE__)
 
         CukeLinter.clear_registered_linters
         CukeLinter.register_linter(linter: non_configurable_linter, name: 'FakeLinter')
@@ -182,9 +183,11 @@ RSpec.describe CukeLinter do
       let(:test_model_trees) { [CukeModeler::FeatureFile.new(linted_file)] }
 
       let(:test_directory) { create_directory }
-      let(:linted_file) { create_file(directory: test_directory,
-                                      extension: '.feature',
-                                      text:      file_text) }
+      let(:linted_file) do
+        create_file(directory: test_directory,
+                    extension: '.feature',
+                    text:      file_text)
+      end
 
 
       [:provided, :registered].each do |linter_type|
@@ -192,18 +195,24 @@ RSpec.describe CukeLinter do
         context "using #{linter_type} linters" do
 
           if linter_type == :provided
-            let(:linting_options) { { model_trees: test_model_trees,
-                                      linters:     test_linters,
-                                      formatters:  test_formatters } }
+            let(:linting_options) do
+              { model_trees: test_model_trees,
+                linters:     test_linters,
+                formatters:  test_formatters }
+            end
           else
-            let(:linting_options) { { model_trees: test_model_trees,
-                                      formatters:  test_formatters } }
+            let(:linting_options) do
+              { model_trees: test_model_trees,
+                formatters:  test_formatters }
+            end
 
             before(:each) do
               subject.clear_registered_linters
 
-              test_linters.each_with_index { |linter, index| subject.register_linter(linter: linter,
-                                                                                     name:   test_linter_names[index]) }
+              test_linters.each_with_index do |linter, index|
+                subject.register_linter(linter: linter,
+                                        name:   test_linter_names[index])
+              end
             end
           end
 
@@ -213,11 +222,13 @@ RSpec.describe CukeLinter do
             let(:test_linters) { [non_nested_targeted_linter] }
             let(:test_linter_names) { [non_nested_linter_name] }
 
-            let(:file_text) { "Feature:
+            let(:file_text) do
+              "Feature:
 
-                                 # cuke_linter:disable #{non_nested_linter_class_name}
-                                 # cuke_linter:enable #{another_non_nested_linter_class_name}
-                                 Scenario:" }
+                 # cuke_linter:disable #{non_nested_linter_class_name}
+                 # cuke_linter:enable #{another_non_nested_linter_class_name}
+                 Scenario:"
+            end
 
 
             it 'handles the directives correctly' do
@@ -241,11 +252,13 @@ RSpec.describe CukeLinter do
             let(:test_linters) { [nested_targeted_linter] }
             let(:test_linter_names) { [nested_linter_name] }
 
-            let(:file_text) { "Feature:
+            let(:file_text) do
+              "Feature:
 
-                                 # cuke_linter:disable #{nested_linter_class_name}
-                                 # cuke_linter:enable #{another_nested_linter_class_name}
-                                 Scenario:" }
+                 # cuke_linter:disable #{nested_linter_class_name}
+                 # cuke_linter:enable #{another_nested_linter_class_name}
+                 Scenario:"
+            end
 
 
             it 'handles the directives correctly' do
@@ -266,26 +279,36 @@ RSpec.describe CukeLinter do
 
           context 'with multiple linters in the directive' do
             # rubocop:disable Metrics/LineLength
-            let(:commas_text) { "Feature:
+            let(:commas_text) do
+              "Feature:
 
-                                   # cuke_linter:disable #{linter_class_name}, #{another_linter_class_name}, #{yet_another_linter_class_name}
-                                   Scenario:" }
-            let(:commas_file) { create_file(directory: test_directory,
-                                            extension: '.feature',
-                                            text:      commas_text,
-                                            name:      'commas_text') }
+                 # cuke_linter:disable #{linter_class_name}, #{another_linter_class_name}, #{yet_another_linter_class_name}
+                 Scenario:"
+            end
+            let(:commas_file) do
+              create_file(directory: test_directory,
+                          extension: '.feature',
+                          text:      commas_text,
+                          name:      'commas_text')
+            end
 
-            let(:spaces_text) { "Feature:
+            let(:spaces_text) do
+              "Feature:
 
-                                   # cuke_linter:disable #{linter_class_name} #{another_linter_class_name} #{yet_another_linter_class_name}
-                                   Scenario:" }
-            let(:spaces_file) { create_file(directory: test_directory,
-                                            extension: '.feature',
-                                            text:      spaces_text,
-                                            name:      'spaces_text') }
+                 # cuke_linter:disable #{linter_class_name} #{another_linter_class_name} #{yet_another_linter_class_name}
+                 Scenario:"
+            end
+            let(:spaces_file) do
+              create_file(directory: test_directory,
+                          extension: '.feature',
+                          text:      spaces_text,
+                          name:      'spaces_text')
+            end
 
-            let(:test_model_trees) { [CukeModeler::FeatureFile.new(commas_file),
-                                      CukeModeler::FeatureFile.new(spaces_file)] }
+            let(:test_model_trees) do
+              [CukeModeler::FeatureFile.new(commas_file),
+               CukeModeler::FeatureFile.new(spaces_file)]
+            end
 
             let(:test_linters) { [targeted_linter, another_targeted_linter, yet_another_targeted_linter] }
             let(:test_linter_names) { [linter_name, another_linter_name, yet_another_linter_name] }
@@ -337,22 +360,32 @@ RSpec.describe CukeLinter do
 
           context 'with multiple files' do
 
-            let(:modified_text) { "Feature:
+            let(:modified_text) do
+              "Feature:
 
-                                     # cuke_linter:disable #{linter_class_name}
-                                     Scenario:" }
-            let(:modified_file) { create_file(directory: test_directory,
-                                              extension: '.feature',
-                                              text:      modified_text) }
-            let(:unmodified_text) { "Feature:
+                 # cuke_linter:disable #{linter_class_name}
+                 Scenario:"
+            end
+            let(:modified_file) do
+              create_file(directory: test_directory,
+                          extension: '.feature',
+                          text:      modified_text)
+            end
+            let(:unmodified_text) do
+              "Feature:
 
-                                       Scenario:" }
-            let(:unmodified_file) { create_file(directory: test_directory,
-                                                extension: '.feature',
-                                                text:      unmodified_text) }
+                 Scenario:"
+            end
+            let(:unmodified_file) do
+              create_file(directory: test_directory,
+                          extension: '.feature',
+                          text:      unmodified_text)
+            end
 
-            let(:test_model_trees) { [CukeModeler::FeatureFile.new(modified_file),
-                                      CukeModeler::FeatureFile.new(unmodified_file)] }
+            let(:test_model_trees) do
+              [CukeModeler::FeatureFile.new(modified_file),
+               CukeModeler::FeatureFile.new(unmodified_file)]
+            end
 
             it 'does not use targeted linting changes outside of the file in which they occur' do
               results = subject.lint(linting_options)
@@ -378,12 +411,14 @@ RSpec.describe CukeLinter do
 
           context 'with other comments in the file' do
 
-            let(:file_text) { "# I'm just a comment
-                                   Feature:
+            let(:file_text) do
+              "# I'm just a comment
+                   Feature:
 
-                                     # cuke_linter:disable #{linter_class_name}
-                                     #Me too
-                                     Scenario:" }
+                     # cuke_linter:disable #{linter_class_name}
+                     #Me too
+                     Scenario:"
+            end
 
 
             it 'handles the directive correctly' do
@@ -401,23 +436,33 @@ RSpec.describe CukeLinter do
 
           context 'with varying whitespace' do
 
-            let(:extra_whitespace_text) { "Feature:
+            let(:extra_whitespace_text) do
+              "Feature:
 
-                                             #      cuke_linter:disable       #{linter_class_name}
-                                             Scenario:" }
-            let(:extra_whitespace_file) { create_file(directory: test_directory,
-                                                      extension: '.feature',
-                                                      text:      extra_whitespace_text) }
-            let(:minimal_whitespace_text) { "Feature:
+                 #      cuke_linter:disable       #{linter_class_name}
+                 Scenario:"
+            end
+            let(:extra_whitespace_file) do
+              create_file(directory: test_directory,
+                          extension: '.feature',
+                          text:      extra_whitespace_text)
+            end
+            let(:minimal_whitespace_text) do
+              "Feature:
 
-                                               #cuke_linter:disable #{linter_class_name}
-                                               Scenario:" }
-            let(:minimal_whitespace_file) { create_file(directory: test_directory,
-                                                        extension: '.feature',
-                                                        text:      minimal_whitespace_text) }
+                 #cuke_linter:disable #{linter_class_name}
+                 Scenario:"
+            end
+            let(:minimal_whitespace_file) do
+              create_file(directory: test_directory,
+                          extension: '.feature',
+                          text:      minimal_whitespace_text)
+            end
 
-            let(:test_model_trees) { [CukeModeler::FeatureFile.new(extra_whitespace_file),
-                                      CukeModeler::FeatureFile.new(minimal_whitespace_file)] }
+            let(:test_model_trees) do
+              [CukeModeler::FeatureFile.new(extra_whitespace_file),
+               CukeModeler::FeatureFile.new(minimal_whitespace_file)]
+            end
 
 
             it 'handles the directives correctly' do
@@ -441,46 +486,64 @@ RSpec.describe CukeLinter do
             context 'and multiple targeted linters' do
 
               # rubocop:disable Metrics/LineLength
-              let(:spaced_commas_text) { "Feature:
+              let(:spaced_commas_text) do
+                "Feature:
 
-                                            # cuke_linter:disable #{linter_class_name}    ,    #{another_linter_class_name} , #{yet_another_linter_class_name}
-                                            Scenario:" }
-              let(:spaced_commas_file) { create_file(directory: test_directory,
-                                                     extension: '.feature',
-                                                     text:      spaced_commas_text,
-                                                     name:      'spaced_commas_text') }
+                   # cuke_linter:disable #{linter_class_name}    ,    #{another_linter_class_name} , #{yet_another_linter_class_name}
+                   Scenario:"
+              end
+              let(:spaced_commas_file) do
+                create_file(directory: test_directory,
+                            extension: '.feature',
+                            text:      spaced_commas_text,
+                            name:      'spaced_commas_text')
+              end
 
-              let(:compact_commas_text) { "Feature:
+              let(:compact_commas_text) do
+                "Feature:
 
-                                             # cuke_linter:disable #{linter_class_name},#{another_linter_class_name},#{yet_another_linter_class_name}
-                                             Scenario:" }
-              let(:compact_commas_file) { create_file(directory: test_directory,
-                                                      extension: '.feature',
-                                                      text:      compact_commas_text,
-                                                      name:      'compact_commas_text') }
+                   # cuke_linter:disable #{linter_class_name},#{another_linter_class_name},#{yet_another_linter_class_name}
+                   Scenario:"
+              end
+              let(:compact_commas_file) do
+                create_file(directory: test_directory,
+                            extension: '.feature',
+                            text:      compact_commas_text,
+                            name:      'compact_commas_text')
+              end
 
-              let(:spaced_space_text) { "Feature:
+              let(:spaced_space_text) do
+                "Feature:
 
-                                           # cuke_linter:disable #{linter_class_name}        #{another_linter_class_name}  #{yet_another_linter_class_name}
-                                           Scenario:" }
-              let(:spaced_space_file) { create_file(directory: test_directory,
-                                                    extension: '.feature',
-                                                    text:      spaced_space_text,
-                                                    name:      'spaced_space_text') }
+                   # cuke_linter:disable #{linter_class_name}        #{another_linter_class_name}  #{yet_another_linter_class_name}
+                   Scenario:"
+              end
+              let(:spaced_space_file) do
+                create_file(directory: test_directory,
+                            extension: '.feature',
+                            text:      spaced_space_text,
+                            name:      'spaced_space_text')
+              end
 
-              let(:compact_space_text) { "Feature:
+              let(:compact_space_text) do
+                "Feature:
 
-                                            # cuke_linter:disable #{linter_class_name} #{another_linter_class_name} #{yet_another_linter_class_name}
-                                            Scenario:" }
-              let(:compact_space_file) { create_file(directory: test_directory,
-                                                     extension: '.feature',
-                                                     text:      compact_space_text,
-                                                     name:      'compact_space_text') }
+                   # cuke_linter:disable #{linter_class_name} #{another_linter_class_name} #{yet_another_linter_class_name}
+                   Scenario:"
+              end
+              let(:compact_space_file) do
+                create_file(directory: test_directory,
+                            extension: '.feature',
+                            text:      compact_space_text,
+                            name:      'compact_space_text')
+              end
 
-              let(:test_model_trees) { [CukeModeler::FeatureFile.new(spaced_commas_file),
-                                        CukeModeler::FeatureFile.new(compact_commas_file),
-                                        CukeModeler::FeatureFile.new(spaced_space_file),
-                                        CukeModeler::FeatureFile.new(compact_space_file)] }
+              let(:test_model_trees) do
+                [CukeModeler::FeatureFile.new(spaced_commas_file),
+                 CukeModeler::FeatureFile.new(compact_commas_file),
+                 CukeModeler::FeatureFile.new(spaced_space_file),
+                 CukeModeler::FeatureFile.new(compact_space_file)]
+              end
 
               let(:test_linters) { [targeted_linter, another_targeted_linter, yet_another_targeted_linter] }
               let(:test_linter_names) { [linter_name, another_linter_name, yet_another_linter_name] }
@@ -594,21 +657,24 @@ RSpec.describe CukeLinter do
               let(:test_linters) { [baseline_linter, targeted_linter] }
               let(:test_linter_names) { [baseline_linter_name, linter_name] }
 
+              let(:file_text) do
+                "Feature:
 
-              let(:file_text) { "Feature:
+                   # cuke_linter:disable #{linter_class_name}
+                   Scenario:"
+              end
 
-                                   # cuke_linter:disable #{linter_class_name}
-                                   Scenario:" }
-
-              let(:baseline_linter_results) { [{ linter:   baseline_linter_name,
-                                                 location: linted_file,
-                                                 problem:  "#{baseline_linter_name} problem" },
-                                               { linter:   baseline_linter_name,
-                                                 location: "#{linted_file}:1",
-                                                 problem:  "#{baseline_linter_name} problem" },
-                                               { linter:   baseline_linter_name,
-                                                 location: "#{linted_file}:4",
-                                                 problem:  "#{baseline_linter_name} problem" }] }
+              let(:baseline_linter_results) do
+                [{ linter:   baseline_linter_name,
+                   location: linted_file,
+                   problem:  "#{baseline_linter_name} problem" },
+                 { linter:   baseline_linter_name,
+                   location: "#{linted_file}:1",
+                   problem:  "#{baseline_linter_name} problem" },
+                 { linter:   baseline_linter_name,
+                   location: "#{linted_file}:4",
+                   problem:  "#{baseline_linter_name} problem" }]
+              end
 
 
               it 'does not use the linter' do
@@ -622,10 +688,12 @@ RSpec.describe CukeLinter do
 
                 context 'with separate targetings' do
 
-                  let(:file_text) { "Feature:
-                                       # cuke_linter:disable #{linter_class_name}
-                                       # cuke_linter:disable #{linter_class_name}
-                                       Scenario:" }
+                  let(:file_text) do
+                    "Feature:
+                       # cuke_linter:disable #{linter_class_name}
+                       # cuke_linter:disable #{linter_class_name}
+                       Scenario:"
+                  end
 
 
                   it 'does not use the linter' do
@@ -638,10 +706,12 @@ RSpec.describe CukeLinter do
 
                 context 'with the same targeting' do
 
-                  let(:file_text) { "Feature:
+                  let(:file_text) do
+                    "Feature:
 
-                                       # cuke_linter:disable #{linter_class_name}, #{linter_class_name}
-                                       Scenario:" }
+                       # cuke_linter:disable #{linter_class_name}, #{linter_class_name}
+                       Scenario:"
+                  end
 
                   it 'does not use the linter' do
                     results = subject.lint(linting_options)
@@ -657,10 +727,12 @@ RSpec.describe CukeLinter do
 
             context 'that is explicitly enabled' do
 
-              let(:file_text) { "Feature:
+              let(:file_text) do
+                "Feature:
 
-                                   # cuke_linter:enable #{linter_class_name}
-                                   Scenario:" }
+                   # cuke_linter:enable #{linter_class_name}
+                   Scenario:"
+              end
 
               it 'uses the linter' do
                 results = subject.lint(linting_options)
@@ -674,10 +746,12 @@ RSpec.describe CukeLinter do
 
                 context 'with separate targetings' do
 
-                  let(:file_text) { "Feature:
-                                       # cuke_linter:enable #{linter_class_name}
-                                       # cuke_linter:enable #{linter_class_name}
-                                       Scenario:" }
+                  let(:file_text) do
+                    "Feature:
+                       # cuke_linter:enable #{linter_class_name}
+                       # cuke_linter:enable #{linter_class_name}
+                       Scenario:"
+                  end
 
                   it 'uses the linter' do
                     results = subject.lint(linting_options)
@@ -699,10 +773,12 @@ RSpec.describe CukeLinter do
 
                 context 'with the same targeting' do
 
-                  let(:file_text) { "Feature:
+                  let(:file_text) do
+                    "Feature:
 
-                                       # cuke_linter:enable #{linter_class_name}, #{linter_class_name}
-                                       Scenario:" }
+                       # cuke_linter:enable #{linter_class_name}, #{linter_class_name}
+                       Scenario:"
+                  end
 
                   it 'uses the linter' do
                     results = subject.lint(linting_options)
@@ -726,12 +802,14 @@ RSpec.describe CukeLinter do
 
               context 'and then re-disabled' do
 
-                let(:file_text) { "Feature:
+                let(:file_text) do
+                  "Feature:
 
-                                     # cuke_linter:enable #{linter_class_name}
-                                     Scenario:
-                                     # cuke_linter:disable #{linter_class_name}
-                                     Scenario:" }
+                     # cuke_linter:enable #{linter_class_name}
+                     Scenario:
+                     # cuke_linter:disable #{linter_class_name}
+                     Scenario:"
+                end
 
                 it 'ceases using the linter' do
                   results = subject.lint(linting_options)
@@ -762,10 +840,12 @@ RSpec.describe CukeLinter do
 
             context 'that is explicitly disabled' do
 
-              let(:file_text) { "Feature:
+              let(:file_text) do
+                "Feature:
 
-                                   # cuke_linter:disable #{linter_class_name}
-                                   Scenario:" }
+                   # cuke_linter:disable #{linter_class_name}
+                   Scenario:"
+              end
 
 
               it 'does not use the linter' do
@@ -783,10 +863,12 @@ RSpec.describe CukeLinter do
 
                 context 'with separate targetings' do
 
-                  let(:file_text) { "Feature:
-                                       # cuke_linter:disable #{linter_class_name}
-                                       # cuke_linter:disable #{linter_class_name}
-                                       Scenario:" }
+                  let(:file_text) do
+                    "Feature:
+                       # cuke_linter:disable #{linter_class_name}
+                       # cuke_linter:disable #{linter_class_name}
+                       Scenario:"
+                  end
 
 
                   it 'does not use the linter' do
@@ -804,10 +886,12 @@ RSpec.describe CukeLinter do
 
                 context 'with the same targeting' do
 
-                  let(:file_text) { "Feature:
+                  let(:file_text) do
+                    "Feature:
 
-                                       # cuke_linter:disable #{linter_class_name}, #{linter_class_name}
-                                       Scenario:" }
+                       # cuke_linter:disable #{linter_class_name}, #{linter_class_name}
+                       Scenario:"
+                  end
 
                   it 'does not use the linter' do
                     results = subject.lint(linting_options)
@@ -825,12 +909,14 @@ RSpec.describe CukeLinter do
 
               context 'and then re-enabled' do
 
-                let(:file_text) { "Feature:
+                let(:file_text) do
+                  "Feature:
 
-                                     # cuke_linter:disable #{linter_class_name}
-                                     Scenario:
-                                     # cuke_linter:enable #{linter_class_name}
-                                     Scenario:" }
+                     # cuke_linter:disable #{linter_class_name}
+                     Scenario:
+                     # cuke_linter:enable #{linter_class_name}
+                     Scenario:"
+                end
 
 
                 it 'resumes using the linter' do
@@ -867,10 +953,12 @@ RSpec.describe CukeLinter do
 
             context 'that is explicitly enabled' do
 
-              let(:file_text) { "Feature:
+              let(:file_text) do
+                "Feature:
 
-                                   # cuke_linter:enable #{linter_class_name}
-                                   Scenario:" }
+                   # cuke_linter:enable #{linter_class_name}
+                   Scenario:"
+              end
 
 
               it 'uses the linter' do
@@ -938,10 +1026,12 @@ RSpec.describe CukeLinter do
 
                 context 'with separate targetings' do
 
-                  let(:file_text) { "Feature:
-                                       # cuke_linter:enable #{linter_class_name}
-                                       # cuke_linter:enable #{linter_class_name}
-                                       Scenario:" }
+                  let(:file_text) do
+                    "Feature:
+                       # cuke_linter:enable #{linter_class_name}
+                       # cuke_linter:enable #{linter_class_name}
+                       Scenario:"
+                  end
 
                   it 'uses the linter' do
                     results = subject.lint(linting_options)
@@ -975,10 +1065,12 @@ RSpec.describe CukeLinter do
 
                 context 'with the same targeting' do
 
-                  let(:file_text) { "Feature:
+                  let(:file_text) do
+                    "Feature:
 
-                                       # cuke_linter:enable #{linter_class_name}, #{linter_class_name}
-                                       Scenario:" }
+                       # cuke_linter:enable #{linter_class_name}, #{linter_class_name}
+                       Scenario:"
+                  end
 
                   it 'uses the linter' do
                     results = subject.lint(linting_options)
@@ -1025,3 +1117,4 @@ RSpec.describe CukeLinter do
   end
 
 end
+# rubocop:enable Metrics/BlockLength

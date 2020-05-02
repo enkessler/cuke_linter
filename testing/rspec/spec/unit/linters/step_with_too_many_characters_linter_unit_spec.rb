@@ -134,9 +134,11 @@ RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
       let(:character_threshold) { 10 }
       let(:configuration) { { 'StepLengthThreshold' => character_threshold } }
 
-      subject { linter = CukeLinter::StepWithTooManyCharactersLinter.new
-                linter.configure(configuration)
-                linter }
+      subject do
+        linter = CukeLinter::StepWithTooManyCharactersLinter.new
+        linter.configure(configuration)
+        linter
+      end
 
       let(:test_model) do
         step = 'x' * (character_threshold + 1)

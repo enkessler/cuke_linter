@@ -213,7 +213,7 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
           let(:test_model_with_inherited_tags) do
             test_model      = send("generate_#{model_type}_model")
             test_model.tags = []
-            (default_tag_threshold).times { test_model.tags << :a_tag }
+            default_tag_threshold.times { test_model.tags << :a_tag }
 
             ancestor_model      = generate_lintable_model
             ancestor_model.tags = [:an_extra_tag]

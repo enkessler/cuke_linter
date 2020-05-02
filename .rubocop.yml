@@ -36,3 +36,8 @@ Layout/AlignHash:
 # Helps with readability
 Layout/CaseIndentation:
   Enabled: false
+
+# The test code is safe to evaluate
+Security/Eval:
+  Exclude:
+    - 'testing/**/*'

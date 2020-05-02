@@ -159,9 +159,11 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
           let(:step_threshhold) { 3 }
           let(:configuration) { { 'StepThreshold' => step_threshhold } }
 
-          subject { linter = CukeLinter::TestWithTooManyStepsLinter.new
-                    linter.configure(configuration)
-                    linter }
+          subject do
+            linter = CukeLinter::TestWithTooManyStepsLinter.new
+            linter.configure(configuration)
+            linter
+          end
 
           let(:test_model) do
             model       = send("generate_#{model_type}_model")

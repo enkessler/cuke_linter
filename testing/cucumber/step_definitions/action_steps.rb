@@ -42,7 +42,7 @@ When(/^the executable finds no linting problems$/) do
   # Linting an empty directory doesn't (currently) find and problems
   command = "bundle exec ruby #{PROJECT_ROOT}/exe/cuke_linter"
 
-  std_out, std_err, status = [nil, nil, nil]
+  std_out = std_err = status = nil
 
   Dir.chdir(@root_test_directory) do
     std_out, std_err, status = Open3.capture3(command)
@@ -61,7 +61,7 @@ When(/^the executable finds linting problems$/) do
 
   command = "bundle exec ruby #{PROJECT_ROOT}/exe/cuke_linter"
 
-  std_out, std_err, status = [nil, nil, nil]
+  std_out = std_err = status = nil
 
   Dir.chdir(@root_test_directory) do
     std_out, std_err, status = Open3.capture3(command)
@@ -74,7 +74,7 @@ When(/^the executable has a problem$/) do
   # Missing a required argument for a flag should be a problem
   command = "bundle exec ruby #{PROJECT_ROOT}/exe/cuke_linter -r"
 
-  std_out, std_err, status = [nil, nil, nil]
+  std_out = std_err = status = nil
 
   Dir.chdir(@root_test_directory) do
     std_out, std_err, status = Open3.capture3(command)
