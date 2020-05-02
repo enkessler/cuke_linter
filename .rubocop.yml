@@ -48,3 +48,12 @@ Metrics/BlockLength:
     - 'testing/rspec/spec/**/*_spec.rb'
     # Gemspecs are inherently one large block of code
     - cuke_linter.gemspec
+
+# Whitespace improves readability
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Layout/EndOfLine:
+  Exclude:
+    # Git isn't changing the line endings locally for some reason
+    - 'bin/console'
