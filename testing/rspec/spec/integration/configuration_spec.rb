@@ -1,6 +1,5 @@
 require_relative '../../../../environments/rspec_env'
 
-# rubocop:disable Metrics/BlockLength
 RSpec.describe CukeLinter do
 
   describe 'configuration' do
@@ -1117,4 +1116,3 @@ RSpec.describe CukeLinter do
   end
 
 end
-# rubocop:enable Metrics/BlockLength

@@ -9,6 +9,7 @@ params[:formatters] = []
 params[:outs]       = []
 params[:requires]   = []
 
+# rubocop:disable Metrics/BlockLength
 parser = OptionParser.new do |options|
 
   options.set_summary_width(30)
@@ -68,6 +69,7 @@ parser = OptionParser.new do |options|
   end
 
 end
+# rubocop:enable Metrics/BlockLength
 
 begin
   parser.parse!

@@ -26,6 +26,7 @@ require_relative '../testing/rspec/spec/integration/linters/linter_integration_s
 TAGGABLE_ELEMENTS               = %w[feature scenario outline example].freeze
 ELEMENTS_WITH_TAGGABLE_CHILDREN = %w[feature outline].freeze
 
+# rubocop:disable Metrics/BlockLength
 RSpec.configure do |config|
 
   if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
@@ -75,3 +76,4 @@ RSpec.configure do |config|
   config.include CukeLinter::LinterFactory
   config.include CukeLinter::ModelFactory
 end
+# rubocop:enable Metrics/BlockLength

@@ -41,3 +41,10 @@ Layout/CaseIndentation:
 Security/Eval:
   Exclude:
     - 'testing/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    # RSpec tests are inherently large blocks of code
+    - 'testing/rspec/spec/**/*_spec.rb'
+    # Gemspecs are inherently one large block of code
+    - cuke_linter.gemspec

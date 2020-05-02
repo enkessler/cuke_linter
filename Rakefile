@@ -8,6 +8,7 @@ require_relative 'rakefiles/testing_tasks'
 
 Rainbow.enabled = true
 
+# rubocop:disable Metrics/BlockLength
 namespace 'cuke_linter' do
 
   desc 'Check documentation with RDoc'
@@ -47,6 +48,7 @@ namespace 'cuke_linter' do
   end
 
 end
+# rubocop:enable Metrics/BlockLength
 
 
 task :default => 'cuke_linter:test_everything' # rubocop:disable Style/HashSyntax

@@ -24,12 +24,6 @@ Layout/EndOfLine:
 Metrics/AbcSize:
   Max: 56
 
-# Offense count: 171
-# Configuration parameters: CountComments, ExcludedMethods.
-# ExcludedMethods: refine
-Metrics/BlockLength:
-  Max: 511
-
 # Offense count: 9
 Metrics/CyclomaticComplexity:
   Max: 10

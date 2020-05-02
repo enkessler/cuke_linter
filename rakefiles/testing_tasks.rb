@@ -1,6 +1,7 @@
 require_relative '../testing/process_helper'
 require_relative '../testing/parallel_helper'
 
+# rubocop:disable Metrics/BlockLength
 namespace 'cuke_linter' do
 
   desc 'Run all of the RSpec tests'
@@ -79,3 +80,4 @@ namespace 'cuke_linter' do
   end
 
 end
+# rubocop:enable Metrics/BlockLength
