@@ -15,7 +15,7 @@ RSpec.describe CukeLinter::TestWithSetupStepAsFinalStepLinter do
 
   describe 'linting' do
 
-    ['scenario', 'outline'].each do |model_type|
+    %w[scenario outline].each do |model_type|
 
       context "with a #{model_type} that has a setup step as its final step" do
 

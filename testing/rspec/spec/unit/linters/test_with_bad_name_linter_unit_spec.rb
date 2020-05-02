@@ -14,13 +14,13 @@ RSpec.describe CukeLinter::TestWithBadNameLinter do
 
   describe 'linting' do
 
-    ['scenario', 'outline'].each do |model_type|
+    %w[scenario outline].each do |model_type|
 
       context "with a #{model_type} that has a bad name" do
 
         context 'because its name contains a bad word' do
 
-          ['test', 'check', 'verify'].each do |bad_word|
+          %w[test check verify].each do |bad_word|
 
             let(:test_model) do
               model      = send("generate_#{model_type}_model", parent_file_path: model_file_path)
@@ -41,7 +41,7 @@ RSpec.describe CukeLinter::TestWithBadNameLinter do
 
           context 'because bad words are case insensitive' do
 
-            ['Test', 'TEST'].each do |bad_word|
+            %w[Test TEST].each do |bad_word|
 
               let(:test_model) do
                 model      = send("generate_#{model_type}_model", parent_file_path: model_file_path)

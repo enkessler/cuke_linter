@@ -22,7 +22,7 @@ RSpec.describe CukeLinter::FeatureFileWithMismatchedNameLinter do
     end
 
 
-    context "with a feature file model that has mismatched feature name" do
+    context 'with a feature file model that has mismatched feature name' do
 
       let(:model_file_path) { 'foo.feature' }
       let(:model_feature_name) { 'Bar' }
@@ -37,7 +37,7 @@ RSpec.describe CukeLinter::FeatureFileWithMismatchedNameLinter do
 
     end
 
-    context "with a feature file model that does not have a mismatched feature name" do
+    context 'with a feature file model that does not have a mismatched feature name' do
 
       context 'with a file name that has caps' do
         let(:model_file_path) { 'Name With Caps.feature' }

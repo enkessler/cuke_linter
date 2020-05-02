@@ -60,7 +60,7 @@ module CukeLinter
         model
       end
 
-      def generate_outline_model(source_text: "Scenario Outline:", parent_file_path: 'path_to_file')
+      def generate_outline_model(source_text: 'Scenario Outline:', parent_file_path: 'path_to_file')
         fake_parent_model = generate_feature_model(parent_file_path: parent_file_path)
 
         model              = CukeModeler::Outline.new(source_text)

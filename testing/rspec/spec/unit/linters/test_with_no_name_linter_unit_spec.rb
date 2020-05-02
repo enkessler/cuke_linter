@@ -14,7 +14,7 @@ RSpec.describe CukeLinter::TestWithNoNameLinter do
 
   describe 'linting' do
 
-    ['scenario', 'outline'].each do |model_type|
+    %w[scenario outline].each do |model_type|
 
       context "with a #{model_type} that has no name" do
 

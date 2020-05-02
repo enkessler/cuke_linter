@@ -45,7 +45,7 @@ Given(/^a linter for outlines with only one example row$/) do
   @linter = CukeLinter::OutlineWithSingleExampleRowLinter.new
 end
 
-Given("a linter for tests with bad names") do
+Given(/^a linter for tests with bad names$/) do
   @linter = CukeLinter::TestWithBadNameLinter.new
 end
 
@@ -65,7 +65,7 @@ Given(/^a linter for backgrounds that do more than setup$/) do
   @linter = CukeLinter::BackgroundDoesMoreThanSetupLinter.new
 end
 
-Given("a linter for test steps with too many characters") do
+Given(/^a linter for test steps with too many characters$/) do
   @linter = CukeLinter::StepWithTooManyCharactersLinter.new
 end
 
@@ -139,7 +139,7 @@ Given(/^a linter for tests with a setup step as the final step has been register
                              name:   'TestWithSetupStepAsFinalStepLinter')
 end
 
-Given("a linter for features without a description") do
+Given(/^a linter for features without a description$/) do
   @linter = CukeLinter::FeatureWithoutDescriptionLinter.new
 end
 

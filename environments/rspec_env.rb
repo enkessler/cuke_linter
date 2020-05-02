@@ -23,8 +23,8 @@ require_relative '../testing/rspec/spec/integration/formatters/formatter_integra
 require_relative '../testing/rspec/spec/integration/linters/linter_integration_specs'
 
 # Convenient constants, just in case what kinds of elements are taggable ever changes
-TAGGABLE_ELEMENTS               = ['feature', 'scenario', 'outline', 'example'].freeze
-ELEMENTS_WITH_TAGGABLE_CHILDREN = ['feature', 'outline'].freeze
+TAGGABLE_ELEMENTS               = %w[feature scenario outline example].freeze
+ELEMENTS_WITH_TAGGABLE_CHILDREN = %w[feature outline].freeze
 
 RSpec.configure do |config|
 

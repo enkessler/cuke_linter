@@ -5,7 +5,7 @@ namespace 'cuke_linter' do
 
   desc 'Run all of the RSpec tests'
   task :run_rspec_tests => [:clear_old_results] do # rubocop:disable Style/HashSyntax
-    puts Rainbow("Running RSpec tests...").cyan
+    puts Rainbow('Running RSpec tests...').cyan
 
     process = CukeLinter::ProcessHelper.create_process('bundle', 'exec', 'rspec',
                                                        '-r', './environments/rspec_env.rb')
@@ -22,7 +22,7 @@ namespace 'cuke_linter' do
 
   desc 'Run all of the RSpec tests'
   task :run_rspec_tests_in_parallel => [:clear_old_results] do # rubocop:disable Style/HashSyntax
-    puts Rainbow("Running RSpec tests").cyan
+    puts Rainbow('Running RSpec tests').cyan
 
     pattern = 'testing/rspec/spec/**/*_spec.rb'
     specs   = CukeLinter::ParallelHelper.get_discrete_specs(spec_pattern: pattern)
@@ -33,7 +33,7 @@ namespace 'cuke_linter' do
 
   desc 'Run all of the Cucumber tests'
   task :run_cucumber_tests_in_parallel => [:clear_old_results] do # rubocop:disable Style/HashSyntax
-    puts Rainbow("Running Cucumber tests...").cyan
+    puts Rainbow('Running Cucumber tests...').cyan
 
     feature_directory = 'testing/cucumber/features'
     scenarios         = CukeLinter::ParallelHelper.get_discrete_scenarios(directory: feature_directory)
@@ -44,7 +44,7 @@ namespace 'cuke_linter' do
 
   desc 'Run all of the Cucumber tests'
   task :run_cucumber_tests => [:clear_old_results] do # rubocop:disable Style/HashSyntax
-    puts Rainbow("Running Cucumber tests...").cyan
+    puts Rainbow('Running Cucumber tests...').cyan
 
     process = CukeLinter::ProcessHelper.create_process('bundle', 'exec', 'cucumber',
                                                        '-p', 'default')

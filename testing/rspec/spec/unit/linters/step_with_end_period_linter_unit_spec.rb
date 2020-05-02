@@ -14,7 +14,7 @@ RSpec.describe CukeLinter::StepWithEndPeriodLinter do
 
   describe 'linting' do
 
-    context "with a step that ends with a period" do
+    context 'with a step that ends with a period' do
 
       let(:test_model) do
         generate_step_model(parent_file_path: model_file_path,
@@ -32,7 +32,7 @@ RSpec.describe CukeLinter::StepWithEndPeriodLinter do
 
     end
 
-    context "with a step that does not end with a period" do
+    context 'with a step that does not end with a period' do
 
       let(:test_model) do
         generate_step_model(source_text: '* without a period')

@@ -16,7 +16,7 @@ RSpec.describe CukeLinter::SingleTestBackgroundLinter do
 
     context 'with a background that affects only one test' do
 
-      ['scenario', 'outline'].each do |model_type|
+      %w[scenario outline].each do |model_type|
 
         context "and that test is a #{model_type}" do
 

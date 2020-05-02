@@ -15,7 +15,7 @@ RSpec.describe CukeLinter::TestWithNoVerificationStepLinter do
 
   describe 'linting' do
 
-    ['scenario', 'outline'].each do |model_type|
+    %w[scenario outline].each do |model_type|
 
       context "with a #{model_type} that has no verification step" do
 
@@ -120,7 +120,7 @@ RSpec.describe CukeLinter::TestWithNoVerificationStepLinter do
 
     end
 
-    ['scenario', 'outline'].each do |model_type|
+    %w[scenario outline].each do |model_type|
 
       context "with a #{model_type} that has a related background" do
 

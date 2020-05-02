@@ -133,7 +133,7 @@ end
 
 RSpec.describe CukeLinter do
 
-  it "has a version number" do
+  it 'has a version number' do
     expect(CukeLinter::VERSION).not_to be nil
   end
 
@@ -155,10 +155,10 @@ RSpec.describe CukeLinter do
 
   it 'lints using a set of model trees, file paths, linters, and formatters (all of which are optional)' do
     expect(CukeLinter.method(:lint).arity).to eq(-1)
-    expect(CukeLinter.method(:lint).parameters).to match_array([[:key, :model_trees],
-                                                                [:key, :linters],
-                                                                [:key, :formatters],
-                                                                [:key, :file_paths]])
+    expect(CukeLinter.method(:lint).parameters).to match_array([%i[key model_trees],
+                                                                %i[key linters],
+                                                                %i[key formatters],
+                                                                %i[key file_paths]])
   end
 
   it 'can register a linter' do
@@ -171,13 +171,13 @@ RSpec.describe CukeLinter do
 
   it 'registers a linter by name' do
     expect(CukeLinter.method(:register_linter).arity).to eq(1)
-    expect(CukeLinter.method(:register_linter).parameters).to match_array([[:keyreq, :linter],
-                                                                           [:keyreq, :name]])
+    expect(CukeLinter.method(:register_linter).parameters).to match_array([%i[keyreq linter],
+                                                                           %i[keyreq name]])
   end
 
   it 'unregisters a linter by name' do
     expect(CukeLinter.method(:unregister_linter).arity).to eq(1)
-    expect(CukeLinter.method(:unregister_linter).parameters).to match_array([[:req, :name]])
+    expect(CukeLinter.method(:unregister_linter).parameters).to match_array([%i[req name]])
   end
 
   it 'knows its currently registered linters' do
@@ -217,8 +217,8 @@ RSpec.describe CukeLinter do
 
     it 'is configured optionally via a file or a directly provided configuration' do
       expect(CukeLinter.method(:load_configuration).arity).to eq(-1)
-      expect(CukeLinter.method(:load_configuration).parameters).to match_array([[:key, :config_file_path],
-                                                                                [:key, :config]])
+      expect(CukeLinter.method(:load_configuration).parameters).to match_array([%i[key config_file_path],
+                                                                                %i[key config]])
     end
 
   end

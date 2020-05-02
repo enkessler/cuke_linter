@@ -36,7 +36,7 @@ shared_examples_for 'a linter linting a bad model' do
     result = subject.lint(test_model)
 
     expect(result).to_not be_nil
-    expect(result.keys).to match_array([:problem, :location])
+    expect(result.keys).to match_array(%i[problem location])
   end
 
   it 'correctly records the location of the problem' do

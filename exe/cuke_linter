@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require "cuke_linter"
+require 'cuke_linter'
 require 'optparse'
 
 params              = {}

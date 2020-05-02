@@ -14,7 +14,7 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
   describe 'linting' do
 
-    ['scenario', 'outline'].each do |model_type|
+    %w[scenario outline].each do |model_type|
 
       context "with a #{model_type} that shares a first step with all other tests in the feature" do
 
@@ -95,7 +95,7 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
 
             let(:test_model) do
               # Whitespace is significant
-              step_text     = "the step <    param_foo     >"
+              step_text     = 'the step <    param_foo     >'
               feature_model = generate_feature_model(parent_file_path: model_file_path,
                                                      source_text:      "Feature:
                                                                           Scenario Outline:
@@ -413,7 +413,7 @@ RSpec.describe CukeLinter::TestShouldUseBackgroundLinter do
               context 'with inconsistent parameter usage' do
 
                 let(:test_model) do
-                  step_text     = "the step <param_foo>"
+                  step_text     = 'the step <param_foo>'
                   feature_model = generate_feature_model(source_text: "Feature:
                                                                          Scenario Outline:
                                                                            * #{step_text}

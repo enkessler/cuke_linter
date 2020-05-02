@@ -31,7 +31,7 @@ module CukeLinter
       include ProcessHelper
 
       def get_discrete_specs(spec_pattern:)
-        puts "Gathering specs..."
+        puts 'Gathering specs...'
 
         temp_file = Tempfile.new
         process   = create_process('bundle', 'exec', 'rspec',

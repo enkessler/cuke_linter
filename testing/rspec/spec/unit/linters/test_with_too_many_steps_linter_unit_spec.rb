@@ -15,23 +15,23 @@ RSpec.describe CukeLinter::TestWithTooManyStepsLinter do
 
   describe 'linting' do
 
-    ['scenario', 'outline'].each do |model_type|
+    %w[scenario outline].each do |model_type|
 
       context "with a #{model_type} that has too many steps" do
 
         let(:test_model) do
           model       = send("generate_#{model_type}_model", parent_file_path: model_file_path)
-          model.steps = [:step_1,
-                         :step_2,
-                         :step_3,
-                         :step_4,
-                         :step_5,
-                         :step_6,
-                         :step_7,
-                         :step_8,
-                         :step_9,
-                         :step_10,
-                         :step_11]
+          model.steps = %i[step_1
+                           step_2
+                           step_3
+                           step_4
+                           step_5
+                           step_6
+                           step_7
+                           step_8
+                           step_9
+                           step_10
+                           step_11]
 
           model
         end

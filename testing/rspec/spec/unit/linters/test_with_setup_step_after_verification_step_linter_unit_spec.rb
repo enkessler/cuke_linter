@@ -15,7 +15,7 @@ RSpec.describe CukeLinter::TestWithSetupStepAfterVerificationStepLinter do
 
   describe 'linting' do
 
-    ['scenario', 'outline'].each do |model_type|
+    %w[scenario outline].each do |model_type|
 
       context "with a #{model_type} that has a setup step after a verification step" do
 

@@ -81,7 +81,7 @@ RSpec.describe CukeLinter do
       @a_feature_file    = create_file(text: "\nFeature:", extension: '.feature')
       a_non_feature_file = create_file(text: 'Some text', extension: '.foo')
       @a_directory       = create_directory
-      File.write("#{@a_directory}/test_feature.feature", "Feature:")
+      File.write("#{@a_directory}/test_feature.feature", 'Feature:')
 
       linting_options[:file_paths] = [@a_feature_file, a_non_feature_file, @a_directory]
       linting_options.delete(:model_trees)
@@ -148,7 +148,7 @@ RSpec.describe CukeLinter do
 
     it 'models the current directory' do
       test_dir = create_directory
-      File.write("#{test_dir}/test_feature.feature", "Feature:")
+      File.write("#{test_dir}/test_feature.feature", 'Feature:')
 
       Dir.chdir(test_dir) do
         @results = subject.lint(linting_options)
@@ -215,31 +215,31 @@ RSpec.describe CukeLinter do
   it 'has a default set of registered linters' do
     subject.reset_linters
 
-    default_linter_classes = ['BackgroundDoesMoreThanSetupLinter',
-                              'ElementWithCommonTagsLinter',
-                              'ElementWithDuplicateTagsLinter',
-                              'ElementWithTooManyTagsLinter',
-                              'ExampleWithoutNameLinter',
-                              'FeatureFileWithInvalidNameLinter',
-                              'FeatureFileWithMismatchedNameLinter',
-                              'FeatureWithTooManyDifferentTagsLinter',
-                              'FeatureWithoutDescriptionLinter',
-                              'FeatureWithoutNameLinter',
-                              'FeatureWithoutScenariosLinter',
-                              'OutlineWithSingleExampleRowLinter',
-                              'SingleTestBackgroundLinter',
-                              'StepWithEndPeriodLinter',
-                              'StepWithTooManyCharactersLinter',
-                              'TestShouldUseBackgroundLinter',
-                              'TestWithActionStepAsFinalStepLinter',
-                              'TestWithBadNameLinter',
-                              'TestWithNoActionStepLinter',
-                              'TestWithNoNameLinter',
-                              'TestWithNoVerificationStepLinter',
-                              'TestWithSetupStepAfterActionStepLinter',
-                              'TestWithSetupStepAfterVerificationStepLinter',
-                              'TestWithSetupStepAsFinalStepLinter',
-                              'TestWithTooManyStepsLinter']
+    default_linter_classes = %w[BackgroundDoesMoreThanSetupLinter
+                                ElementWithCommonTagsLinter
+                                ElementWithDuplicateTagsLinter
+                                ElementWithTooManyTagsLinter
+                                ExampleWithoutNameLinter
+                                FeatureFileWithInvalidNameLinter
+                                FeatureFileWithMismatchedNameLinter
+                                FeatureWithTooManyDifferentTagsLinter
+                                FeatureWithoutDescriptionLinter
+                                FeatureWithoutNameLinter
+                                FeatureWithoutScenariosLinter
+                                OutlineWithSingleExampleRowLinter
+                                SingleTestBackgroundLinter
+                                StepWithEndPeriodLinter
+                                StepWithTooManyCharactersLinter
+                                TestShouldUseBackgroundLinter
+                                TestWithActionStepAsFinalStepLinter
+                                TestWithBadNameLinter
+                                TestWithNoActionStepLinter
+                                TestWithNoNameLinter
+                                TestWithNoVerificationStepLinter
+                                TestWithSetupStepAfterActionStepLinter
+                                TestWithSetupStepAfterVerificationStepLinter
+                                TestWithSetupStepAsFinalStepLinter
+                                TestWithTooManyStepsLinter]
 
     expect(subject.registered_linters.keys).to eq(default_linter_classes)
 

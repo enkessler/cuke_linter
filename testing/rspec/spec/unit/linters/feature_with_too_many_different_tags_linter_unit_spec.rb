@@ -88,7 +88,7 @@ RSpec.describe CukeLinter::FeatureWithTooManyDifferentTagsLinter do
         end
 
         # Descriptive variable name, just in case what kinds of elements are taggable ever changes
-        taggable_elements = ['feature', 'scenario', 'outline', 'example']
+        taggable_elements = %w[feature scenario outline example]
 
         taggable_elements.each do |model_type|
 

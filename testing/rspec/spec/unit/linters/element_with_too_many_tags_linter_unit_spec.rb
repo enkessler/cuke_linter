@@ -21,12 +21,12 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
 
         let(:test_model) do
           model      = send("generate_#{model_type}_model", parent_file_path: model_file_path)
-          model.tags = [:tag_1,
-                        :tag_2,
-                        :tag_3,
-                        :tag_4,
-                        :tag_5,
-                        :tag_6]
+          model.tags = %i[tag_1
+                          tag_2
+                          tag_3
+                          tag_4
+                          tag_5
+                          tag_6]
 
           model
         end
@@ -60,11 +60,11 @@ RSpec.describe CukeLinter::ElementWithTooManyTagsLinter do
 
           let(:test_model) do
             model      = send("generate_#{model_type}_model")
-            model.tags = [:tag_1,
-                          :tag_2,
-                          :tag_3,
-                          :tag_4,
-                          :tag_5]
+            model.tags = %i[tag_1
+                            tag_2
+                            tag_3
+                            tag_4
+                            tag_5]
 
             model
           end

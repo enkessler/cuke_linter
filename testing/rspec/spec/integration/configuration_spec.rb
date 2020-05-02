@@ -190,7 +190,7 @@ RSpec.describe CukeLinter do
       end
 
 
-      [:provided, :registered].each do |linter_type|
+      %i[provided registered].each do |linter_type|
 
         context "using #{linter_type} linters" do
 

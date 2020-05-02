@@ -15,7 +15,7 @@ RSpec.describe CukeLinter::TestWithActionStepAsFinalStepLinter do
 
   describe 'linting' do
 
-    ['scenario', 'outline'].each do |model_type|
+    %w[scenario outline].each do |model_type|
 
       context "with a #{model_type} that has an action step as its final step" do
 
