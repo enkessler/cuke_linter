@@ -14,6 +14,7 @@ module CukeLinter
 
     module Methods
 
+      # TODO: Make it short
       # Dynamically defining a objects is not going to be short
       # rubocop:disable Metrics/MethodLength
       def generate_fake_linter(name: 'FakeLinter', finds_problems: true)
@@ -45,8 +46,9 @@ module CukeLinter
 
       # rubocop:enable Metrics/MethodLength
 
-      # Dynamically defining a class is not going to be short
-      # rubocop:disable Metrics/MethodLength
+      # TODO: Make it short and simple
+      # Dynamically defining a class is not going to be short or simple
+      # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       def generate_fake_linter_class(module_name: nil, class_name: nil, linter_name: nil, finds_problems: nil)
         class_name     ||= 'FakeLinter'
         linter_name    ||= 'Some Name'
@@ -81,7 +83,7 @@ module CukeLinter
 
         end)
       end
-      # rubocop:enable Metrics/MethodLength
+      # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
     end
 

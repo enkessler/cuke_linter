@@ -12,6 +12,9 @@ require 'simplecov'
 
 module CukeLinter
 
+  # TODO: Maybe address this later
+  # rubocop:disable Metrics/ModuleLength
+
   # A helper module that has methods for doing testing in parallel
 
   module ParallelHelper
@@ -34,16 +37,7 @@ module CukeLinter
         puts 'Gathering specs...'
 
         temp_file = Tempfile.new
-        process   = create_process('bundle', 'exec', 'rspec',
-                                   '--pattern', spec_pattern,
-                                   '--dry-run',
-                                   '-r', './environments/rspec_env.rb',
-                                   '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', temp_file.path)
-        process.io.inherit!
-        process.environment['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] = 'rspec_spec_gathering'
-        process.environment['CUKE_LINTER_TEST_PROCESS']           = 'false'
-        process.start
-        process.wait
+        process   = run_spec_gathering_process(spec_pattern, temp_file)
 
         raise(Rainbow('Could not gather specs!').red) unless process.exit_code.zero?
 
@@ -51,24 +45,7 @@ module CukeLinter
       end
 
       def run_rspec_in_parallel(spec_list:, parallel_count: Parallel.processor_count)
-        create_process_test_files(spec_list, parallel_count, 'rspec')
-
-        Kernel.puts "Running #{spec_list.count} specs across #{parallel_count} processes..."
-
-        processes              = generate_processes(parallel_count, 'rspec')
-        problem_process_groups = []
-
-        processes.each_with_index do |process, index|
-          process.wait
-          problem_process_groups << index + 1 unless process.exit_code.zero?
-        end
-
-        if problem_process_groups.any?
-          display_problems(problem_process_groups, 'rspec')
-          raise(Rainbow("RSpec tests encountered problems! (see reports for groups #{problem_process_groups}").red)
-        end
-
-        puts Rainbow('All RSpec tests passing. :)').green
+        run_tests_in_parallel(test_list: spec_list, parallel_count: parallel_count, test_type: 'rspec')
       end
 
       def get_discrete_scenarios(directory:)
@@ -77,24 +54,7 @@ module CukeLinter
       end
 
       def run_cucumber_in_parallel(scenario_list:, parallel_count: Parallel.processor_count)
-        create_process_test_files(scenario_list, parallel_count, 'cucumber')
-
-        puts "Running #{scenario_list.count} scenarios across #{parallel_count} processes..."
-
-        processes              = generate_processes(parallel_count, 'cucumber')
-        problem_process_groups = []
-
-        processes.each_with_index do |process, index|
-          process.wait
-          problem_process_groups << index + 1 unless process.exit_code.zero?
-        end
-
-        if problem_process_groups.any?
-          display_problems(problem_process_groups, 'cucumber')
-          raise(Rainbow("Cucumber tests encountered problems! (see reports for groups #{problem_process_groups}").red)
-        end
-
-        puts Rainbow('All Cucumber tests passing. :)').green
+        run_tests_in_parallel(test_list: scenario_list, parallel_count: parallel_count, test_type: 'cucumber')
       end
 
       def combine_code_coverage_reports
@@ -117,6 +77,21 @@ module CukeLinter
       private
 
 
+      def run_spec_gathering_process(spec_pattern, temp_file)
+        process = create_process('bundle', 'exec', 'rspec',
+                                 '--pattern', spec_pattern,
+                                 '--dry-run',
+                                 '-r', './environments/rspec_env.rb',
+                                 '--format', 'RSpec::Core::Formatters::JsonFormatter', '--out', temp_file.path)
+        process.io.inherit!
+        process.environment['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] = 'rspec_spec_gathering'
+        process.environment['CUKE_LINTER_TEST_PROCESS']           = 'false'
+        process.start
+        process.wait
+
+        process
+      end
+
       def create_process_test_files(test_list, parallel_count, test_type)
         # Round-robin split so that long-running tests in the suite (either evening distributed
         # or in clusters) are less likely to be grouped in the split files
@@ -134,8 +109,6 @@ module CukeLinter
         end
       end
 
-      # It's readable enough
-      # rubocop:disable Metrics/MethodLength
       def generate_processes(parallel_count, test_type)
         [].tap do |processes|
           parallel_count.times do |process_count|
@@ -143,11 +116,7 @@ module CukeLinter
             stdout_file_name = "std_out_#{process_count + 1}.txt"
             stdout_file_path = "#{directory}/#{stdout_file_name}"
 
-            process = if test_type == 'rspec'
-                        create_parallel_rspec_process(process_count, directory)
-                      else
-                        create_parallel_cucumber_process(process_count, directory)
-                      end
+            process = send("create_parallel_#{test_type}_process", process_count, directory)
 
             FileUtils.touch(stdout_file_path)
             process.io.stdout                                         = File.new(stdout_file_path, 'w')
@@ -159,7 +128,32 @@ module CukeLinter
         end
       end
 
-      # rubocop:enable Metrics/MethodLength
+      def run_tests_in_parallel(test_list:, parallel_count: Parallel.processor_count, test_type:)
+        create_process_test_files(test_list, parallel_count, test_type)
+
+        puts "Running #{test_list.count} tests across #{parallel_count} processes..."
+
+        processes              = generate_processes(parallel_count, test_type)
+        problem_process_groups = gather_process_results(processes)
+        handle_bad_results(problem_process_groups, test_type) if problem_process_groups.any?
+
+        puts Rainbow("All #{test_type.capitalize} tests passing. :)").green
+      end
+
+      def gather_process_results(processes)
+        [].tap do |problem_process_groups|
+          processes.each_with_index do |process, index|
+            process.wait
+            problem_process_groups << index + 1 unless process.exit_code.zero?
+          end
+        end
+      end
+
+      def handle_bad_results(problem_process_groups, test_type)
+        display_problems(problem_process_groups, test_type)
+        error_messaage = "#{test_type.capitalize} tests encountered problems! (see reports for groups #{problem_process_groups}" # rubocop:disable Metrics/LineLength
+        raise(Rainbow(error_messaage).red)
+      end
 
       def create_parallel_rspec_process(process_count, directory)
         json_file_path = "results_#{process_count + 1}.json"
@@ -204,4 +198,6 @@ module CukeLinter
     extend Methods
 
   end
+  # rubocop:enable Metrics/ModuleLength
+
 end

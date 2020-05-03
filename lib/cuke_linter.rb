@@ -29,65 +29,23 @@ require 'cuke_linter/linters/test_with_setup_step_after_action_step_linter'
 require 'cuke_linter/linters/test_with_setup_step_after_verification_step_linter'
 require 'cuke_linter/linters/test_with_setup_step_as_final_step_linter'
 require 'cuke_linter/linters/test_with_too_many_steps_linter'
+require 'cuke_linter/configuration'
 require 'cuke_linter/default_linters'
+require 'cuke_linter/gherkin'
+require 'cuke_linter/linter_registration'
 
 
 # The top level namespace used by this gem
-
 module CukeLinter
 
-  # The default keyword that is considered a 'Given' keyword
-  DEFAULT_GIVEN_KEYWORD = 'Given'.freeze
-  # The default keyword that is considered a 'When' keyword
-  DEFAULT_WHEN_KEYWORD = 'When'.freeze
-  # The default keyword that is considered a 'Then' keyword
-  DEFAULT_THEN_KEYWORD = 'Then'.freeze
+  extend CukeLinter::Configuration
+  extend CukeLinter::LinterRegistration
 
   class << self
 
-    # Configures linters based on the given options
-    def load_configuration(config_file_path: nil, config: nil)
-      # TODO: define what happens if both a configuration file and a configuration are
-      # provided. Merge them or have direct config take precedence? Both?
-
-      unless config || config_file_path
-        config_file_path = "#{Dir.pwd}/.cuke_linter"
-        message          = 'No configuration or configuration file given and no .cuke_linter file found'
-        raise message unless File.exist?(config_file_path)
-      end
-
-      config ||= YAML.load_file(config_file_path)
-      configure_linters(config, registered_linters)
-    end
-
-    # Returns the registered linters to their default state
-    def reset_linters
-      @registered_linters = nil
-    end
-
-    # Registers for linting use the given linter object, tracked by the given name
-    def register_linter(linter:, name:)
-      registered_linters[name] = linter
-    end
-
-    # Unregisters the linter object tracked by the given name so that it is not used for linting
-    def unregister_linter(name)
-      registered_linters.delete(name)
-    end
-
-    # Lists the names of the currently registered linting objects
-    def registered_linters
-      @registered_linters ||= Marshal.load(Marshal.dump(@original_linters))
-    end
-
-    # Unregisters all currently registered linting objects
-    def clear_registered_linters
-      registered_linters.clear
-    end
-
     # Lints the given model trees and file paths using the given linting objects and formatting
     # the results with the given formatters and their respective output locations
-    def lint(file_paths: nil, model_trees: nil, linters: nil, formatters: nil)
+    def lint(file_paths: [], model_trees: [], linters: registered_linters.values, formatters: [[CukeLinter::PrettyFormatter.new]]) # rubocop:disable Metrics/LineLength
       # TODO: Test this?
       # Because directive memoization is based on a model's `#object_id` and Ruby reuses object IDs over the
       # life of a program as objects are garbage collected, it is not safe to remember the IDs forever. However,
@@ -95,14 +53,9 @@ module CukeLinter
       # a good time to reset things
       @directives_for_feature_file = {}
 
-      file_paths       ||= []
-      model_trees      ||= []
-      linters          ||= registered_linters.values
-      formatters       ||= [[CukeLinter::PrettyFormatter.new]]
-
-      model_trees      = [CukeModeler::Directory.new(Dir.pwd)] if model_trees.empty? && file_paths.empty?
-      file_path_models = collect_file_path_models(file_paths)
-      model_sets       = model_trees + file_path_models
+      model_trees                  = [CukeModeler::Directory.new(Dir.pwd)] if model_trees.empty? && file_paths.empty?
+      file_path_models             = collect_file_path_models(file_paths)
+      model_sets                   = model_trees + file_path_models
 
       linting_data = lint_models(model_sets, linters)
       format_data(formatters, linting_data)
@@ -165,7 +118,12 @@ module CukeLinter
       disabled_linter_classes = linter_modifications_for_model.reject { |_name, status| status }.keys
       enabled_linter_classes  = linter_modifications_for_model.select { |_name, status| status }.keys
 
+      determine_final_linters(base_linters, disabled_linter_classes, enabled_linter_classes)
+    end
+
+    def determine_final_linters(base_linters, disabled_linter_classes, enabled_linter_classes)
       final_linters = base_linters.reject { |linter| disabled_linter_classes.include?(linter.class) }
+
       enabled_linter_classes.each do |clazz|
         final_linters << dynamic_linters[clazz] unless final_linters.map(&:class).include?(clazz)
       end
@@ -179,24 +137,28 @@ module CukeLinter
 
       return existing_directives if existing_directives
 
-      directives = []
-
-      feature_file_model.comments.each do |comment|
-        pieces = comment.text.match(/#\s*cuke_linter:(disable|enable)\s+(.*)/)
-        next unless pieces # Skipping non-directive file comments
-
-        linter_classes = pieces[2].tr(',', ' ').split(' ')
-        linter_classes.each do |clazz|
-          directives << { linter_class:   Kernel.const_get(clazz),
-                          enabled_status: pieces[1] != 'disable',
-                          source_line:    comment.source_line }
-        end
-      end
+      directives = gather_directives_in_feature(feature_file_model)
 
       # Make sure that the directives are in the same order as they appear in the source file
       directives = directives.sort_by { |a| a[:source_line] }
 
       @directives_for_feature_file[feature_file_model.object_id] = directives
+    end
+
+    def gather_directives_in_feature(feature_file_model)
+      [].tap do |directives|
+        feature_file_model.comments.each do |comment|
+          pieces = comment.text.match(/#\s*cuke_linter:(disable|enable)\s+(.*)/)
+          next unless pieces # Skipping non-directive file comments
+
+          linter_classes = pieces[2].tr(',', ' ').split(' ')
+          linter_classes.each do |clazz|
+            directives << { linter_class:   Kernel.const_get(clazz),
+                            enabled_status: pieces[1] != 'disable',
+                            source_line:    comment.source_line }
+          end
+        end
+      end
     end
 
     def dynamic_linters
@@ -220,25 +182,6 @@ module CukeLinter
           puts formatted_data
         end
       end
-    end
-
-    def configure_linters(configuration, linters)
-      common_config = configuration['AllLinters'] || {}
-      to_delete     = []
-
-      linters.each_pair do |name, linter|
-        linter_config = configuration[name] || {}
-        final_config  = common_config.merge(linter_config)
-
-        disabled = (final_config.key?('Enabled') && !final_config['Enabled'])
-
-        # Just save it for afterwards because modifying a collection while iterating through it is not a good idea
-        to_delete << name if disabled
-
-        linter.configure(final_config) if linter.respond_to?(:configure)
-      end
-
-      to_delete.each { |linter_name| unregister_linter(linter_name) }
     end
 
     # Not linting unused code

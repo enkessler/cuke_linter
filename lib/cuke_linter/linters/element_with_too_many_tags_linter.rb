@@ -12,10 +12,7 @@ module CukeLinter
 
     # The rule used to determine if a model has a problem
     def rule(model)
-      return false unless model.is_a?(CukeModeler::Feature) ||
-                          model.is_a?(CukeModeler::Scenario) ||
-                          model.is_a?(CukeModeler::Outline) ||
-                          model.is_a?(CukeModeler::Example)
+      return false unless relevant_model?(model)
 
       @linted_model_class   = model.class
       @linted_tag_threshold = @tag_threshold || 5
@@ -33,6 +30,17 @@ module CukeLinter
       class_name = @linted_model_class.name.split('::').last
 
       "#{class_name} has too many tags. #{@linted_tag_count} tags found (max #{@linted_tag_threshold})."
+    end
+
+
+    private
+
+
+    def relevant_model?(model)
+      model.is_a?(CukeModeler::Feature) ||
+        model.is_a?(CukeModeler::Scenario) ||
+        model.is_a?(CukeModeler::Outline) ||
+        model.is_a?(CukeModeler::Example)
     end
 
   end

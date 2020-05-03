@@ -20,15 +20,23 @@ module CukeLinter
 
       problem_found = respond_to?(:rule) ? rule(model) : @rule.call(model)
 
-      if problem_found
-        problem_message = respond_to?(:message) ? message : @message
+      return nil unless problem_found
 
-        return { problem: problem_message, location: model.path } if model.is_a?(CukeModeler::FeatureFile)
+      build_problem(model)
+    end
 
-        return { problem: problem_message, location: "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" }
+
+    private
+
+
+    def build_problem(model)
+      problem_message = respond_to?(:message) ? message : @message
+
+      if model.is_a?(CukeModeler::FeatureFile)
+        { problem: problem_message, location: model.path }
+      else
+        { problem: problem_message, location: "#{model.get_ancestor(:feature_file).path}:#{model.source_line}" }
       end
-
-      nil
     end
 
   end

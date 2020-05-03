@@ -11,10 +11,7 @@ module CukeLinter
 
     # The rule used to determine if a model has a problem
     def rule(model)
-      return false unless model.is_a?(CukeModeler::Feature) ||
-                          model.is_a?(CukeModeler::Scenario) ||
-                          model.is_a?(CukeModeler::Outline) ||
-                          model.is_a?(CukeModeler::Example)
+      return false unless relevant_model?(model)
 
       @linted_model_class = model.class
 
@@ -35,6 +32,17 @@ module CukeLinter
       class_name = @linted_model_class.name.split('::').last
 
       "#{class_name} has duplicate tag '#{@duplicate_tag}'."
+    end
+
+
+    private
+
+
+    def relevant_model?(model)
+      model.is_a?(CukeModeler::Feature) ||
+        model.is_a?(CukeModeler::Scenario) ||
+        model.is_a?(CukeModeler::Outline) ||
+        model.is_a?(CukeModeler::Example)
     end
 
   end

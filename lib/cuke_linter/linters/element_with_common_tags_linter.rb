@@ -6,21 +6,17 @@ module CukeLinter
 
     # The rule used to determine if a model has a problem
     def rule(model)
-      return false unless model.is_a?(CukeModeler::Feature) || model.is_a?(CukeModeler::Outline)
+      return false unless relevant_model?(model)
 
       @linted_model_class = model.class
-
-      child_accessor_method = model.is_a?(CukeModeler::Feature) ? :tests : :examples
-      child_models          = model.send(child_accessor_method) || []
+      child_models        = model.send(child_accessor_method(model)) || []
 
       tag_sets      = child_models.collect { |child_model| child_model.tags || [] }
       tag_name_sets = tag_sets.collect { |tags| tags.map(&:name) }
 
       return false if tag_name_sets.count < 2
 
-      @common_tag = tag_name_sets.reduce(:&).first
-
-      !@common_tag.nil?
+      !find_common_tag(tag_name_sets).nil?
     end
 
     # The message used to describe the problem that has been found
@@ -32,6 +28,22 @@ module CukeLinter
       else
         "All Examples in Outline have tag '#{@common_tag}'. Move tag to #{class_name} level."
       end
+    end
+
+
+    private
+
+
+    def relevant_model?(model)
+      model.is_a?(CukeModeler::Feature) || model.is_a?(CukeModeler::Outline)
+    end
+
+    def child_accessor_method(model)
+      model.is_a?(CukeModeler::Feature) ? :tests : :examples
+    end
+
+    def find_common_tag(tag_name_sets)
+      @common_tag = tag_name_sets.reduce(:&).first
     end
 
   end

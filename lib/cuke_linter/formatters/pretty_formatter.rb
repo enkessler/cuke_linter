@@ -53,13 +53,31 @@ module CukeLinter
     end
 
     def compare_locations(file_name_1, file_name_2, line_number_1, line_number_2)
-      if (file_name_1 < file_name_2) || (file_name_1 == file_name_2) && (line_number_1 < line_number_2)
+      if earlier_file(file_name_1, file_name_2) ||
+         same_file_earlier_line(file_name_1, file_name_2, line_number_1, line_number_2)
         -1
-      elsif (file_name_1 > file_name_2) || (file_name_1 == file_name_2) && (line_number_1 > line_number_2)
+      elsif later_file(file_name_1, file_name_2) ||
+            same_file_later_line(file_name_1, file_name_2, line_number_1, line_number_2)
         1
       else
         0
       end
+    end
+
+    def earlier_file(file_name_1, file_name_2)
+      (file_name_1 < file_name_2)
+    end
+
+    def same_file_earlier_line(file_name_1, file_name_2, line_number_1, line_number_2)
+      (file_name_1 == file_name_2) && (line_number_1 < line_number_2)
+    end
+
+    def later_file(file_name_1, file_name_2)
+      (file_name_1 > file_name_2)
+    end
+
+    def same_file_later_line(file_name_1, file_name_2, line_number_1, line_number_2)
+      (file_name_1 == file_name_2) && (line_number_1 > line_number_2)
     end
 
   end
