@@ -1,4 +1,6 @@
 module CukeLinter
+
+  # Mix-in module containing methods related to registering linters
   module LinterRegistration
 
     # Returns the registered linters to their default state

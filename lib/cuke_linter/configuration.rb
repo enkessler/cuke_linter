@@ -1,4 +1,6 @@
 module CukeLinter
+
+  # Mix-in module containing methods related to configuring linters
   module Configuration
 
     # Configures linters based on the given options
