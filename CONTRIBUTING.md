@@ -22,6 +22,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/enkess
    `git push origin my-new-feature`
 5. Create new Pull Request
 
+Be sure to update the `CHANGELOG` to reflect your changes if they affect the outward behavior of the gem.
 
 ### Adding a new linter
 
