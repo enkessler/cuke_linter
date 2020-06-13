@@ -63,15 +63,15 @@ namespace 'cuke_linter' do
   desc 'Run all of the tests'
   task :test_everything => [:clear_old_results] do # rubocop:disable Style/HashSyntax
     begin
-      # JRuby doesn't seem to work reliably with the parallel process approach
-      if ChildProcess.jruby?
+      # # JRuby doesn't seem to work reliably with the parallel process approach
+      # if ChildProcess.jruby?
         Rake::Task['cuke_linter:run_rspec_tests'].invoke
         Rake::Task['cuke_linter:run_cucumber_tests'].invoke
-      else
-        Rake::Task['cuke_linter:run_rspec_tests_in_parallel'].invoke
-        Rake::Task['cuke_linter:run_cucumber_tests_in_parallel'].invoke
-        Rake::Task['cuke_linter:combine_code_coverage_reports'].invoke
-      end
+      # else
+      #   Rake::Task['cuke_linter:run_rspec_tests_in_parallel'].invoke
+      #   Rake::Task['cuke_linter:run_cucumber_tests_in_parallel'].invoke
+      #   Rake::Task['cuke_linter:combine_code_coverage_reports'].invoke
+      # end
     rescue => e
       puts Rainbow("-----------------------\nSomething isn't right!").red
       puts Rainbow(e.message).yellow
