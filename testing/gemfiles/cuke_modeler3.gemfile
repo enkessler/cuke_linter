@@ -7,12 +7,13 @@ gemspec path: '../../'
 
 # The Coveralls gem can't handle more recent versions of the SimpleCov gem
 gem 'simplecov', '<= 0.16.1'
-# Cucumber above 4.x the `cucumber-gherkin` gem, which is incompatible
-# with the `gherkin` gem, which is what CukeModeler 1.x` depends on.
-gem 'cucumber', '< 4.0.0'
+
+# Cueumber 4.x doesn't work on all JRubies and this is the only earlier version
+# that is compatible with the `cucumber-gherkin` gem, upon which CukeModler 3.x depends
+gem 'cucumber', '2.2.0'
 
 # The version of CukeModeler being tested
-gem 'cuke_modeler', '~> 2.0'
+gem 'cuke_modeler', '~> 3.0'
 
 # TODO: Use the official version once a new release is out that is compatible with all needed versions of `cuke_modeler`
 gem 'cuke_slicer', git: 'https://github.com/enkessler/cuke_slicer.git', branch: 'dev'
