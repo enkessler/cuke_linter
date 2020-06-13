@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet...
+### Added
+ - Now compatible with CukeModeler 3.x
 
 ## [1.0.1] - 2020-05-06
 

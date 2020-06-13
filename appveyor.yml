@@ -28,6 +28,19 @@ environment:
     - RUBY_VERSION: 25-x64
       BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler2.gemfile
 
+    - RUBY_VERSION: 23
+      BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler3.gemfile
+    - RUBY_VERSION: 23-x64
+      BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler3.gemfile
+    - RUBY_VERSION: 24
+      BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler3.gemfile
+    - RUBY_VERSION: 24-x64
+      BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler3.gemfile
+    - RUBY_VERSION: 25
+      BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler3.gemfile
+    - RUBY_VERSION: 25-x64
+      BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler3.gemfile
+
 install:
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - bundle install
