@@ -2,10 +2,10 @@ version: '1.0.{build}'
 
 environment:
   matrix:
-    - RUBY_VERSION: 23
-      BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler1.gemfile
-    - RUBY_VERSION: 23-x64
-      BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler1.gemfile
+
+    # NOTES:
+    #   - Ruby 2.3 doesn't seem to work on AppVeyor
+
     - RUBY_VERSION: 24
       BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler1.gemfile
     - RUBY_VERSION: 24-x64
@@ -15,10 +15,6 @@ environment:
     - RUBY_VERSION: 25-x64
       BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler1.gemfile
 
-    - RUBY_VERSION: 23
-      BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler2.gemfile
-    - RUBY_VERSION: 23-x64
-      BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler2.gemfile
     - RUBY_VERSION: 24
       BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler2.gemfile
     - RUBY_VERSION: 24-x64
@@ -28,10 +24,6 @@ environment:
     - RUBY_VERSION: 25-x64
       BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler2.gemfile
 
-    - RUBY_VERSION: 23
-      BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler3.gemfile
-    - RUBY_VERSION: 23-x64
-      BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler3.gemfile
     - RUBY_VERSION: 24
       BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler3.gemfile
     - RUBY_VERSION: 24-x64
