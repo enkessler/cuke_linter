@@ -97,7 +97,7 @@ RSpec.describe CukeLinter do
         linting_options.delete(:linters)
 
         subject.load_configuration(config: config)
-        results = subject.lint(linting_options)
+        results = subject.lint(**linting_options)
 
         expect(results).to match_array([{ linter:   'FakeLinter1',
                                           location: 'path_to_file:1',
@@ -117,7 +117,7 @@ RSpec.describe CukeLinter do
         linting_options.delete(:linters)
 
         subject.load_configuration(config: config)
-        results = subject.lint(linting_options)
+        results = subject.lint(**linting_options)
 
         expect(results).to match_array([{ linter:   'FakeLinter',
                                           location: 'path_to_file:1',
@@ -231,7 +231,7 @@ RSpec.describe CukeLinter do
 
 
             it 'handles the directives correctly' do
-              results = subject.lint(linting_options)
+              results = subject.lint(**linting_options)
 
               expect(results).to match_array([{ linter:   non_nested_linter_name,
                                                 location: linted_file,
@@ -261,7 +261,7 @@ RSpec.describe CukeLinter do
 
 
             it 'handles the directives correctly' do
-              results = subject.lint(linting_options)
+              results = subject.lint(**linting_options)
 
               expect(results).to match_array([{ linter:   nested_linter_name,
                                                 location: linted_file,
@@ -314,7 +314,7 @@ RSpec.describe CukeLinter do
             # rubocop:enable Metrics/LineLength
 
             it 'handles the directives correctly' do
-              results = subject.lint(linting_options)
+              results = subject.lint(**linting_options)
 
               expect(results).to match_array([{ linter:   linter_name,
                                                 location: spaces_file,
@@ -387,7 +387,7 @@ RSpec.describe CukeLinter do
             end
 
             it 'does not use targeted linting changes outside of the file in which they occur' do
-              results = subject.lint(linting_options)
+              results = subject.lint(**linting_options)
 
               expect(results).to match_array([{ linter:   linter_name,
                                                 location: modified_file,
@@ -421,7 +421,7 @@ RSpec.describe CukeLinter do
 
 
             it 'handles the directive correctly' do
-              results = subject.lint(linting_options)
+              results = subject.lint(**linting_options)
 
               expect(results).to match_array([{ linter:   linter_name,
                                                 location: linted_file,
@@ -465,7 +465,7 @@ RSpec.describe CukeLinter do
 
 
             it 'handles the directives correctly' do
-              results = subject.lint(linting_options)
+              results = subject.lint(**linting_options)
 
               expect(results).to match_array([{ linter:   linter_name,
                                                 location: extra_whitespace_file,
@@ -550,7 +550,7 @@ RSpec.describe CukeLinter do
 
 
               it 'handles the directives correctly' do
-                results = subject.lint(linting_options)
+                results = subject.lint(**linting_options)
 
                 expect(results).to match_array([{ linter:   linter_name,
                                                   location: spaced_commas_file,
@@ -677,7 +677,7 @@ RSpec.describe CukeLinter do
 
 
               it 'does not use the linter' do
-                results = subject.lint(linting_options)
+                results = subject.lint(**linting_options)
 
                 expect(results).to match_array(baseline_linter_results + [])
               end
@@ -696,7 +696,7 @@ RSpec.describe CukeLinter do
 
 
                   it 'does not use the linter' do
-                    results = subject.lint(linting_options)
+                    results = subject.lint(**linting_options)
 
                     expect(results).to match_array(baseline_linter_results + [])
                   end
@@ -713,7 +713,7 @@ RSpec.describe CukeLinter do
                   end
 
                   it 'does not use the linter' do
-                    results = subject.lint(linting_options)
+                    results = subject.lint(**linting_options)
 
                     expect(results).to match_array(baseline_linter_results + [])
                   end
@@ -734,7 +734,7 @@ RSpec.describe CukeLinter do
               end
 
               it 'uses the linter' do
-                results = subject.lint(linting_options)
+                results = subject.lint(**linting_options)
 
                 expect(results).to match_array([{ linter:   linter_name,
                                                   location: "#{linted_file}:4",
@@ -753,7 +753,7 @@ RSpec.describe CukeLinter do
                   end
 
                   it 'uses the linter' do
-                    results = subject.lint(linting_options)
+                    results = subject.lint(**linting_options)
 
                     expect(results).to match_array([{ linter:   linter_name,
                                                       location: "#{linted_file}:4",
@@ -761,7 +761,7 @@ RSpec.describe CukeLinter do
                   end
 
                   it 'does not include redundant linting results' do
-                    results = subject.lint(linting_options)
+                    results = subject.lint(**linting_options)
 
                     expect(results).to match_array([{ linter:   linter_name,
                                                       location: "#{linted_file}:4",
@@ -780,7 +780,7 @@ RSpec.describe CukeLinter do
                   end
 
                   it 'uses the linter' do
-                    results = subject.lint(linting_options)
+                    results = subject.lint(**linting_options)
 
                     expect(results).to match_array([{ linter:   linter_name,
                                                       location: "#{linted_file}:4",
@@ -788,7 +788,7 @@ RSpec.describe CukeLinter do
                   end
 
                   it 'does not include redundant linting results' do
-                    results = subject.lint(linting_options)
+                    results = subject.lint(**linting_options)
 
                     expect(results).to match_array([{ linter:   linter_name,
                                                       location: "#{linted_file}:4",
@@ -811,7 +811,7 @@ RSpec.describe CukeLinter do
                 end
 
                 it 'ceases using the linter' do
-                  results = subject.lint(linting_options)
+                  results = subject.lint(**linting_options)
 
                   expect(results).to match_array([{ linter:   linter_name,
                                                     location: "#{linted_file}:4",
@@ -848,7 +848,7 @@ RSpec.describe CukeLinter do
 
 
               it 'does not use the linter' do
-                results = subject.lint(linting_options)
+                results = subject.lint(**linting_options)
 
                 expect(results).to match_array([{ linter:   linter_name,
                                                   location: linted_file,
@@ -871,7 +871,7 @@ RSpec.describe CukeLinter do
 
 
                   it 'does not use the linter' do
-                    results = subject.lint(linting_options)
+                    results = subject.lint(**linting_options)
 
                     expect(results).to match_array([{ linter:   linter_name,
                                                       location: linted_file,
@@ -893,7 +893,7 @@ RSpec.describe CukeLinter do
                   end
 
                   it 'does not use the linter' do
-                    results = subject.lint(linting_options)
+                    results = subject.lint(**linting_options)
 
                     expect(results).to match_array([{ linter:   linter_name,
                                                       location: linted_file,
@@ -919,7 +919,7 @@ RSpec.describe CukeLinter do
 
 
                 it 'resumes using the linter' do
-                  results = subject.lint(linting_options)
+                  results = subject.lint(**linting_options)
 
                   expect(results).to match_array([{ linter:   linter_name,
                                                     location: linted_file,
@@ -933,7 +933,7 @@ RSpec.describe CukeLinter do
                 end
 
                 it 'does not include redundant linting results' do
-                  results = subject.lint(linting_options)
+                  results = subject.lint(**linting_options)
 
                   expect(results).to match_array([{ linter:   linter_name,
                                                     location: linted_file,
@@ -961,7 +961,7 @@ RSpec.describe CukeLinter do
 
 
               it 'uses the linter' do
-                results = subject.lint(linting_options)
+                results = subject.lint(**linting_options)
 
                 expect(results).to match_array([{ linter:   linter_name,
                                                   location: linted_file,
@@ -975,7 +975,7 @@ RSpec.describe CukeLinter do
               end
 
               it 'does not include redundant linting results' do
-                results = subject.lint(linting_options)
+                results = subject.lint(**linting_options)
 
                 expect(results).to match_array([{ linter:   linter_name,
                                                   location: linted_file,
@@ -1007,7 +1007,7 @@ RSpec.describe CukeLinter do
                 end
 
 
-                results = subject.lint(linting_options)
+                results = subject.lint(**linting_options)
 
                 expect(results).to match_array([{ linter:   'Pre-existing Linter',
                                                   location: linted_file,
@@ -1033,7 +1033,7 @@ RSpec.describe CukeLinter do
                   end
 
                   it 'uses the linter' do
-                    results = subject.lint(linting_options)
+                    results = subject.lint(**linting_options)
 
                     expect(results).to match_array([{ linter:   linter_name,
                                                       location: linted_file,
@@ -1047,7 +1047,7 @@ RSpec.describe CukeLinter do
                   end
 
                   it 'does not include redundant linting results' do
-                    results = subject.lint(linting_options)
+                    results = subject.lint(**linting_options)
 
                     expect(results).to match_array([{ linter:   linter_name,
                                                       location: linted_file,
@@ -1072,7 +1072,7 @@ RSpec.describe CukeLinter do
                   end
 
                   it 'uses the linter' do
-                    results = subject.lint(linting_options)
+                    results = subject.lint(**linting_options)
 
                     expect(results).to match_array([{ linter:   linter_name,
                                                       location: linted_file,
@@ -1086,7 +1086,7 @@ RSpec.describe CukeLinter do
                   end
 
                   it 'does not include redundant linting results' do
-                    results = subject.lint(linting_options)
+                    results = subject.lint(**linting_options)
 
                     expect(results).to match_array([{ linter:   linter_name,
                                                       location: linted_file,

@@ -18,7 +18,7 @@ RSpec.describe CukeLinter::Linter do
 
   context 'with a linting rule' do
 
-    subject { CukeLinter::Linter.new(linter_options.merge(rule: linter_rule)) }
+    subject { CukeLinter::Linter.new(**linter_options.merge(rule: linter_rule)) }
 
     context 'with a good model' do
 
@@ -41,7 +41,7 @@ RSpec.describe CukeLinter::Linter do
 
   context 'with custom values' do
 
-    subject { CukeLinter::Linter.new(linter_options) }
+    subject { CukeLinter::Linter.new(**linter_options) }
 
     it 'uses the provided name' do
       expect(subject.name).to eq(linter_name)
@@ -109,7 +109,7 @@ RSpec.describe CukeLinter::Linter do
     end
 
     subject do
-      linter = CukeLinter::Linter.new(linter_options)
+      linter = CukeLinter::Linter.new(**linter_options)
 
       linter.define_singleton_method('rule') do |model|
         model.is_a?(CukeModeler::Example)
@@ -169,14 +169,14 @@ RSpec.describe CukeLinter::Linter do
 
       # Default name
       linter_options[:name] = nil
-      linter                = CukeLinter::Linter.new(linter_options)
+      linter                = CukeLinter::Linter.new(**linter_options)
       result                = linter.lint(bad_data)
 
       expect(result[:problem]).to eq('Linter problem detected')
 
       # Value name
       linter_options[:name] = 'Value name'
-      linter                = CukeLinter::Linter.new(linter_options)
+      linter                = CukeLinter::Linter.new(**linter_options)
       result                = linter.lint(bad_data)
 
       expect(result[:problem]).to eq('Value name problem detected')
@@ -191,7 +191,7 @@ RSpec.describe CukeLinter::Linter do
       end
 
       linter_options[:name] = nil
-      linter                = CustomLinter.new(linter_options)
+      linter                = CustomLinter.new(**linter_options)
       result                = linter.lint(bad_data)
 
       expect(result[:problem]).to eq('Method name problem detected')

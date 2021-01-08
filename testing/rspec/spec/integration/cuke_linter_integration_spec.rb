@@ -9,7 +9,7 @@ RSpec.describe CukeLinter do
 
 
   it 'returns the un-formatted linting data when linting' do
-    results = subject.lint(linting_options)
+    results = subject.lint(**linting_options)
 
     expect(results).to eq([{ linter: 'FakeLinter', location: 'path_to_file:1', problem: 'FakeLinter problem' }])
   end
@@ -18,13 +18,13 @@ RSpec.describe CukeLinter do
     linting_options[:formatters] = [[generate_fake_formatter(name: 'Formatter1')],
                                     [generate_fake_formatter(name: 'Formatter2')]]
 
-    expect { subject.lint(linting_options) }.to output("Formatter1: FakeLinter problem: path_to_file:1\nFormatter2: FakeLinter problem: path_to_file:1\n").to_stdout # rubocop:disable Metrics/LineLength
+    expect { subject.lint(**linting_options) }.to output("Formatter1: FakeLinter problem: path_to_file:1\nFormatter2: FakeLinter problem: path_to_file:1\n").to_stdout # rubocop:disable Metrics/LineLength
   end
 
   it "uses the 'pretty' formatter if none are provided" do
     linting_options.delete(:formatters)
 
-    expect { subject.lint(linting_options) }.to output(['FakeLinter',
+    expect { subject.lint(**linting_options) }.to output(['FakeLinter',
                                                         '  FakeLinter problem',
                                                         '    path_to_file:1',
                                                         '',
@@ -37,14 +37,14 @@ RSpec.describe CukeLinter do
     linting_options[:formatters] = [[generate_fake_formatter(name: 'Formatter1'),
                                      output_path]]
 
-    expect { subject.lint(linting_options) }.to_not output.to_stdout
+    expect { subject.lint(**linting_options) }.to_not output.to_stdout
     expect(File.read(output_path)).to eq("Formatter1: FakeLinter problem: path_to_file:1\n")
   end
 
   it 'outputs formatted data to STDOUT if not location is provided' do
     linting_options[:formatters] = [[generate_fake_formatter(name: 'Formatter1')]]
 
-    expect { subject.lint(linting_options) }.to output("Formatter1: FakeLinter problem: path_to_file:1\n").to_stdout
+    expect { subject.lint(**linting_options) }.to output("Formatter1: FakeLinter problem: path_to_file:1\n").to_stdout
   end
 
   context 'with only model trees' do
@@ -60,7 +60,7 @@ RSpec.describe CukeLinter do
     end
 
     it 'lints every model in each model tree' do
-      results = subject.lint(linting_options)
+      results = subject.lint(**linting_options)
 
       expect(results).to match_array([{ linter:   'FakeLinter',
                                         location: 'path_to_file:3',
@@ -91,7 +91,7 @@ RSpec.describe CukeLinter do
     # aren't linted when paths are explicitly included
 
     it 'lints every model in each path' do
-      results = subject.lint(linting_options)
+      results = subject.lint(**linting_options)
 
       expect(results).to match_array([{ linter:   'FakeLinter',
                                         location: @a_directory,
@@ -124,7 +124,7 @@ RSpec.describe CukeLinter do
 
 
     it 'lints every model in each model tree and file path' do
-      results = subject.lint(linting_options)
+      results = subject.lint(**linting_options)
 
       expect(results).to match_array([{ linter:   'FakeLinter',
                                         location: 'path_to_file:3',
@@ -151,7 +151,7 @@ RSpec.describe CukeLinter do
       File.write("#{test_dir}/test_feature.feature", 'Feature:')
 
       Dir.chdir(test_dir) do
-        @results = subject.lint(linting_options)
+        @results = subject.lint(**linting_options)
       end
 
       # There should be 3 models to lint: the directory, the feature file, and the feature
@@ -164,7 +164,7 @@ RSpec.describe CukeLinter do
     linting_options[:linters] = [generate_fake_linter(name: 'FakeLinter1'),
                                  generate_fake_linter(name: 'FakeLinter2')]
 
-    results = subject.lint(linting_options)
+    results = subject.lint(**linting_options)
 
     expect(results).to match_array([{ linter:   'FakeLinter1',
                                       location: 'path_to_file:1',
@@ -182,7 +182,7 @@ RSpec.describe CukeLinter do
 
     begin
       linting_options.delete(:linters)
-      results = subject.lint(linting_options)
+      results = subject.lint(**linting_options)
 
       expect(results).to match_array([{ linter:   'FakeLinter1',
                                         location: 'path_to_file:1',
@@ -202,7 +202,7 @@ RSpec.describe CukeLinter do
     linting_options[:linters] = [generate_fake_linter(name: 'FakeLinter1'),
                                  generate_fake_linter(name: 'FakeLinter2')]
 
-    results = subject.lint(linting_options)
+    results = subject.lint(**linting_options)
 
     expect(results).to match_array([{ linter:   'FakeLinter1',
                                       location: 'path_to_file:1',
@@ -277,7 +277,7 @@ RSpec.describe CukeLinter do
     linting_options[:linters] = [generate_fake_linter(finds_problems: true),
                                  generate_fake_linter(finds_problems: false)]
 
-    expect { subject.lint(linting_options) }.to_not raise_error
+    expect { subject.lint(**linting_options) }.to_not raise_error
   end
 
 end

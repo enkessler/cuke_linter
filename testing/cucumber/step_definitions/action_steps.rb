@@ -14,7 +14,7 @@ When(/^(?:the feature|the model|it) is linted$/) do
                         formatters:  [[generate_fake_formatter, "#{create_directory}/junk_output_file.txt"]] }
   options[:linters] = [@linter] if @linter
 
-  @results = CukeLinter.lint(options)
+  @results = CukeLinter.lint(**options)
 end
 
 When(/^the configuration file is (?:used|loaded)$/) do
