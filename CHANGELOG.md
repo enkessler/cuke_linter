@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Nothing yet...
+
+## [1.2.0] - 2021-01-08
+
 ### Added
  - Ruby 3.x is now supported
 
@@ -165,7 +169,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Custom linters, formatters, and command line usability
 
 
-[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/enkessler/cuke_linter/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/enkessler/cuke_linter/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/enkessler/cuke_linter/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/enkessler/cuke_linter/compare/v0.13.0...v1.0.0
