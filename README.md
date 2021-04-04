@@ -4,7 +4,7 @@ Basic stuff:
 [![Downloads](https://img.shields.io/gem/dt/cuke_linter.svg)](https://rubygems.org/gems/cuke_linter)
 
 User stuff:
-[![Cucumber Docs](http://img.shields.io/badge/Documentation-Features-green.svg)](https://app.cucumber.pro/projects/cuke_linter)
+[![Cucumber Docs](http://img.shields.io/badge/Documentation-Features-green.svg)](https://github.com/enkessler/cuke_linter/tree/master/testing/cucumber/features)
 [![Yard Docs](http://img.shields.io/badge/Documentation-API-blue.svg)](https://www.rubydoc.info/gems/cuke_linter)
 
 Developer stuff:

@@ -1,19 +1,17 @@
 if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
-  part_number                               = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] # rubocop:disable Layout/SpaceAroundOperators, Metrics/LineLength
-  ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] ||= "rspec_tests_part_#{part_number}"
-  ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  ||= "testing/reports/rspec/part_#{part_number}/coverage"
+  part_number                                   = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] # rubocop:disable Layout/SpaceAroundOperators, Metrics/LineLength
+  ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME']     ||= "rspec_tests_part_#{part_number}"
+  ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'] ||= "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/rspec/part_#{part_number}/coverage"
 else
-  ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] ||= 'rspec_tests'
-  ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  ||= 'coverage'
+  ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME']     ||= 'rspec_tests'
+  ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'] ||= "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/coverage"
 end
 
 # Unless otherwise set, assume that this file is only loaded during testing
 ENV['CUKE_LINTER_TEST_PROCESS'] ||= 'true'
-
 require 'simplecov'
 require_relative 'common_env'
 require 'rspec'
-require 'rubygems/mock_gem_ui'
 require 'yaml'
 
 require_relative '../testing/rspec/spec/unit/formatters/formatter_unit_specs'
@@ -31,14 +29,13 @@ RSpec.configure do |config|
 
   if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
     process_count    = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']
-    source_file      = "testing/reports/rspec/part_#{process_count}/test_list_#{process_count}.txt"
-    persistence_file = "testing/reports/rspec/part_#{process_count}/.rspec_status_#{process_count}"
+    source_file      = "#{ENV['CUKE_LINTER_PARALLEL_FOLDER']}/test_list_#{process_count}.txt"
+    persistence_file = "#{ENV['CUKE_LINTER_PARALLEL_FOLDER']}/.rspec_status_#{process_count}"
     spec_list        = File.read(source_file).split("\n")
     config.instance_variable_set(:@files_or_directories_to_run, spec_list)
   else
-    config.pattern    = 'testing/rspec/spec/**/*_spec.rb'
     config.color_mode = :on
-    persistence_file  = '.rspec_status'
+    persistence_file  = "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/.rspec_status"
   end
 
   # Enable flags like --only-failures and --next-failure

@@ -1,45 +1,37 @@
-require_relative '../testing/process_helper'
+require_relative '../cuke_linter_helper'
 require_relative '../testing/parallel_helper'
 
-# rubocop:disable Metrics/BlockLength
-namespace 'cuke_linter' do
+namespace 'cuke_linter' do # rubocop:disable Metrics/BlockLength
 
   desc 'Run all of the RSpec tests'
   task :run_rspec_tests => [:clear_old_results] do # rubocop:disable Style/HashSyntax
     puts Rainbow('Running RSpec tests...').cyan
 
-    process = CukeLinter::ProcessHelper.create_process('bundle', 'exec', 'rspec',
-                                                       '-r', './environments/rspec_env.rb')
-    process.io.inherit!
-    process.environment['CUKE_LINTER_PARALLEL_RUN'] = 'false'
-    process.environment['CUKE_LINTER_TEST_PROCESS'] = 'true'
-    process.start
-    process.wait
+    completed_process = CukeLinter::CukeLinterHelper.run_command(['bundle', 'exec', 'rspec'],
+                                                                 env_vars: { CUKE_LINTER_PARALLEL_RUN: 'false',
+                                                                             CUKE_LINTER_TEST_PROCESS: 'true', })
 
-    raise(Rainbow('RSpec tests encountered problems!').red) unless process.exit_code.zero?
+    raise(Rainbow('RSpec tests encountered problems!').red) unless completed_process.exit_code.zero?
 
     puts Rainbow('All RSpec tests passing. :)').green
   end
 
   desc 'Run all of the RSpec tests'
   task :run_rspec_tests_in_parallel => [:clear_old_results] do # rubocop:disable Style/HashSyntax
-    puts Rainbow('Running RSpec tests').cyan
+    puts Rainbow('Running RSpec tests in parallel...').cyan
 
-    pattern = 'testing/rspec/spec/**/*_spec.rb'
-    specs   = CukeLinter::ParallelHelper.get_discrete_specs(spec_pattern: pattern)
+    specs = CukeLinter::ParallelHelper.get_discrete_specs
 
-    ENV['CUKE_LINTER_PARALLEL_RUN'] ||= 'true'
     CukeLinter::ParallelHelper.run_rspec_in_parallel(spec_list: specs)
   end
 
   desc 'Run all of the Cucumber tests'
   task :run_cucumber_tests_in_parallel => [:clear_old_results] do # rubocop:disable Style/HashSyntax
-    puts Rainbow('Running Cucumber tests...').cyan
+    puts Rainbow('Running Cucumber tests in parallel...').cyan
 
     feature_directory = 'testing/cucumber/features'
-    scenarios         = CukeLinter::ParallelHelper.get_discrete_scenarios(directory: feature_directory)
+    scenarios = CukeLinter::ParallelHelper.get_discrete_scenarios(directory: feature_directory)
 
-    ENV['CUKE_LINTER_PARALLEL_RUN'] ||= 'true'
     CukeLinter::ParallelHelper.run_cucumber_in_parallel(scenario_list: scenarios)
   end
 
@@ -47,21 +39,19 @@ namespace 'cuke_linter' do
   task :run_cucumber_tests => [:clear_old_results] do # rubocop:disable Style/HashSyntax
     puts Rainbow('Running Cucumber tests...').cyan
 
-    process = CukeLinter::ProcessHelper.create_process('bundle', 'exec', 'cucumber',
-                                                       '-p', 'default')
-    process.io.inherit!
-    process.environment['CUKE_LINTER_PARALLEL_RUN'] = 'false'
-    process.environment['CUKE_LINTER_TEST_PROCESS'] = 'true'
-    process.start
-    process.wait
+    completed_process = CukeLinter::CukeLinterHelper.run_command(['bundle', 'exec', 'cucumber'],
+                                                                 env_vars: { CUKE_LINTER_PARALLEL_RUN: 'false',
+                                                                             CUKE_LINTER_TEST_PROCESS: 'true', })
 
-    raise(Rainbow('Cucumber tests encountered problems!').red) unless process.exit_code.zero?
+    raise(Rainbow('Cucumber tests encountered problems!').red) unless completed_process.exit_code.zero?
 
     puts Rainbow('All Cucumber tests passing. :)').green
   end
 
   desc 'Run all of the tests'
   task :test_everything => [:clear_old_results] do # rubocop:disable Style/HashSyntax
+    puts Rainbow('Running tests...').cyan
+
     begin
       # JRuby doesn't seem to work reliably with the parallel process approach
       if ChildProcess.jruby?
@@ -72,12 +62,13 @@ namespace 'cuke_linter' do
         Rake::Task['cuke_linter:run_cucumber_tests_in_parallel'].invoke
         Rake::Task['cuke_linter:combine_code_coverage_reports'].invoke
       end
-    rescue => e
+    rescue => e # rubocop:disable Lint/RescueWithoutErrorClass - RuboCop shouldn't be complaining about this. Probably a bug.
       puts Rainbow("-----------------------\nSomething isn't right!").red
       puts Rainbow(e.message).yellow
       raise e
     end
+
+    puts Rainbow('All tests passing!').green
   end
 
 end
-# rubocop:enable Metrics/BlockLength

@@ -1,10 +1,10 @@
 if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
-  part_number                               = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']
-  ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] = "cucumber_tests_part_#{part_number}"
-  ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  = "testing/reports/cucumber/part_#{part_number}/coverage"
+  part_number                                   = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']
+  ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME']     = "cucumber_tests_part_#{part_number}"
+  ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'] = "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/cucumber/part_#{part_number}/coverage"
 else
-  ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'] = 'cucumber_tests'
-  ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY']  = 'coverage'
+  ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME']     = 'cucumber_tests'
+  ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'] = "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/coverage"
 end
 
 # Unless otherwise set, assume that this file is only loaded during testing

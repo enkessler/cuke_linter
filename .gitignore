@@ -7,8 +7,8 @@
 /spec/reports/
 /tmp/
 
-# Test output folders
-/testing/reports
+# reporting folders
+/reports
 
 # rspec failure tracking
 .rspec_status

@@ -1,6 +1,15 @@
-<% cucumber_major_version = Gem.loaded_specs['cucumber'].version.version.match(/^(\d+)\./)[1].to_i %>
-common: -r environments/cucumber_env.rb -t <%= cucumber_major_version < 4 ? "~@wip" : "'not @wip'" %>
-default: -p common testing/cucumber/features -f progress --color
+<% # Can't use 'require_relative' because it won't work on JRuby inside of an ERB file %>
+<% require "#{__dir__}/cuke_linter_project_settings" %>
 
-# It is assumed that a specific file will be fed to the Cucumber command when running in parallel and color output isn't needed
-parallel: -p common
+<% FileUtils.mkdir(ENV['CUKE_LINTER_REPORT_FOLDER']) unless File.exist?(ENV['CUKE_LINTER_REPORT_FOLDER'])%>
+<% cucumber_major_version = Gem.loaded_specs['cucumber'].version.version.match(/^(\d+)\./)[1].to_i %>
+
+common: -r environments/cucumber_env.rb -t <%= cucumber_major_version < 4 ? "~@wip": "'not @wip'" %> <%= '--publish-quiet' if cucumber_major_version >= 5 %>  -f progress --color -p json
+
+# Using the HTML formatter causes a bug with some versions of Cucumber, for some reason
+html: -f html -o <%= ENV['CUKE_LINTER_CUCUMBER_REPORT_HTML_FILE_PATH'] %>
+json: -f json -o <%= ENV['CUKE_LINTER_CUCUMBER_REPORT_JSON_FILE_PATH'] %>
+default: -p common testing/cucumber/features
+
+# It is assumed that a specific file will be fed to the Cucumber command when running in parallel and visual output isn't needed
+parallel: -p common <%= "@#{ENV['CUKE_LINTER_PARALLEL_FOLDER']}/test_list_#{ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']}.txt" %>

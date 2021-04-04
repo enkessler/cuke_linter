@@ -3,7 +3,7 @@
 # code coverage if testing is happening.
 if ENV['CUKE_LINTER_TEST_PROCESS'] == 'true'
   SimpleCov.command_name(ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'])
-  SimpleCov.coverage_dir(ENV['CUKE_LINTER_TEST_OUTPUT_DIRECTORY'])
+  SimpleCov.coverage_dir(ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'])
 
   SimpleCov.start do
     root __dir__

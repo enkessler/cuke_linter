@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'cuke_modeler', '>= 1.5', '< 4.0'
 
   spec.add_development_dependency 'bundler', '< 3.0'
-  spec.add_development_dependency 'childprocess', '~> 3.0'
+  spec.add_development_dependency 'childprocess', '< 4.0'
   spec.add_development_dependency 'coveralls', '< 1.0.0'
   spec.add_development_dependency 'cucumber', '< 5.0'
   spec.add_development_dependency 'cuke_slicer', '>= 2.0.2', '< 3.0'
@@ -41,4 +41,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rubocop', '< 1.0.0'
   spec.add_development_dependency 'simplecov', '<= 0.16.1' # Coveralls gem does not support any newer version than this
+  spec.add_development_dependency 'yard', '< 1.0'
 end
