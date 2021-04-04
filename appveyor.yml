@@ -33,6 +33,10 @@ environment:
     - RUBY_VERSION: 25-x64
       BUNDLE_GEMFILE: testing/gemfiles/cuke_modeler3.gemfile
 
+# Allow Windows builds to use CRLF as expected by linting tools, etc.
+init:
+  - git config --global core.autocrlf true
+
 install:
   - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
   - bundle install

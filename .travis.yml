@@ -8,17 +8,28 @@ dist: trusty
 
 language: ruby
 rvm:
-  - 2.3.3
-  - 2.4.0
-  - 2.5.1
-  - 2.6.0
+  - 2.0
+  - 2.2
+  - 2.3
+  - 2.5
+  - 2.7
   - jruby-9.1.7.0
 
 matrix:
   exclude:
-    # Ruby 2.3.x is currently broken on TravisCI and is no longer a supported Ruby version, anyway.
-    - rvm: 2.3.3
+    # Older versions of Ruby don't seem to work on Travis CI for OSX. The Linux
+    # testing is probably good enough for the older versions.
+    - rvm: 2.0
       os: osx
+    - rvm: 2.2
+      os: osx
+    - rvm: 2.3
+      os: osx
+      # CukeModeler 3.x requires at least Ruby 2.3
+    - rvm: 2.0
+      gemfile: testing/gemfiles/cuke_modeler3.gemfile
+    - rvm: 2.2
+      gemfile: testing/gemfiles/cuke_modeler3.gemfile
 
 gemfile:
   - testing/gemfiles/cuke_modeler1.gemfile
