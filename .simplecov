@@ -9,7 +9,6 @@ if ENV['CUKE_LINTER_TEST_PROCESS'] == 'true'
     root __dir__
 
     add_filter '/testing/'
-    add_filter '/environments/'
 
     # The HTML formatter is extra noisy and not needed when running the tests in parallel
     formatter SimpleCov::Formatter::SimpleFormatter if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'

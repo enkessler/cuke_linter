@@ -1,5 +1,3 @@
-require_relative '../../../../environments/rspec_env'
-
 RSpec.describe CukeLinter do
 
   describe 'configuration' do

@@ -1,6 +1,3 @@
-require_relative '../../../../environments/rspec_env'
-
-
 RSpec.describe 'the gem' do
 
   let(:root_dir) { "#{__dir__}/../../../.." }

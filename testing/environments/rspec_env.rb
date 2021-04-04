@@ -14,11 +14,11 @@ require_relative 'common_env'
 require 'rspec'
 require 'yaml'
 
-require_relative '../testing/rspec/spec/unit/formatters/formatter_unit_specs'
-require_relative '../testing/rspec/spec/unit/linters/configurable_linter_unit_specs'
-require_relative '../testing/rspec/spec/unit/linters/linter_unit_specs'
-require_relative '../testing/rspec/spec/integration/formatters/formatter_integration_specs'
-require_relative '../testing/rspec/spec/integration/linters/linter_integration_specs'
+require_relative '../rspec/spec/unit/formatters/formatter_unit_specs'
+require_relative '../rspec/spec/unit/linters/configurable_linter_unit_specs'
+require_relative '../rspec/spec/unit/linters/linter_unit_specs'
+require_relative '../rspec/spec/integration/formatters/formatter_integration_specs'
+require_relative '../rspec/spec/integration/linters/linter_integration_specs'
 
 # Convenient constants, just in case what kinds of elements are taggable ever changes
 TAGGABLE_ELEMENTS               = %w[feature scenario outline example].freeze

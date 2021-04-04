@@ -1,4 +1,3 @@
-require_relative '../../../../environments/rspec_env'
 require 'open3'
 
 

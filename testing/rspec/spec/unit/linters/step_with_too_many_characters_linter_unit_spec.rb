@@ -1,6 +1,3 @@
-require_relative '../../../../../environments/rspec_env'
-
-
 RSpec.describe CukeLinter::StepWithTooManyCharactersLinter do
 
   let(:model_file_path) { 'some_file_path' }
