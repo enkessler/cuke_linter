@@ -9,8 +9,19 @@ Gem::Specification.new do |spec|
   spec.email         = ['morrow748@gmail.com']
 
   spec.summary       = 'Lints feature files used by Cucumber and other similar frameworks.'
+  spec.description   = ["This gem provides linters for detecting common 'smells' in `.feature` files. ",
+                        'In addition to the provided linters, custom linters can be made in order to ',
+                        'create custom linting rules.'].join
   spec.homepage      = 'https://github.com/enkessler/cuke_linter'
   spec.license       = 'MIT'
+
+  spec.metadata = {
+    'bug_tracker_uri'   => 'https://github.com/enkessler/cuke_linter/issues',
+    'changelog_uri'     => 'https://github.com/enkessler/cuke_linter/blob/master/CHANGELOG.md',
+    'documentation_uri' => 'https://www.rubydoc.info/gems/cuke_linter',
+    'homepage_uri'      => 'https://github.com/enkessler/cuke_linter',
+    'source_code_uri'   => 'https://github.com/enkessler/cuke_linter'
+  }
 
 
   # Specify which files should be added to the gem when it is released.
