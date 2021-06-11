@@ -73,6 +73,7 @@ module CukeLinter
 
     def run_spec_gathering_process(gathering_file_path)
       run_command(['bundle', 'exec', 'rspec',
+                   '--pattern', CukeLinter::CukeLinterHelper.rspec_test_file_pattern,
                    '--dry-run'],
                   env_vars: { CUKE_LINTER_SIMPLECOV_COMMAND_NAME: 'rspec_spec_gathering',
                               CUKE_LINTER_TEST_PROCESS: 'false',

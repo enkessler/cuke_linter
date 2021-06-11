@@ -6,7 +6,7 @@ After checking out the repo, run `bin/setup` to install dependencies. You can al
 
 `bundle exec rake cuke_linter:test_everything` will run all of the tests for the project. To run just the RSpec tests 
 or Cucumber tests specifically:
- - `bundle exec rspec` or
+ - `bundle exec rspec  --pattern "testing/rspec/spec/**/*_spec.rb"` or
    `bundle exec rake cuke_linter:run_rspec_tests` or
    `bundle exec rake cuke_linter:run_rspec_tests_in_parallel`
 

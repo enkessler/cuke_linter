@@ -7,7 +7,8 @@ namespace 'cuke_linter' do # rubocop:disable Metrics/BlockLength
   task :run_rspec_tests => [:clear_old_results] do # rubocop:disable Style/HashSyntax
     puts Rainbow('Running RSpec tests...').cyan
 
-    completed_process = CukeLinter::CukeLinterHelper.run_command(['bundle', 'exec', 'rspec'],
+    completed_process = CukeLinter::CukeLinterHelper.run_command(['bundle', 'exec', 'rspec',
+                                                                  '--pattern', CukeLinter::CukeLinterHelper.rspec_test_file_pattern],
                                                                  env_vars: { CUKE_LINTER_PARALLEL_RUN: 'false',
                                                                              CUKE_LINTER_TEST_PROCESS: 'true', })
 

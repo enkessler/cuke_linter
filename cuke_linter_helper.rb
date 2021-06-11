@@ -28,5 +28,9 @@ module CukeLinter
       process
     end
 
+    def rspec_test_file_pattern
+      "testing/rspec/spec/**/*_spec.rb"
+    end
+
   end
 end

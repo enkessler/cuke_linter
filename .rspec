@@ -14,8 +14,3 @@
 --format progress
 --force-color
 <% end %>
-
-<% # It is assumed that a specific file will be fed to RSpec when running in parallel %>
-<% if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'false' %>
---pattern "testing/rspec/spec/**/*_spec.rb"
-<% end %>
