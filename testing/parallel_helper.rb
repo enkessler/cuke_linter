@@ -9,6 +9,7 @@ require 'cuke_slicer'
 # This file is loaded as part of the project framework, not during tests
 ENV['CUKE_LINTER_TEST_PROCESS'] = 'false'
 require 'simplecov'
+require 'simplecov-lcov'
 
 module CukeLinter
 
@@ -47,20 +48,16 @@ module CukeLinter
     def combine_code_coverage_reports
       all_results = Dir["#{ENV['CUKE_LINTER_REPORT_FOLDER']}/{rspec,cucumber}/part_*/coverage/.resultset.json"]
 
-      result_objects = []
-      all_results.each do |result_file_name|
-        result_objects << SimpleCov::Result.from_hash(JSON.parse(File.read(result_file_name)))
+      SimpleCov::Formatter::LcovFormatter.config do |config|
+        config.report_with_single_file = true
+        config.lcov_file_name = 'lcov.info'
       end
-      merged_result = SimpleCov::ResultMerger.merge_results(*result_objects)
 
-      # Set overall coverage report folder
-      SimpleCov.coverage_dir("#{ENV['CUKE_LINTER_REPORT_FOLDER']}/coverage")
-
-      # Creates the HTML report
-      merged_result.format!
-
-      # Creates the finalized JSON file that Coveralls will need
-      SimpleCov::ResultMerger.store_result(merged_result)
+      SimpleCov.collate(all_results) do
+        coverage_dir("#{ENV['CUKE_LINTER_REPORT_FOLDER']}/coverage")
+        formatter SimpleCov::Formatter::MultiFormatter.new([SimpleCov::Formatter::HTMLFormatter,
+                                                            SimpleCov::Formatter::LcovFormatter])
+      end
     end
 
 
