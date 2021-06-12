@@ -2,7 +2,7 @@ Feature: Using cuke_linter on the command line
 
   Linting functionality can be used directly from the command line.
 
-  @this
+
   Scenario: Linting features
 
   Note: By default, linting will be done in the current directory using all linters and 'pretty' formatter.
@@ -123,7 +123,7 @@ Feature: Using cuke_linter on the command line
       """
       Formatting done by MyCustomFormatter
       """
-  @this
+
   Scenario: Redirecting output
     Given the cuke_linter executable is available
     When the following command is executed:

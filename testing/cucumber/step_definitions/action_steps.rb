@@ -1,8 +1,6 @@
 When(/^the following command is executed:$/) do |command|
   command = "bundle exec ruby #{@executable_directory || "#{PROJECT_ROOT}/exe"}/#{command}"
-  puts "base command: #{command}"
   command.gsub!('<path_to>', @root_test_directory)
-  puts "final command: #{command}"
 
   Dir.chdir(@root_test_directory) do
     @results = @output = `#{command}`
