@@ -4,7 +4,7 @@
 <% FileUtils.mkdir(ENV['CUKE_LINTER_REPORT_FOLDER']) unless File.exist?(ENV['CUKE_LINTER_REPORT_FOLDER'])%>
 <% cucumber_major_version = Gem.loaded_specs['cucumber'].version.version.match(/^(\d+)\./)[1].to_i %>
 
-common: -r testing/environments/cucumber_env.rb -t <%= cucumber_major_version < 4 ? "~@wip": "'not @wip'" %> <%= '--publish-quiet' if cucumber_major_version >= 5 %>  -f progress --color -p json
+common: -r testing/environments/cucumber_env.rb -t <%= cucumber_major_version < 4 ? "~@wip": "'not @wip'" %> <%= '--publish-quiet' if cucumber_major_version >= 5 %>  -f progress --color -p json -t @this
 
 # Using the HTML formatter causes a bug with some versions of Cucumber, for some reason
 html: -f html -o <%= ENV['CUKE_LINTER_CUCUMBER_REPORT_HTML_FILE_PATH'] %>
