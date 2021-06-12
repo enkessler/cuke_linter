@@ -1,12 +1,5 @@
 AllCops:
-  TargetRubyVersion: 2.2
-
-# RuboCop does not support as old a Ruby version as this gem does
-Gemspec/RequiredRubyVersion:
-  Enabled: false
-
-Style/RescueStandardError:
-  EnforcedStyle: implicit
+  TargetRubyVersion: 2.0
 
 Layout/EmptyLinesAroundModuleBody:
   Enabled: false

@@ -49,7 +49,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 12.0'
   spec.add_development_dependency 'require_all', '~> 2.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'rubocop', '< 1.0.0'
+  # RuboCop drops Ruby 2.0 support after this version and we need
+  # to maintain Ruby 2.0 compatibility when writing code for this gem
+  spec.add_development_dependency 'rubocop', '<= 0.50'
   spec.add_development_dependency 'simplecov', '< 1.0'
   spec.add_development_dependency 'simplecov-lcov', '< 1.0'
   spec.add_development_dependency 'yard', '< 1.0'
