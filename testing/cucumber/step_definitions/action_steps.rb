@@ -1,6 +1,8 @@
 When(/^the following command is executed:$/) do |command|
   command = "bundle exec ruby #{@executable_directory || "#{PROJECT_ROOT}/exe"}/#{command}"
+  puts "base command: #{command}"
   command.gsub!('<path_to>', @root_test_directory)
+  puts "final command: #{command}"
 
   @results = @output = `#{command}`
 end
@@ -39,7 +41,7 @@ When(/^"([^"]*)" is the current directory$/) do |directory|
 end
 
 When(/^the executable finds no linting problems$/) do
-  # Linting an empty directory doesn't (currently) find and problems
+  # Linting an empty directory doesn't (currently) find any problems
   command = "bundle exec ruby #{PROJECT_ROOT}/exe/cuke_linter"
 
   std_out = std_err = status = nil
