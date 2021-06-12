@@ -4,7 +4,9 @@ When(/^the following command is executed:$/) do |command|
   command.gsub!('<path_to>', @root_test_directory)
   puts "final command: #{command}"
 
-  @results = @output = `#{command}`
+  Dir.chdir(@root_test_directory) do
+    @results = @output = `#{command}`
+  end
 end
 
 When(/^it is formatted by the "([^"]*)" formatter$/) do |linter_name|
