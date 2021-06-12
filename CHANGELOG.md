@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet...
+### Fixed
+ - Updated the minimum required Ruby version to `2.1`. The gem has never had `2.0` compatible code (due to using 
+   named parameters without default values), so it's easier to just officially drop `2.0` 'support' than to change 
+   the API to enable a use case that was never used anyway. 
 
 ## [1.2.0] - 2021-01-08
 

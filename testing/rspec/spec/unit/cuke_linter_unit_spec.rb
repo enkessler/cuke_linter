@@ -239,7 +239,7 @@ RSpec.describe 'the gem' do
     it 'works with Ruby 2 and 3' do
       ruby_version_limits = @gemspec.required_ruby_version.requirements.map(&:join)
 
-      expect(ruby_version_limits).to match_array(['>=2.0', '<4.0'])
+      expect(ruby_version_limits).to match_array(['>=2.1', '<4.0'])
     end
 
     it 'works with CukeModeler 1-3' do

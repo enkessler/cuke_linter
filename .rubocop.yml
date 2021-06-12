@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: 2.0
+  TargetRubyVersion: 2.1
 
 Layout/EmptyLinesAroundModuleBody:
   Enabled: false
