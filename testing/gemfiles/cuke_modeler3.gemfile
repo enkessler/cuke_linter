@@ -18,6 +18,3 @@ gem 'cucumber', '2.2.0'
 
 # The version of CukeModeler being tested
 gem 'cuke_modeler', '~> 3.0'
-
-# TODO: Use the official version once a new release is out that is compatible with all needed versions of `cuke_modeler`
-gem 'cuke_slicer', git: 'https://github.com/enkessler/cuke_slicer.git', branch: 'dev'
