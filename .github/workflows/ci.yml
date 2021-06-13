@@ -21,6 +21,11 @@ jobs:
             ruby-version: '2.1'
           - gemfile: cuke_modeler3
             ruby-version: '2.2'
+          # CukeModeler 1.x and 2.x do not support beyond Ruby 2
+          - gemfile: cuke_modeler1
+            ruby-version: '3.0'
+          - gemfile: cuke_modeler2
+            ruby-version: '3.0'
     runs-on: ${{ matrix.os }}
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
       BUNDLE_GEMFILE: testing/gemfiles/${{ matrix.gemfile }}.gemfile
