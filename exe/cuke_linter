@@ -107,9 +107,6 @@ elsif File.exist?("#{Dir.pwd}/.cuke_linter")
   CukeLinter.load_configuration
 end
 
-puts "options: #{options}"
-
 results = CukeLinter.lint(**options)
-puts "results: #{results}"
 
 exit(1) unless results.empty?

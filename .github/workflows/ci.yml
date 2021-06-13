@@ -21,6 +21,27 @@ jobs:
             ruby-version: '2.1'
           - gemfile: cuke_modeler3
             ruby-version: '2.2'
+          # CukeModeler 1.x and 2.x do not support beyond Ruby 2
+          - gemfile: cuke_modeler1
+            ruby-version: '3.0'
+          - gemfile: cuke_modeler2
+            ruby-version: '3.0'
+
+          # Just not worth it to get these working and no additional and meaningful proof is provided by these
+          # combinations, given the other combinations that are being tested.
+
+          # Problems building ChildProcess native extensions during gem installation
+          - os: windows-latest
+            ruby-version: '2.1'
+          - os: windows-latest
+            ruby-version: '2.2'
+
+          # Random JRuby bugs
+          - os: ubuntu-latest
+            ruby-version: 'jruby-9.1.17.0'
+          - os: windows-latest
+            ruby-version: 'jruby-9.1.17.0'
+
     runs-on: ${{ matrix.os }}
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
       BUNDLE_GEMFILE: testing/gemfiles/${{ matrix.gemfile }}.gemfile

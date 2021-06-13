@@ -5,8 +5,12 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 # Specify your gem's dependencies in cuke_linter.gemspec
 gemspec path: '../../'
 
-# The Coveralls gem can't handle more recent versions of the SimpleCov gem
-gem 'simplecov', '<= 0.16.1'
+if RUBY_VERSION =~ /^2\.[123]/
+  # Versions 0.8.0 of 'simplecov-lcov' requires at least 'simplecov' 0.18.0, which requires at least
+  # Ruby 2.4. Bundler does not correctly resolve this declared limitation, so we have to do it ourselves.
+  gem 'simplecov', '< 0.18.0'
+  gem 'simplecov-lcov', '< 0.8.0'
+end
 
 # Cueumber 4.x doesn't work on all JRubies and this is the only earlier version
 # that is compatible with the `cucumber-gherkin` gem, upon which CukeModler 3.x depends
@@ -14,6 +18,3 @@ gem 'cucumber', '2.2.0'
 
 # The version of CukeModeler being tested
 gem 'cuke_modeler', '~> 3.0'
-
-# TODO: Use the official version once a new release is out that is compatible with all needed versions of `cuke_modeler`
-gem 'cuke_slicer', git: 'https://github.com/enkessler/cuke_slicer.git', branch: 'dev'
