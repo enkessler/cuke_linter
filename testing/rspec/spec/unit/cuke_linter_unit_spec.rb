@@ -57,7 +57,7 @@ RSpec.describe 'the gem' do
     text = <<-TEXT
       Lints feature files used by Cucumber and other similar frameworks.
     TEXT
-             .strip.delete("\n").squeeze(' ')
+           .strip.delete("\n").squeeze(' ')
 
     expect(@gemspec.summary).to eq(text)
   end
@@ -67,7 +67,7 @@ RSpec.describe 'the gem' do
       This gem provides linters for detecting common 'smells' in `.feature` files. In addition to
       the provided linters, custom linters can be made in order to create custom linting rules.
     TEXT
-             .strip.delete("\n").squeeze(' ')
+           .strip.delete("\n").squeeze(' ')
 
     expect(@gemspec.description).to eq(text)
   end
@@ -244,11 +244,11 @@ RSpec.describe 'the gem' do
 
     it 'works with CukeModeler 1-3' do
       cuke_modeler_version_limits = @gemspec.dependencies
-                                      .find do |dependency|
-        (dependency.type == :runtime) &&
-          (dependency.name == 'cuke_modeler')
-      end
-                                      .requirement.requirements.map(&:join)
+                                            .find do |dependency|
+                                              (dependency.type == :runtime) &&
+                                                (dependency.name == 'cuke_modeler')
+                                            end
+                                            .requirement.requirements.map(&:join)
 
       expect(cuke_modeler_version_limits).to match_array(['>=1.5', '<4.0'])
     end

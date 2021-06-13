@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
-  spec.files         = Dir.chdir(File.expand_path('', __dir__)) do
+  spec.files = Dir.chdir(File.expand_path('', __dir__)) do
     source_controlled_files = `git ls-files -z`.split("\x0")
     source_controlled_files.keep_if { |file| file =~ %r{^(lib|exe|testing/cucumber/features)} }
     source_controlled_files + ['README.md', 'LICENSE.txt', 'CHANGELOG.md', 'cuke_linter.gemspec']

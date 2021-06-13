@@ -1,7 +1,7 @@
 if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
   part_number                                   = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] # rubocop:disable Layout/SpaceAroundOperators, Metrics/LineLength
   ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME']     ||= "rspec_tests_part_#{part_number}"
-  ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'] ||= "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/rspec/part_#{part_number}/coverage"
+  ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'] ||= "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/rspec/part_#{part_number}/coverage" # rubocop:disable Metrics/LineLength
 else
   ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME']     ||= 'rspec_tests'
   ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'] ||= "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/coverage"

@@ -29,7 +29,7 @@ module CukeLinter
     end
 
     def rspec_test_file_pattern
-      "testing/rspec/spec/**/*_spec.rb"
+      'testing/rspec/spec/**/*_spec.rb'
     end
 
   end

@@ -8,9 +8,9 @@ namespace 'cuke_linter' do # rubocop:disable Metrics/BlockLength
     puts Rainbow('Running RSpec tests...').cyan
 
     completed_process = CukeLinter::CukeLinterHelper.run_command(['bundle', 'exec', 'rspec',
-                                                                  '--pattern', CukeLinter::CukeLinterHelper.rspec_test_file_pattern],
+                                                                  '--pattern', CukeLinter::CukeLinterHelper.rspec_test_file_pattern], # rubocop:disable Metrics/LineLength
                                                                  env_vars: { CUKE_LINTER_PARALLEL_RUN: 'false',
-                                                                             CUKE_LINTER_TEST_PROCESS: 'true', })
+                                                                             CUKE_LINTER_TEST_PROCESS: 'true' })
 
     raise(Rainbow('RSpec tests encountered problems!').red) unless completed_process.exit_code.zero?
 
@@ -42,7 +42,7 @@ namespace 'cuke_linter' do # rubocop:disable Metrics/BlockLength
 
     completed_process = CukeLinter::CukeLinterHelper.run_command(['bundle', 'exec', 'cucumber'],
                                                                  env_vars: { CUKE_LINTER_PARALLEL_RUN: 'false',
-                                                                             CUKE_LINTER_TEST_PROCESS: 'true', })
+                                                                             CUKE_LINTER_TEST_PROCESS: 'true' })
 
     raise(Rainbow('Cucumber tests encountered problems!').red) unless completed_process.exit_code.zero?
 
@@ -63,7 +63,7 @@ namespace 'cuke_linter' do # rubocop:disable Metrics/BlockLength
         Rake::Task['cuke_linter:run_cucumber_tests_in_parallel'].invoke
         Rake::Task['cuke_linter:combine_code_coverage_reports'].invoke
       end
-    rescue => e # rubocop:disable Lint/RescueWithoutErrorClass - RuboCop shouldn't be complaining about this. Probably a bug.
+    rescue => e
       puts Rainbow("-----------------------\nSomething isn't right!").red
       puts Rainbow(e.message).yellow
       raise e

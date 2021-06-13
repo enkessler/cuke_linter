@@ -23,11 +23,11 @@ RSpec.describe CukeLinter do
     linting_options.delete(:formatters)
 
     expect { subject.lint(**linting_options) }.to output(['FakeLinter',
-                                                        '  FakeLinter problem',
-                                                        '    path_to_file:1',
-                                                        '',
-                                                        '1 issues found',
-                                                        ''].join("\n")).to_stdout
+                                                          '  FakeLinter problem',
+                                                          '    path_to_file:1',
+                                                          '',
+                                                          '1 issues found',
+                                                          ''].join("\n")).to_stdout
   end
 
   it 'outputs formatted linting data to the provided output location' do

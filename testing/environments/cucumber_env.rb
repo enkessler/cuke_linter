@@ -1,7 +1,7 @@
 if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
   part_number                                   = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']
   ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME']     = "cucumber_tests_part_#{part_number}"
-  ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'] = "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/cucumber/part_#{part_number}/coverage"
+  ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'] = "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/cucumber/part_#{part_number}/coverage" # rubocop:disable Metrics/LineLength
 else
   ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME']     = 'cucumber_tests'
   ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'] = "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/coverage"

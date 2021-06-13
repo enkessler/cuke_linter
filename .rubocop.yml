@@ -10,6 +10,15 @@ Layout/EmptyLinesAroundClassBody:
 Naming/VariableNumber:
   EnforcedStyle: snake_case
 
+# Non-specific exception handling is fine
+Style/RescueStandardError:
+  EnforcedStyle: 'implicit'
+
+# This would result in too much intermixing of regular and percent arrays, depending on
+# context, and makes nested arrays look weird
+Style/WordArray:
+  Enabled: false
+
 # Helps with readability
 Layout/EmptyLines:
   Enabled: false
