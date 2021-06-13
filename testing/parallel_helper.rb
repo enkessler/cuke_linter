@@ -48,15 +48,43 @@ module CukeLinter
     def combine_code_coverage_reports
       all_results = Dir["#{ENV['CUKE_LINTER_REPORT_FOLDER']}/{rspec,cucumber}/part_*/coverage/.resultset.json"]
 
-      SimpleCov::Formatter::LcovFormatter.config do |config|
-        config.report_with_single_file = true
-        config.lcov_file_name = 'lcov.info'
-      end
+      # Never versions of SimpleCov make combining reports a lot easier
+      if SimpleCov.respond_to?(:collate)
+        SimpleCov::Formatter::LcovFormatter.config do |config|
+          config.report_with_single_file = true
+          config.lcov_file_name = 'lcov.info'
+        end
 
-      SimpleCov.collate(all_results) do
-        coverage_dir("#{ENV['CUKE_LINTER_REPORT_FOLDER']}/coverage")
-        formatter SimpleCov::Formatter::MultiFormatter.new([SimpleCov::Formatter::HTMLFormatter,
-                                                            SimpleCov::Formatter::LcovFormatter])
+        SimpleCov.collate(all_results) do
+          coverage_dir("#{ENV['CUKE_LINTER_REPORT_FOLDER']}/coverage")
+          formatter SimpleCov::Formatter::MultiFormatter.new([SimpleCov::Formatter::HTMLFormatter,
+                                                              SimpleCov::Formatter::LcovFormatter])
+        end
+      else
+        result_objects = []
+        all_results.each do |result_file_name|
+          result_objects << SimpleCov::Result.from_hash(JSON.parse(File.read(result_file_name)))
+        end
+        merged_result = SimpleCov::ResultMerger.merge_results(*result_objects)
+
+
+        # Set overall coverage report folder
+        SimpleCov.coverage_dir("#{ENV['CUKE_LINTER_REPORT_FOLDER']}/coverage")
+
+        # Create the LCOV report
+        SimpleCov::Formatter::LcovFormatter.config do |config|
+          config.report_with_single_file = true
+          config.lcov_file_name = 'lcov.info'
+        end
+
+        SimpleCov::Formatter::LcovFormatter.new.format(merged_result)
+
+
+        # Creates the HTML report
+        merged_result.format!
+
+        # Creates the finalized JSON file that Coveralls will need
+        SimpleCov::ResultMerger.store_result(merged_result)
       end
     end
 
