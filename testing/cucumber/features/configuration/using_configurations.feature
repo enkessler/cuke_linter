@@ -1,6 +1,7 @@
 Feature: Using a configuration
 
-  Configuration can be done during a script or through a configuration file. This file can be explicitly provided or a default configuration file will be used.
+  Configuration can be done during a script or through a configuration file. This file can be explicitly
+  provided or a default configuration file will be used.
 
 
   Scenario: Providing a configuration directly

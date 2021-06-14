@@ -101,7 +101,8 @@ Feature: Using cuke_linter on the command line
 
   Scenario: Specifying a formatter to use
 
-  Note: The file containing the formatter class will have to be explicitly loaded if not using one of the built in formatters
+  Note: The file containing the formatter class will have to be explicitly loaded if not using one
+        of the built in formatters
 
     Given the following feature file "some.feature":
       """
@@ -134,7 +135,9 @@ Feature: Using cuke_linter on the command line
 
   Scenario: Redirecting output for specific formatters
 
-  Note: Formatters match to output locations in the same order that they are specified. Formatters that do not have their output location specified will output to STDOUT. Output locations that are not matched to a formatter will use the default formatter.
+  Note: Formatters match to output locations in the same order that they are specified. Formatters
+        that do not have their output location specified will output to STDOUT. Output locations
+        that are not matched to a formatter will use the default formatter.
 
     Given the following feature file "some.feature":
       """

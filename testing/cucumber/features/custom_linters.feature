@@ -1,6 +1,8 @@
 Feature: Custom linters
 
-  In addition to the linters provided by CukeLinter, custom linters can be used. A linter is essentially any object that provides a few needed methods. In order to simplify the creation of custom linters, a base linter class is available that provides these needed methods.
+  In addition to the linters provided by CukeLinter, custom linters can be used. A linter is
+  essentially any object that provides a few needed methods. In order to simplify the creation
+  of custom linters, a base linter class is available that provides these needed methods.
 
 
   Scenario: Creating a custom linter object

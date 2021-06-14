@@ -4,12 +4,17 @@ Feature: Locally scoping linters
   I want to be able to limit the scope of linters for certain portions of the documentation
   So that exceptions to rules can be made
 
-  In addition to using configurations to change whether or not a given linter is used when linting, linters can be enabled/disabled for specific portions of a `.feature` file. To enable/disable one (or more) linters, add a comment line before the portion of the file where the change should apply. Add a comment with the opposite change at the point in the file when the default behavior should resume. Unless so countermanded, changes remain in effect for the remainder of the feature file.
+  In addition to using configurations to change whether or not a given linter is used when linting, linters
+  can be enabled/disabled for specific portions of a `.feature` file. To enable/disable one (or more) linters,
+  add a comment line before the portion of the file where the change should apply. Add a comment with the
+  opposite change at the point in the file when the default behavior should resume. Unless so countermanded,
+  changes remain in effect for the remainder of the feature file.
 
 
   Scenario: Enabling/disabling a linter within a feature file
 
-  Note: This example disables linters that are enabled by default but enabling a linter that is disabled by default works in the same manner
+  Note: This example disables linters that are enabled by default but enabling a linter that is disabled by
+        default works in the same manner
 
     Given the default linters are being used
     And a feature file model based on the following text:
