@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Nothing yet...
+
+## [1.2.1] - 2021-06-13
+
 ### Fixed
  - Updated the minimum required Ruby version to `2.1`. The gem has never had `2.0` compatible code (due to using 
    named parameters without default values), so it's easier to just officially drop `2.0` 'support' than to change 
@@ -172,7 +176,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Custom linters, formatters, and command line usability
 
 
-[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/enkessler/cuke_linter/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/enkessler/cuke_linter/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/enkessler/cuke_linter/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/enkessler/cuke_linter/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/enkessler/cuke_linter/compare/v1.0.0...v1.0.1
