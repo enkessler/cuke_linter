@@ -164,9 +164,6 @@ module CukeLinter
     def dynamic_linters
       # No need to keep making new ones over and over...
       @dynamic_linters ||= Hash.new { |hash, key| hash[key] = key.new }
-      # return @dynamic_linters if @dynamic_linters
-      #
-      # @dynamic_linters = {}
     end
 
     def format_data(formatters, linting_data)
