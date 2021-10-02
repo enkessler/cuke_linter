@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects taggable Gherkin elements that have duplicate tags
-
   class ElementWithDuplicateTagsLinter < Linter
 
     # Changes the linting settings on the linter using the provided configuration

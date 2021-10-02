@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects scenarios and outlines that have a setup step as their final step
-
   class TestWithSetupStepAsFinalStepLinter < Linter
 
     # Changes the linting settings on the linter using the provided configuration

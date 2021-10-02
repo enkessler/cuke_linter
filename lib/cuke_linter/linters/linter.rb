@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A generic linter that can be used to make arbitrary linting rules
-
   class Linter
 
     # Returns the name of the linter

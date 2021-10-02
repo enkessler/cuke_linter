@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects outlines that don't have multiple example rows
-
   class OutlineWithSingleExampleRowLinter < Linter
 
     # The rule used to determine if a model has a problem

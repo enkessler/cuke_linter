@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects scenarios and outlines that have too many steps
-
   class TestWithTooManyStepsLinter < Linter
 
     # Changes the linting settings on the linter using the provided configuration

@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects features that contain too many different tags
-
   class FeatureWithTooManyDifferentTagsLinter < Linter
 
     # Changes the linting settings on the linter using the provided configuration

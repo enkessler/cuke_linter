@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects scenarios and outlines that have a bad name
-
   class TestWithBadNameLinter < Linter
 
     # The rule used to determine if a model has a problem

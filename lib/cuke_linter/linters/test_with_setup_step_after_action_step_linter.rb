@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects scenarios and outlines that have a setup step that comes after an action step
-
   class TestWithSetupStepAfterActionStepLinter < Linter
 
     # Changes the linting settings on the linter using the provided configuration

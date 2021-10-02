@@ -53,11 +53,8 @@ Metrics/BlockLength:
 Layout/EmptyLinesAroundBlockBody:
   Enabled: false
 
+# TODO: Figure out why this is
 Layout/EndOfLine:
   Exclude:
     # Git isn't changing the line endings locally for some reason
     - 'bin/console'
-
-# Documentation is checked using RDoc
-Style/Documentation:
-  Enabled: false

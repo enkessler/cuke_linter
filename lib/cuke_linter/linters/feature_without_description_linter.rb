@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects features that don't have a description
-
   class FeatureWithoutDescriptionLinter < Linter
 
     # The rule used to determine if a model has a problem

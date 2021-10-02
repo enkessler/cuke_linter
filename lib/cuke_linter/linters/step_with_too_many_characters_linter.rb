@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects steps that are too long
-
   class StepWithTooManyCharactersLinter < Linter
 
     # The threshold used if not otherwise configured

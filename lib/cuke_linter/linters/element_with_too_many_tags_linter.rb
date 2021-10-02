@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects taggable Gherkin elements that have too many tags
-
   class ElementWithTooManyTagsLinter < Linter
 
     # Changes the linting settings on the linter using the provided configuration

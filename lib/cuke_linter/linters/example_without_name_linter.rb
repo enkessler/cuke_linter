@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects unnamed example groups
-
   class ExampleWithoutNameLinter < Linter
 
     # The rule used to determine if a model has a problem

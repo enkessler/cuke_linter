@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects scenarios and outlines that have an action step as their final step
-
   class TestWithActionStepAsFinalStepLinter < Linter
 
     # Changes the linting settings on the linter using the provided configuration

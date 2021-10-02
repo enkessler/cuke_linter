@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects mismatched feature file names
-
   class FeatureFileWithMismatchedNameLinter < Linter
 
     # The rule used to determine if a model has a problem

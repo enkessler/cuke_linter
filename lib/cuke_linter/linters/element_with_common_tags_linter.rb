@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects Gherkin elements that have the same tag on all of their taggable child elements
-
   class ElementWithCommonTagsLinter < Linter
 
     # The rule used to determine if a model has a problem

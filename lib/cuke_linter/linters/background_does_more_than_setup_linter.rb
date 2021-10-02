@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects backgrounds that have non-setup steps
-
   class BackgroundDoesMoreThanSetupLinter < Linter
 
     # Changes the linting settings on the linter using the provided configuration

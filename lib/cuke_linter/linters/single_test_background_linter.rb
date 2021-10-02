@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects backgrounds that apply to only one test
-
   class SingleTestBackgroundLinter < Linter
 
     # The rule used to determine if a model has a problem

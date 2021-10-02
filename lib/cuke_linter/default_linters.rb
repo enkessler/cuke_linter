@@ -1,4 +1,4 @@
-module CukeLinter
+module CukeLinter # rubocop:disable Style/Documentation
 
   # Long names inherently result in long lines
   # rubocop:disable Metrics/LineLength

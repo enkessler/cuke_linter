@@ -1,7 +1,6 @@
 module CukeLinter
 
   # A linter that detects scenarios and outlines that do not have a verification (i.e. 'Then') step
-
   class TestWithNoVerificationStepLinter < Linter
 
     # Changes the linting settings on the linter using the provided configuration
