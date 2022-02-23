@@ -36,6 +36,10 @@ jobs:
           - os: windows-latest
             ruby-version: '2.2'
 
+          # Problems building FFI native extensions during gem installation
+          - os: windows-latest
+            ruby-version: '2.3'
+
           # Random JRuby bugs
           - os: ubuntu-latest
             ruby-version: 'jruby-9.1.17.0'
