@@ -148,7 +148,7 @@ Rather than using the default linters or providing a custom set of of modified l
 
 ### <a id="documentation"></a>Everything Else
 
-For more detailed examples of usage, see the documentation [here](https://app.cucumber.pro/projects/cuke_linter).
+For more detailed examples of usage, see the documentation [here](https://github.com/enkessler/cuke_linter/tree/master/testing/cucumber/features).
 
 ## Development and Contributing
 
