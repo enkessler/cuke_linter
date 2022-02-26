@@ -69,6 +69,10 @@ Given(/^a linter for test steps with too many characters$/) do
   @linter = CukeLinter::StepWithTooManyCharactersLinter.new
 end
 
+Given(/^a linter for test names with too many characters$/) do
+  @linter = CukeLinter::TestNameWithTooManyCharactersLinter.new
+end
+
 Given(/^a linter for tests with no action step$/) do
   @linter = CukeLinter::TestWithNoActionStepLinter.new
 end
@@ -178,6 +182,11 @@ end
 Given(/^a linter for test steps with too many characters has been registered$/) do
   CukeLinter.register_linter(linter: CukeLinter::StepWithTooManyCharactersLinter.new,
                              name:   'StepWithTooManyCharactersLinter')
+end
+
+Given(/^a linter for test names with too many characters has been registered$/) do
+  CukeLinter.register_linter(linter: CukeLinter::TestNameWithTooManyCharactersLinter.new,
+                             name:   'TestNameWithTooManyCharactersLinter')
 end
 
 Given(/^a linter for features with too many different tags has been registered$/) do
