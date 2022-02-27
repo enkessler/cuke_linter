@@ -228,7 +228,6 @@ RSpec.describe CukeLinter do
                                 SingleTestBackgroundLinter
                                 StepWithEndPeriodLinter
                                 StepWithTooManyCharactersLinter
-                                TestNameWithTooManyCharactersLinter
                                 TestShouldUseBackgroundLinter
                                 TestWithActionStepAsFinalStepLinter
                                 TestWithBadNameLinter

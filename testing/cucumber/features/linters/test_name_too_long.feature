@@ -17,7 +17,7 @@ Feature: Scenario name with too many characters
     When it is linted
     Then an error is reported:
       | linter                              | problem                                                  | location         |
-      | TestNameWithTooManyCharactersLinter | Scenario name is too long. 121 characters found (max 80) | <path_to_file>:4 |
+      | TestNameWithTooManyCharactersLinter | Scenario name is too long. 121 characters found (max 80) | <path_to_file>:3 |
 
 
   Scenario: Configuration of test name count threshold
@@ -26,7 +26,7 @@ Feature: Scenario name with too many characters
     And the following configuration file:
       """
       TestNameWithTooManyCharactersLinter:
-        TestNameLengthThreshold: 80
+        TestNameLengthThreshold: 30
       """
     And the following feature:
       """
@@ -38,4 +38,4 @@ Feature: Scenario name with too many characters
     And the feature is linted
     Then an error is reported:
       | linter                              | problem                                                 | location         |
-      | TestNameWithTooManyCharactersLinter | Scenario name is too long. 92 characters found (max 00) | <path_to_file>:4 |
+      | TestNameWithTooManyCharactersLinter | Scenario name is too long. 92 characters found (max 30) | <path_to_file>:3 |

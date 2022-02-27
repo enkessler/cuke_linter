@@ -15,7 +15,7 @@ module CukeLinter
     def rule(model)
       return false unless model.is_a?(CukeModeler::Scenario) || model.is_a?(CukeModeler::Outline)
 
-      @linted_test_name_length = model.text.nil? ? 0 : model.text.length
+      @linted_test_name_length = model.name.nil? ? 0 : model.name.length
 
       @linted_test_name_length > test_name_length_threshold
     end
