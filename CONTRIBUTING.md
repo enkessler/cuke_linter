@@ -44,4 +44,4 @@ Some guidelines when adding a new linter
 
 Some guidelines when adding a new formatter
   * While most linters only produce a single type of problem, it is not a strict requirement. The formatter should be able to handle multiple problem types per linter.
-  * Some linters report problems at the file level instead of the line level. The formatter should be able to handle locations that do not include lines numbers.
+  * Some linters report problems at the file level instead of the line level. The formatter should be able to handle locations that do not include line numbers.
