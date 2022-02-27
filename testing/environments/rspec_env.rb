@@ -48,6 +48,9 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
+  # For running only specific tests with the 'focus' tag
+  config.filter_run_when_matching focus: true
+
   config.before(:suite) do
     DEFAULT_LINTERS = Marshal.load(Marshal.dump(CukeLinter.registered_linters)).freeze
   end
