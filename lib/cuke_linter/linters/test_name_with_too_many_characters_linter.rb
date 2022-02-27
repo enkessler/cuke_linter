@@ -36,4 +36,3 @@ module CukeLinter
 
   end
 end
-

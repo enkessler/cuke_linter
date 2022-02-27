@@ -11,26 +11,20 @@ RSpec.describe CukeLinter::TestNameWithTooManyCharactersLinter do
 
   describe 'linting' do
 
+    let(:default_character_threshold) { 80 }
+
     %w[scenario outline].each do |model_type|
 
       context "with a #{model_type} that has too long name" do
-
-        let(:default_character_threshold) { 80 }
 
         context 'when the scenario name is too long' do
 
           let(:test_model) do
             scenario_name = 'x' * (default_character_threshold + 1)
+            model         = send("generate_#{model_type}_model", parent_file_path: model_file_path)
+            model.name    = scenario_name
 
-            case model_type
-            when 'scenario'
-              generate_scenario_model(parent_file_path: model_file_path,
-                                      source_text: "Scenario: #{scenario_name}")
-            when 'outline'
-              generate_outline_model(parent_file_path: model_file_path,
-                                     source_text: "Scenario Outline: #{scenario_name}")
-            end
-
+            model
           end
 
           it_should_behave_like 'a linter linting a bad model'
@@ -38,17 +32,20 @@ RSpec.describe CukeLinter::TestNameWithTooManyCharactersLinter do
           it 'reports a problem' do
             result = subject.lint(test_model)
 
-            expect(result[:problem]).to match(/^Scenario name is too long. \d+ characters found \(max 80\)/)
+            expect(result[:problem])
+              .to match(/^Scenario name is too long. \d+ characters found \(max #{default_character_threshold}\)/)
           end
 
           it 'includes the number of characters found in the problem record' do
             character_count = test_model.name.length
             result = subject.lint(test_model)
-            expect(result[:problem]).to eq("Scenario name is too long. #{character_count} characters found (max 80)")
+            expect(result[:problem])
+              .to eq("Scenario name is too long. #{character_count} characters found (max 80)")
 
             test_model.name += 'x'
-            result = subject.lint(test_model) # rubocop:disable Layout/SpaceAroundOperators
-            expect(result[:problem]).to eq("Scenario name is too long. #{character_count + 1} characters found (max 80)")
+            result = subject.lint(test_model)
+            expect(result[:problem])
+              .to eq("Scenario name is too long. #{character_count + 1} characters found (max 80)")
           end
 
         end
@@ -59,14 +56,10 @@ RSpec.describe CukeLinter::TestNameWithTooManyCharactersLinter do
 
         let(:test_model) do
           scenario_name = 'x' * default_character_threshold
+          model         = send("generate_#{model_type}_model")
+          model.name    = scenario_name
 
-          case model_type
-          when 'scenario'
-            generate_scenario_model(source_text: "Scenario: #{scenario_name}")
-          when 'outline'
-            generate_outline_model(source_text: "Scenario Outline: #{scenario_name}")
-          end
-
+          model
         end
 
         it_should_behave_like 'a linter linting a good model'
@@ -77,14 +70,10 @@ RSpec.describe CukeLinter::TestNameWithTooManyCharactersLinter do
 
         let(:test_model) do
           scenario_name = 'x' * (default_character_threshold - 1)
+          model         = send("generate_#{model_type}_model")
+          model.name    = scenario_name
 
-          case model_type
-          when 'scenario'
-            generate_scenario_model(source_text: "Scenario: #{scenario_name}")
-          when 'outline'
-            generate_outline_model(source_text: "Scenario Outline: #{scenario_name}")
-          end
-
+          model
         end
 
         it_should_behave_like 'a linter linting a good model'
@@ -108,20 +97,14 @@ RSpec.describe CukeLinter::TestNameWithTooManyCharactersLinter do
 
         context 'with no configuration' do
 
-          let(:default_character_threshold) { 80 }
-
           context 'because configuration never happened' do
 
             let(:default_model) do
               scenario_name = 'x' * (default_character_threshold + 1)
+              model         = send("generate_#{model_type}_model")
+              model.name    = scenario_name
 
-              case model_type
-              when 'scenario'
-                generate_scenario_model(source_text: "Scenario: #{scenario_name}")
-              when 'outline'
-                generate_outline_model(source_text: "Scenario Outline: #{scenario_name}")
-              end
-
+              model
             end
 
             it 'defaults to a maximum of 80 characters' do
@@ -132,19 +115,15 @@ RSpec.describe CukeLinter::TestNameWithTooManyCharactersLinter do
 
           end
 
-          context 'because configuration did not set a scenario name threshold' do
+          context 'because configuration did not set a test name threshold' do
             let(:configuration) { {} }
             let(:configured_model) do
               subject.configure(configuration)
               scenario_name = 'x' * (default_character_threshold + 1)
+              model         = send("generate_#{model_type}_model")
+              model.name    = scenario_name
 
-              case model_type
-              when 'scenario'
-                generate_scenario_model(source_text: "Scenario: #{scenario_name}")
-              when 'outline'
-                generate_outline_model(source_text: "Scenario Outline: #{scenario_name}")
-              end
-
+              model
             end
 
             it 'defaults to a maximum of 80 characters' do
@@ -169,20 +148,17 @@ RSpec.describe CukeLinter::TestNameWithTooManyCharactersLinter do
 
           let(:test_model) do
             scenario_name = 'x' * (character_threshold + 1)
+            model         = send("generate_#{model_type}_model")
+            model.name    = scenario_name
 
-            case model_type
-            when 'scenario'
-              generate_scenario_model(source_text: "Scenario: #{scenario_name}")
-            when 'outline'
-              generate_outline_model(source_text: "Scenario Outline: #{scenario_name}")
-            end
-
+            model
           end
 
           it 'uses the maximum character length provided by configuration' do
             result = subject.lint(test_model)
 
-            expect(result[:problem]).to match(/^Scenario name is too long. \d+ characters found \(max 10\)/)
+            expect(result[:problem])
+              .to match(/^Scenario name is too long. \d+ characters found \(max #{character_threshold}\)/)
           end
 
         end
