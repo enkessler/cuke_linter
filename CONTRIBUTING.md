@@ -14,6 +14,11 @@ or Cucumber tests specifically:
    `bundle exec rake cuke_linter:run_cucumber_tests` or 
    `bundle exec rake cuke_linter:run_cucumber_tests_in_parallel`
 
+### Releasing a new version of the gem
+
+Use the `build_and_tag` Rake task to build the gem for release. That way, the commit that the gem was built from 
+will also be tagged with the appropriate version tag.
+
 
 ## Contributing
 
