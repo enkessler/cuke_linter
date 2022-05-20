@@ -7,7 +7,10 @@ module CukeLinter
     def rule(model)
       return false unless model.is_a?(CukeModeler::Feature)
 
-      model.tests.nil? || model.tests.empty?
+      feature_tests = model.tests && model.tests.any?
+      rule_tests = model.rules && model.rules.any?{|rule| rule.tests && rule.tests.any?}
+
+      !(feature_tests || rule_tests)
     end
 
     # The message used to describe the problem that has been found
