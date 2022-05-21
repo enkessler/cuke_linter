@@ -102,7 +102,7 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
             let(:test_model) do
               gherkin = 'Feature:
                            Rule:'
-              model       = generate_feature_model(source_text: gherkin, parent_file_path: model_file_path)
+              model   = generate_feature_model(source_text: gherkin, parent_file_path: model_file_path)
               model.rules.first.tests = []
 
               model
@@ -123,7 +123,7 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
             let(:test_model) do
               gherkin = 'Feature:
                            Rule:'
-              model       = generate_feature_model(source_text: gherkin, parent_file_path: model_file_path)
+              model   = generate_feature_model(source_text: gherkin, parent_file_path: model_file_path)
               model.rules.first.tests = nil
 
               model
