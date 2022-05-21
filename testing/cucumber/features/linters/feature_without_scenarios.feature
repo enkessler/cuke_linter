@@ -26,6 +26,7 @@ Feature: Feature without scenarios linter
     When it is linted
     Then no error is reported
 
+  @cuke_modeler_min_version_3
   Scenario: Linting (Good, with Rules)
     Given a linter for features without scenarios
     And the following feature:

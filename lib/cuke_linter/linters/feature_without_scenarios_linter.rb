@@ -8,7 +8,8 @@ module CukeLinter
       return false unless model.is_a?(CukeModeler::Feature)
 
       feature_tests = model.tests && model.tests.any?
-      rule_tests = model.rules && model.rules.any?{|rule| rule.tests && rule.tests.any?}
+      rule_tests    = model.respond_to?(:rules) && # Earlier versions of CukeModeler did not have Rule models
+                      model.rules && model.rules.any? { |rule| rule.tests && rule.tests.any? }
 
       !(feature_tests || rule_tests)
     end

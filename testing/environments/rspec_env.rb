@@ -71,6 +71,10 @@ RSpec.configure do |config|
     end
   end
 
+  # Methods will be available outside of tests
+  include CukeLinter::HelperMethods
+
+  # Methods will be available inside of tests
   config.include CukeLinter::FileHelper
   config.include CukeLinter::FormatterFactory
   config.include CukeLinter::LinterFactory

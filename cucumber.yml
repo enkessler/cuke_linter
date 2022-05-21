@@ -2,9 +2,19 @@
 <% require "#{__dir__}/cuke_linter_project_settings" %>
 
 <% FileUtils.mkdir(ENV['CUKE_LINTER_REPORT_FOLDER']) unless File.exist?(ENV['CUKE_LINTER_REPORT_FOLDER'])%>
-<% cucumber_major_version = Gem.loaded_specs['cucumber'].version.version.match(/^(\d+)\./)[1].to_i %>
+<%
+  cucumber_major_version = Gem.loaded_specs['cucumber'].version.version.match(/^(\d+)\./)[1].to_i
+  cuke_modeler_major_version = Gem.loaded_specs['cuke_modeler'].version.version.match(/^(\d+)\./)[1].to_i
+  max_cuke_modeler_version = ENV['MOST_CURRENT_CUKE_MODELER_VERSION'].to_i
+%>  
 
-common: -r testing/environments/cucumber_env.rb -t <%= cucumber_major_version < 4 ? "~@wip": "'not @wip'" %> <%= '--publish-quiet' if cucumber_major_version >= 5 %>  -f progress --color -p json
+<%
+  # Some tests only work for some versions of CukeModeler
+  cuke_modeler_filter_tags = ((cuke_modeler_major_version + 1)..max_cuke_modeler_version).map{ |index| "@cuke_modeler_min_version_#{index}" }
+  formatted_filter_tags = (cucumber_major_version < 4 ? cuke_modeler_filter_tags.map { |tag| "-t ~#{tag}" } : cuke_modeler_filter_tags.map { |tag| "-t 'not #{tag}'" }).join(' ')
+%>
+
+common: -r testing/environments/cucumber_env.rb -t <%= cucumber_major_version < 4 ? "~@wip": "'not @wip'" %> <%= '--publish-quiet' if cucumber_major_version >= 5 %> <%= formatted_filter_tags unless cuke_modeler_major_version == max_cuke_modeler_version %> -f progress --color -p json
 
 # Using the HTML formatter causes a bug with some versions of Cucumber, for some reason
 html: -f html -o <%= ENV['CUKE_LINTER_CUCUMBER_REPORT_HTML_FILE_PATH'] %>

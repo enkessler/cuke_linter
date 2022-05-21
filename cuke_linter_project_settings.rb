@@ -1,4 +1,6 @@
 # rubocop:disable Metrics/LineLength
+ENV['MOST_CURRENT_CUKE_MODELER_VERSION'] ||= '3'
+
 ENV['CUKE_LINTER_PARALLEL_RUN'] ||= 'false'
 ENV['CUKE_LINTER_REPORT_FOLDER'] ||= "#{__dir__}/reports"
 
