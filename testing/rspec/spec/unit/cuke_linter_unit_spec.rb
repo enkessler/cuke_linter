@@ -114,6 +114,10 @@ RSpec.describe 'the gem' do
       expect(@gemspec.metadata['documentation_uri']).to eq('https://www.rubydoc.info/gems/cuke_linter')
     end
 
+    it 'has two-factor authentication enabled' do
+      expect(@gemspec.metadata['rubygems_mfa_required']).to eq('true')
+    end
+
   end
 
 
