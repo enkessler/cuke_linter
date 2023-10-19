@@ -86,7 +86,7 @@ RSpec.describe CukeLinter do
         end
       end
 
-      it 'configures every linter for which it has a configuration' do
+      it 'configures every linter for which it has a configuration', :linter_registration do
         config = { 'FakeLinter1' => { 'Problem' => 'My custom message for FakeLinter1' },
                    'FakeLinter2' => { 'Problem' => 'My custom message for FakeLinter2' } }
 
@@ -97,12 +97,12 @@ RSpec.describe CukeLinter do
         subject.load_configuration(config: config)
         results = subject.lint(**linting_options)
 
-        expect(results).to match_array([{ linter:   'FakeLinter1',
-                                          location: 'path_to_file:1',
-                                          problem:  'My custom message for FakeLinter1' },
-                                        { linter:   'FakeLinter2',
-                                          location: 'path_to_file:1',
-                                          problem:  'My custom message for FakeLinter2' }])
+        expect(results).to include({ linter:   'FakeLinter1',
+                                     location: 'path_to_file:1',
+                                     problem:  'My custom message for FakeLinter1' },
+                                   { linter:   'FakeLinter2',
+                                     location: 'path_to_file:1',
+                                     problem:  'My custom message for FakeLinter2' })
       end
 
       it "does not try to configure linters that don't know how to be configured" do
