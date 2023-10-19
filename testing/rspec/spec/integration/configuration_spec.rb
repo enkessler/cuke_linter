@@ -189,7 +189,7 @@ RSpec.describe CukeLinter do
 
       %i[provided registered].each do |linter_type|
 
-        context "using #{linter_type} linters" do
+        context "using #{linter_type} linters", :linter_registration do
 
           if linter_type == :provided
             let(:linting_options) do
@@ -822,7 +822,7 @@ RSpec.describe CukeLinter do
 
           end
 
-          context 'with an enabled(i.e. registered)/provided linter' do
+          context 'with an enabled(i.e. registered)/provided linter', :linter_registration do
 
             if linter_type == :provided
               before(:each) do
