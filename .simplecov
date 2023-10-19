@@ -4,8 +4,8 @@
 if ENV['CUKE_LINTER_TEST_PROCESS'] == 'true'
   require 'simplecov-lcov'
 
-  SimpleCov.command_name(ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME'])
-  SimpleCov.coverage_dir(ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'])
+  SimpleCov.command_name(ENV.fetch('CUKE_LINTER_SIMPLECOV_COMMAND_NAME'))
+  SimpleCov.coverage_dir(ENV.fetch('CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'))
 
   SimpleCov::Formatter::LcovFormatter.config do |config|
     config.report_with_single_file = true

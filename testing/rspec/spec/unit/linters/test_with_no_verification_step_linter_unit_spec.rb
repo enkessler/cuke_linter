@@ -115,10 +115,6 @@ RSpec.describe CukeLinter::TestWithNoVerificationStepLinter do
 
       end
 
-    end
-
-    %w[scenario outline].each do |model_type|
-
       context "with a #{model_type} that has a related background" do
 
         let(:test_model) do

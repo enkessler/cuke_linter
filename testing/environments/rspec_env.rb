@@ -1,10 +1,10 @@
 if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
-  part_number                                   = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT'] # rubocop:disable Layout/SpaceAroundOperators, Metrics/LineLength
+  part_number                                   = ENV.fetch('CUKE_LINTER_PARALLEL_PROCESS_COUNT') # rubocop:disable Layout/SpaceAroundOperators
   ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME']     ||= "rspec_tests_part_#{part_number}"
-  ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'] ||= "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/rspec/part_#{part_number}/coverage" # rubocop:disable Metrics/LineLength
+  ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'] ||= "#{ENV.fetch('CUKE_LINTER_REPORT_FOLDER')}/rspec/part_#{part_number}/coverage" # rubocop:disable Layout/LineLength
 else
   ENV['CUKE_LINTER_SIMPLECOV_COMMAND_NAME']     ||= 'rspec_tests'
-  ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'] ||= "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/coverage"
+  ENV['CUKE_LINTER_SIMPLECOV_OUTPUT_DIRECTORY'] ||= "#{ENV.fetch('CUKE_LINTER_REPORT_FOLDER')}/coverage"
 end
 
 # Unless otherwise set, assume that this file is only loaded during testing
@@ -24,18 +24,20 @@ require_relative '../rspec/spec/integration/linters/linter_integration_specs'
 TAGGABLE_ELEMENTS               = %w[feature scenario outline example].freeze
 ELEMENTS_WITH_TAGGABLE_CHILDREN = %w[feature outline].freeze
 
+DEFAULT_LINTERS = Marshal.load(Marshal.dump(CukeLinter.registered_linters)).freeze
+
 # rubocop:disable Metrics/BlockLength
 RSpec.configure do |config|
 
   if ENV['CUKE_LINTER_PARALLEL_RUN'] == 'true'
-    process_count    = ENV['CUKE_LINTER_PARALLEL_PROCESS_COUNT']
-    source_file      = "#{ENV['CUKE_LINTER_PARALLEL_FOLDER']}/test_list_#{process_count}.txt"
-    persistence_file = "#{ENV['CUKE_LINTER_PARALLEL_FOLDER']}/.rspec_status_#{process_count}"
+    process_count    = ENV.fetch('CUKE_LINTER_PARALLEL_PROCESS_COUNT')
+    source_file      = "#{ENV.fetch('CUKE_LINTER_PARALLEL_FOLDER')}/test_list_#{process_count}.txt"
+    persistence_file = "#{ENV.fetch('CUKE_LINTER_PARALLEL_FOLDER')}/.rspec_status_#{process_count}"
     spec_list        = File.read(source_file).split("\n")
     config.instance_variable_set(:@files_or_directories_to_run, spec_list)
   else
     config.color_mode = :on
-    persistence_file  = "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/.rspec_status"
+    persistence_file  = "#{ENV.fetch('CUKE_LINTER_REPORT_FOLDER')}/.rspec_status"
   end
 
   # Enable flags like --only-failures and --next-failure
@@ -50,10 +52,6 @@ RSpec.configure do |config|
 
   # For running only specific tests with the 'focus' tag
   config.filter_run_when_matching focus: true
-
-  config.before(:suite) do
-    DEFAULT_LINTERS = Marshal.load(Marshal.dump(CukeLinter.registered_linters)).freeze
-  end
 
   # Restore the original linters after any test that modifies them so that other tests can
   # rely on them being only the default ones

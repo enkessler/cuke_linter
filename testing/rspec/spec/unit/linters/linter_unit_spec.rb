@@ -1,3 +1,16 @@
+# A custom test linter class with no changes from the default linter
+class CustomLinter < CukeLinter::Linter; end
+
+# A custom test linter class with a custom #name method
+class CustomLinterWithNameMethod < CukeLinter::Linter
+
+  def name
+    'Method name'
+  end
+
+end
+
+
 RSpec.describe CukeLinter::Linter do
 
   let(:model_file_path) { 'some_file_path' }
@@ -154,10 +167,6 @@ RSpec.describe CukeLinter::Linter do
     it 'has a default name based on its class' do
       expect(subject.name).to eq('Linter')
 
-      class CustomLinter < CukeLinter::Linter
-
-      end
-
       expect(CustomLinter.new.name).to eq('CustomLinter')
     end
 
@@ -179,16 +188,8 @@ RSpec.describe CukeLinter::Linter do
       expect(result[:problem]).to eq('Value name problem detected')
 
       # Method name
-      class CustomLinter < CukeLinter::Linter
-
-        def name
-          'Method name'
-        end
-
-      end
-
       linter_options[:name] = nil
-      linter                = CustomLinter.new(**linter_options)
+      linter                = CustomLinterWithNameMethod.new(**linter_options)
       result                = linter.lint(bad_data)
 
       expect(result[:problem]).to eq('Method name problem detected')

@@ -59,3 +59,7 @@ Layout/EndOfLine:
   Exclude:
     # Git isn't changing the line endings locally for some reason
     - 'bin/console'
+
+# The gemspec is the source of truth for a gem.
+Gemspec/DevelopmentDependencies:
+  EnforcedStyle: gemspec

@@ -6,7 +6,7 @@ namespace 'cuke_linter' do # rubocop:disable Metrics/BlockLength - Namespaces in
 
     completed_process = CukeLinter::CukeLinterHelper.run_command(['bundle', 'exec', 'rubocop',
                                                                   '--format', 'fuubar',
-                                                                  '--format', 'html', '--out', "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/rubocop.html", # rubocop:disable Metrics/LineLength
+                                                                  '--format', 'html', '--out', "#{ENV.fetch('CUKE_LINTER_REPORT_FOLDER')}/rubocop.html", # rubocop:disable Layout/LineLength
                                                                   '-S', '-D'])
 
     raise(Rainbow('RuboCop found violations').red) unless completed_process.exit_code.zero?

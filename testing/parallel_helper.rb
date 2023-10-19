@@ -45,8 +45,8 @@ module CukeLinter
       run_tests_in_parallel(test_list: scenario_list, parallel_count: parallel_count, test_type: 'cucumber')
     end
 
-    def combine_code_coverage_reports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/LineLength - It'll get better when support for older versions of Ruby is dropped.
-      all_results = Dir["#{ENV['CUKE_LINTER_REPORT_FOLDER']}/{rspec,cucumber}/part_*/coverage/.resultset.json"]
+    def combine_code_coverage_reports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength - It'll get better when support for older versions of Ruby is dropped.
+      all_results = Dir["#{ENV.fetch('CUKE_LINTER_REPORT_FOLDER')}/{rspec,cucumber}/part_*/coverage/.resultset.json"]
 
       # Never versions of SimpleCov make combining reports a lot easier
       if SimpleCov.respond_to?(:collate)
@@ -56,7 +56,7 @@ module CukeLinter
         end
 
         SimpleCov.collate(all_results) do
-          coverage_dir("#{ENV['CUKE_LINTER_REPORT_FOLDER']}/coverage")
+          coverage_dir("#{ENV.fetch('CUKE_LINTER_REPORT_FOLDER')}/coverage")
           formatter SimpleCov::Formatter::MultiFormatter.new([SimpleCov::Formatter::HTMLFormatter,
                                                               SimpleCov::Formatter::LcovFormatter])
         end
@@ -69,7 +69,7 @@ module CukeLinter
 
 
         # Set overall coverage report folder
-        SimpleCov.coverage_dir("#{ENV['CUKE_LINTER_REPORT_FOLDER']}/coverage")
+        SimpleCov.coverage_dir("#{ENV.fetch('CUKE_LINTER_REPORT_FOLDER')}/coverage")
 
         # Create the LCOV report
         SimpleCov::Formatter::LcovFormatter.config do |config|
@@ -93,7 +93,7 @@ module CukeLinter
 
 
     def parallel_folder_path_for(test_type:, process_number:)
-      "#{ENV['CUKE_LINTER_REPORT_FOLDER']}/#{test_type}/part_#{process_number}"
+      "#{ENV.fetch('CUKE_LINTER_REPORT_FOLDER')}/#{test_type}/part_#{process_number}"
     end
 
     def run_spec_gathering_process(gathering_file_path)
@@ -123,7 +123,7 @@ module CukeLinter
       end
     end
 
-    def generate_processes(parallel_count, test_type) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/LineLength - Some day I might worry about this. Today is not that day.
+    def generate_processes(parallel_count, test_type) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength - Some day I might worry about this. Today is not that day.
       [].tap do |processes|
         parallel_count.times do |process_count|
           directory = parallel_folder_path_for(test_type: test_type, process_number: process_count + 1)
@@ -148,7 +148,7 @@ module CukeLinter
       end
     end
 
-    def run_tests_in_parallel(test_list:, parallel_count: Parallel.processor_count, test_type:)
+    def run_tests_in_parallel(test_list:, test_type:, parallel_count: Parallel.processor_count)
       create_process_test_files(test_list, parallel_count, test_type)
 
       puts "Running #{test_list.count} tests across #{parallel_count} processes..."
@@ -164,14 +164,14 @@ module CukeLinter
       [].tap do |problem_process_groups|
         processes.each_with_index do |process, index|
           process.wait
-          problem_process_groups << index + 1 unless process.exit_code.zero?
+          problem_process_groups << (index + 1) unless process.exit_code.zero?
         end
       end
     end
 
     def handle_bad_results(problem_process_groups, test_type)
       display_problems(problem_process_groups, test_type)
-      error_message = "#{test_type.capitalize} tests encountered problems! (see reports for groups #{problem_process_groups}" # rubocop:disable Metrics/LineLength
+      error_message = "#{test_type.capitalize} tests encountered problems! (see reports for groups #{problem_process_groups}" # rubocop:disable Layout/LineLength
       raise(Rainbow(error_message).red)
     end
 
@@ -209,7 +209,7 @@ module CukeLinter
       end
     end
 
-    extend self # rubocop:disable Style/ModuleFunction - module_function ruins private method access
+    extend self
 
   end
   # rubocop:enable Metrics/ModuleLength

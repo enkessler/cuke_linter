@@ -125,7 +125,7 @@ RSpec.describe CukeLinter do
     end
 
     describe 'targeted linters' do
-      # rubocop:disable Metrics/LineLength
+      # rubocop:disable Layout/LineLength
       before(:all) do
         @targeted_linter_class             = generate_fake_linter_class(class_name:  'ATargetedLinterClass',
                                                                         linter_name: 'ATargetedLinter')
@@ -148,7 +148,7 @@ RSpec.describe CukeLinter do
                                                                            class_name:  'AnotherNestedTargetedLinterClass',
                                                                            linter_name: 'AnotherNestedTargetedLinter')
       end
-      # rubocop:enable Metrics/LineLength
+      # rubocop:enable Layout/LineLength
 
 
       let(:linter_name) { 'ATargetedLinter' }
@@ -275,7 +275,7 @@ RSpec.describe CukeLinter do
           end
 
           context 'with multiple linters in the directive' do
-            # rubocop:disable Metrics/LineLength
+            # rubocop:disable Layout/LineLength
             let(:commas_text) do
               "Feature:
 
@@ -309,7 +309,7 @@ RSpec.describe CukeLinter do
 
             let(:test_linters) { [targeted_linter, another_targeted_linter, yet_another_targeted_linter] }
             let(:test_linter_names) { [linter_name, another_linter_name, yet_another_linter_name] }
-            # rubocop:enable Metrics/LineLength
+            # rubocop:enable Layout/LineLength
 
             it 'handles the directives correctly' do
               results = subject.lint(**linting_options)
@@ -482,7 +482,7 @@ RSpec.describe CukeLinter do
 
             context 'and multiple targeted linters' do
 
-              # rubocop:disable Metrics/LineLength
+              # rubocop:disable Layout/LineLength
               let(:spaced_commas_text) do
                 "Feature:
 
@@ -544,7 +544,7 @@ RSpec.describe CukeLinter do
 
               let(:test_linters) { [targeted_linter, another_targeted_linter, yet_another_targeted_linter] }
               let(:test_linter_names) { [linter_name, another_linter_name, yet_another_linter_name] }
-              # rubocop:enable Metrics/LineLength
+              # rubocop:enable Layout/LineLength
 
 
               it 'handles the directives correctly' do
@@ -990,7 +990,7 @@ RSpec.describe CukeLinter do
                 # Tweaking the linter objects that will already exist so that any linter
                 # created from the same class will be noticeably different
                 provided_linter   = test_linters.find { |linter| linter.is_a?(Kernel.const_get(linter_class_name)) }
-                registered_linter = CukeLinter.registered_linters.values.find { |linter| linter.is_a?(Kernel.const_get(linter_class_name)) } # rubocop:disable Metrics/LineLength
+                registered_linter = CukeLinter.registered_linters.values.find { |linter| linter.is_a?(Kernel.const_get(linter_class_name)) } # rubocop:disable Layout/LineLength
 
                 if provided_linter
                   def provided_linter.name

@@ -46,13 +46,13 @@ module CukeLinter
 
     # Lints the given model trees and file paths using the given linting objects and formatting
     # the results with the given formatters and their respective output locations
-    def lint(file_paths: [], model_trees: [], linters: registered_linters.values, formatters: [[CukeLinter::PrettyFormatter.new]]) # rubocop:disable Metrics/LineLength
+    def lint(file_paths: [], model_trees: [], linters: registered_linters.values, formatters: [[CukeLinter::PrettyFormatter.new]]) # rubocop:disable Layout/LineLength
       # TODO: Test this?
       # Because directive memoization is based on a model's `#object_id` and Ruby reuses object IDs over the
       # life of a program as objects are garbage collected, it is not safe to remember the IDs forever. However,
       # models shouldn't get GC'd in the middle of the linting process and so the start of the linting process is
       # a good time to reset things
-      @directives_for_feature_file = {}
+      @directives_for_feature_file = {}.compare_by_identity
 
       model_trees                  = [CukeModeler::Directory.new(Dir.pwd)] if model_trees.empty? && file_paths.empty?
       file_path_models             = collect_file_path_models(file_paths)
@@ -134,7 +134,7 @@ module CukeLinter
 
     def linter_directives_for_feature_file(feature_file_model)
       # IMPORTANT ASSUMPTION: Models never change during the life of a linting, so data only has to be gathered once
-      existing_directives = @directives_for_feature_file[feature_file_model.object_id]
+      existing_directives = @directives_for_feature_file[feature_file_model]
 
       return existing_directives if existing_directives
 
@@ -143,7 +143,7 @@ module CukeLinter
       # Make sure that the directives are in the same order as they appear in the source file
       directives = directives.sort_by { |a| a[:source_line] }
 
-      @directives_for_feature_file[feature_file_model.object_id] = directives
+      @directives_for_feature_file[feature_file_model] = directives
     end
 
     def gather_directives_in_feature(feature_file_model)
@@ -152,7 +152,7 @@ module CukeLinter
           pieces = comment.text.match(/#\s*cuke_linter:(disable|enable)\s+(.*)/)
           next unless pieces # Skipping non-directive file comments
 
-          linter_classes = pieces[2].tr(',', ' ').split(' ')
+          linter_classes = pieces[2].tr(',', ' ').split
           linter_classes.each do |clazz|
             directives << { linter_class:   Kernel.const_get(clazz),
                             enabled_status: pieces[1] != 'disable',
@@ -183,14 +183,14 @@ module CukeLinter
     end
 
     # Not linting unused code
-    # rubocop:disable Metrics/LineLength
+    # rubocop:disable Layout/LineLength
     #   def self.relevant_model?(linter, model)
     #     model_classes = linter.class.target_model_types.map { |type| CukeModeler.const_get(type.to_s.capitalize.chop) }
     #     model_classes.any? { |clazz| model.is_a?(clazz) }
     #   end
     #
     #   private_class_method(:relevant_model?)
-    # rubocop:enable Metrics/LineLength
+    # rubocop:enable Layout/LineLength
 
   end
 end

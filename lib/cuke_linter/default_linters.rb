@@ -1,7 +1,7 @@
 module CukeLinter # rubocop:disable Style/Documentation
 
   # Long names inherently result in long lines
-  # rubocop:disable Metrics/LineLength
+  # rubocop:disable Layout/LineLength
   @original_linters = { 'BackgroundDoesMoreThanSetupLinter'            => BackgroundDoesMoreThanSetupLinter.new,
                         'ElementWithCommonTagsLinter'                  => ElementWithCommonTagsLinter.new,
                         'ElementWithDuplicateTagsLinter'               => ElementWithDuplicateTagsLinter.new,
@@ -27,6 +27,6 @@ module CukeLinter # rubocop:disable Style/Documentation
                         'TestWithSetupStepAfterVerificationStepLinter' => TestWithSetupStepAfterVerificationStepLinter.new,
                         'TestWithSetupStepAsFinalStepLinter'           => TestWithSetupStepAsFinalStepLinter.new,
                         'TestWithTooManyStepsLinter'                   => TestWithTooManyStepsLinter.new }
-  # rubocop:enable Metrics/LineLength
+  # rubocop:enable Layout/LineLength
 
 end

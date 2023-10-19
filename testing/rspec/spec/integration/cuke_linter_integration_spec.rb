@@ -16,7 +16,7 @@ RSpec.describe CukeLinter do
     linting_options[:formatters] = [[generate_fake_formatter(name: 'Formatter1')],
                                     [generate_fake_formatter(name: 'Formatter2')]]
 
-    expect { subject.lint(**linting_options) }.to output("Formatter1: FakeLinter problem: path_to_file:1\nFormatter2: FakeLinter problem: path_to_file:1\n").to_stdout # rubocop:disable Metrics/LineLength
+    expect { subject.lint(**linting_options) }.to output("Formatter1: FakeLinter problem: path_to_file:1\nFormatter2: FakeLinter problem: path_to_file:1\n").to_stdout # rubocop:disable Layout/LineLength
   end
 
   it "uses the 'pretty' formatter if none are provided" do

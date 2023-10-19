@@ -15,7 +15,6 @@ module CukeLinter
   end
 end
 
-
 module CukeLinter
 
   # A helper module that generates various models for use in testing
@@ -36,9 +35,7 @@ module CukeLinter
     end
 
     def generate_feature_file_model
-      model = CukeModeler::FeatureFile.new
-
-      model
+      CukeModeler::FeatureFile.new
     end
 
     def generate_example_model(source_text: 'Examples:', parent_file_path: 'path_to_file')
