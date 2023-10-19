@@ -22,7 +22,7 @@ module CukeLinter
     private
 
 
-    def configure_linters(configuration, linters)
+    def configure_linters(configuration, linters) # rubocop:disable Metrics/CyclomaticComplexity - Maybe I'll revisit this later
       common_config = configuration['AllLinters'] || {}
       to_delete     = []
 

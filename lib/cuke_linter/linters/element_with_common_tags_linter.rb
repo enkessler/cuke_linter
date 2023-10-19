@@ -4,7 +4,7 @@ module CukeLinter
   class ElementWithCommonTagsLinter < Linter
 
     # The rule used to determine if a model has a problem
-    def rule(model)
+    def rule(model) # rubocop:disable Metrics/CyclomaticComplexity - Rules can be tightened up later
       return false unless relevant_model?(model)
 
       @linted_model_class = model.class
