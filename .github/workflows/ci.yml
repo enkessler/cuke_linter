@@ -9,13 +9,46 @@ on:
 
 jobs:
 
-  test:
+  # Bundler installation issue on some older Ruby/OS combinations
+  test_older_rubies:
+    strategy:
+      matrix:
+        os: [ubuntu-20.04]
+        ruby-version: ['2.2']
+        # CukeModeler 3.x requires at least Ruby 2.3
+        gemfile: [ cuke_modeler1, cuke_modeler2 ]
+    runs-on: ${{ matrix.os }}
+    env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
+      BUNDLE_GEMFILE: testing/gemfiles/${{ matrix.gemfile }}.gemfile
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Run CI Rake task
+        run: bundle exec rake cuke_linter:test_everything
+      - name: Push code coverage to Coveralls (conditional)
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          path-to-lcov: "./reports/coverage/lcov/lcov.info"
+          parallel: true
+          flag-name: run-${{ matrix.os }}-${{ matrix.ruby-version }}-${{ matrix.gemfile }}
+
+  test_newer_rubies:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0']
         gemfile: [ cuke_modeler1, cuke_modeler2, cuke_modeler3 ]
         exclude:
+          # Problems installing Bundler (https://github.com/ruby/setup-ruby/issues/496#issuecomment-1520662740)
+          - os: ubuntu-latest
+            ruby-version: '2.2'
+
           # CukeModeler 3.x requires at least Ruby 2.3
           - gemfile: cuke_modeler3
             ruby-version: '2.1'
@@ -68,7 +101,7 @@ jobs:
           flag-name: run-${{ matrix.os }}-${{ matrix.ruby-version }}-${{ matrix.gemfile }}
 
   test_finish:
-    needs: test
+    needs: [ test_older_rubies, test_newer_rubies]
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
