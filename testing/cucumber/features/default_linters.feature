@@ -33,7 +33,7 @@ Feature: Default Linters
       | TestWithSetupStepAfterVerificationStepLinter |
       | TestWithSetupStepAsFinalStepLinter           |
       | TestWithTooManyStepsLinter                   |
-
+      | UniqueScenarioNamesLinter                    |
 
   Scenario: Registering new linters
     Given no linters are currently registered
