@@ -9,7 +9,7 @@ Feature: Pylint formatter
       | FeatureWithoutDescriptionLinter  | No description      | path/to/the_file:1     |
       | SomeOtherLinter                  | Some other problem  | path/to/the_file:33    |
       | SomeOtherLinter                  | Problem with column | path/to/the_file:33:33 |
-    When it is formatted by the "pylint" formatter
+    When it is formatted by the "Pylint" formatter
     Then the resulting output is the following:
       """
       path/to/the/file::: [FeatureFileWithInvalidNameLinter] Invalid file name
