@@ -1,7 +1,7 @@
 module CukeLinter
   # Formats linting data into the PyLint format
   # path/to/file:line:col: [Rule] Message
-  class Pylint8Formatter
+  class PylintFormatter
     # Formats the given linting data
     def format(data)
       ''.tap do |formatted_data|
