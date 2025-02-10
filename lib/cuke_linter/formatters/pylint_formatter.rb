@@ -10,7 +10,7 @@ module CukeLinter
           # Linters at the very least don't specify column numbers, but for feature file wide errors
           # there's no line numbers either. Pad the location out if we need to.
           while location.length() < 3
-            location.insert(-1, "1")
+            location.insert(-1, "")
           end
           formatted_data << "#{location.join(separator=':')}: [#{problem[:linter]}] #{problem[:problem]}\n"
         end
