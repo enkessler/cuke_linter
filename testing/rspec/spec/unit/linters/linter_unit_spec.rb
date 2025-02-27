@@ -28,7 +28,7 @@ RSpec.describe CukeLinter::Linter do
 
   context 'with a linting rule' do
 
-    subject { CukeLinter::Linter.new(**linter_options.merge(rule: linter_rule)) }
+    subject { CukeLinter::Linter.new(**linter_options, rule: linter_rule) }
 
     context 'with a good model' do
 

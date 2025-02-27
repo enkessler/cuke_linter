@@ -1,4 +1,4 @@
-namespace 'cuke_linter' do # rubocop:disable Metrics/BlockLength - Namespaces inherently have a lot of lines
+namespace 'cuke_linter' do # rubocop:disable Metrics/BlockLength -- Namespaces inherently have a lot of lines
 
   desc 'Generate a Rubocop report for the project'
   task :rubocop do

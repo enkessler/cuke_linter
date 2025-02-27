@@ -21,7 +21,7 @@ module CukeLinter
 
     include CukeLinterHelper
 
-    def get_discrete_specs # rubocop:disable Naming/AccessorMethodName - This is not that.
+    def get_discrete_specs # rubocop:disable Naming/AccessorMethodName -- This is not that.
       puts 'Gathering specs...'
 
       temp_file_path = Tempfile.new(['cuke_linter', '.json']).path
@@ -45,7 +45,7 @@ module CukeLinter
       run_tests_in_parallel(test_list: scenario_list, parallel_count: parallel_count, test_type: 'cucumber')
     end
 
-    def combine_code_coverage_reports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength - It'll get better when support for older versions of Ruby is dropped.
+    def combine_code_coverage_reports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength -- It'll get better when support for older versions of Ruby is dropped.
       all_results = Dir["#{ENV.fetch('CUKE_LINTER_REPORT_FOLDER')}/{rspec,cucumber}/part_*/coverage/.resultset.json"]
 
       # Never versions of SimpleCov make combining reports a lot easier
@@ -61,9 +61,8 @@ module CukeLinter
                                                               SimpleCov::Formatter::LcovFormatter])
         end
       else
-        result_objects = []
-        all_results.each do |result_file_name|
-          result_objects << SimpleCov::Result.from_hash(JSON.parse(File.read(result_file_name)))
+        result_objects = all_results.map do |result_file_name|
+          SimpleCov::Result.from_hash(JSON.parse(File.read(result_file_name)))
         end
         merged_result = SimpleCov::ResultMerger.merge_results(*result_objects)
 
@@ -123,7 +122,7 @@ module CukeLinter
       end
     end
 
-    def generate_processes(parallel_count, test_type) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength - Some day I might worry about this. Today is not that day.
+    def generate_processes(parallel_count, test_type) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength -- Some day I might worry about this. Today is not that day.
       [].tap do |processes|
         parallel_count.times do |process_count|
           directory = parallel_folder_path_for(test_type: test_type, process_number: process_count + 1)
