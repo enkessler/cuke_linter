@@ -40,9 +40,9 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'cuke_modeler', '>= 1.5', '< 4.0'
 
   spec.add_development_dependency 'bundler', '< 3.0'
-  spec.add_development_dependency 'childprocess', '< 4.0'
+  spec.add_development_dependency 'childprocess', '< 6.0'
   spec.add_development_dependency 'cucumber', '< 5.0'
-  spec.add_development_dependency 'cuke_slicer', '>= 2.0.2', '< 3.0'
+  spec.add_development_dependency 'cuke_slicer', '>= 2.0.2', '< 4.0'
   spec.add_development_dependency 'ffi', '~> 1.0'
   spec.add_development_dependency 'parallel', '~> 1.0'
   spec.add_development_dependency 'rainbow', '< 4.0.0'
