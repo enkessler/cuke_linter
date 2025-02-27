@@ -108,10 +108,6 @@ RSpec.describe 'the gem' do
       expect(@gemspec.metadata['source_code_uri']).to eq('https://github.com/enkessler/cuke_linter')
     end
 
-    it 'links to the home page of the project' do
-      expect(@gemspec.metadata['homepage_uri']).to eq(@gemspec.homepage)
-    end
-
     it 'links to the gem documentation' do
       expect(@gemspec.metadata['documentation_uri']).to eq('https://www.rubydoc.info/gems/cuke_linter')
     end

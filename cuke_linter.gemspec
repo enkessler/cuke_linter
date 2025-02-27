@@ -19,7 +19,6 @@ Gem::Specification.new do |spec|
     'bug_tracker_uri'       => 'https://github.com/enkessler/cuke_linter/issues',
     'changelog_uri'         => 'https://github.com/enkessler/cuke_linter/blob/master/CHANGELOG.md',
     'documentation_uri'     => 'https://www.rubydoc.info/gems/cuke_linter',
-    'homepage_uri'          => 'https://github.com/enkessler/cuke_linter',
     'source_code_uri'       => 'https://github.com/enkessler/cuke_linter',
     'rubygems_mfa_required' => 'true'
   }
