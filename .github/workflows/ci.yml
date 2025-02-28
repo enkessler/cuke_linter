@@ -109,17 +109,6 @@ jobs:
             ruby-version: '2.5'
             gemfile: cuke_modeler3
 
-          # Replacements for excluded macos-latest + JRuby
-          - os: macos-13
-            ruby-version: jruby-9.1.17.0
-            gemfile: cuke_modeler1
-          - os: macos-13
-            ruby-version: jruby-9.1.17.0
-            gemfile: cuke_modeler2
-          - os: macos-13
-            ruby-version: jruby-9.1.17.0
-            gemfile: cuke_modeler3
-
 
     runs-on: ${{ matrix.os }}
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
