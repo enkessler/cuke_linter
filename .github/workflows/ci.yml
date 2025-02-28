@@ -19,6 +19,16 @@ jobs:
           - os: ubuntu-latest
             ruby-version: '2.2'
 
+          # Older versions of Ruby (<2.6) can't handle ARM, so they can't run on the latest macOS
+          - os: macos-latest
+            ruby-version: '2.1'
+          - os: macos-latest
+            ruby-version: '2.2'
+          - os: macos-latest
+            ruby-version: '2.3'
+          - os: macos-latest
+            ruby-version: '2.5'
+
           # CukeModeler 3.x requires at least Ruby 2.3
           - gemfile: cuke_modeler3
             ruby-version: '2.1'
@@ -50,9 +60,51 @@ jobs:
             ruby-version: 'jruby-9.1.17.0'
 
         include:
-          # Replacement for excluded ubuntu-latest + 2.2
+          # Replacements for excluded ubuntu-latest + 2.2
           - os: ubuntu-20.04
             ruby-version: '2.2'
+            gemfile: cuke_modeler1
+          - os: ubuntu-20.04
+            ruby-version: '2.2'
+            gemfile: cuke_modeler2
+
+          # Replacements for excluded macos-latest + <2.6
+          - os: macos-13
+            ruby-version: '2.1'
+            gemfile: cuke_modeler1
+          - os: macos-13
+            ruby-version: '2.1'
+            gemfile: cuke_modeler2
+          - os: macos-13
+            ruby-version: '2.1'
+            gemfile: cuke_modeler3
+          - os: macos-13
+            ruby-version: '2.2'
+            gemfile: cuke_modeler1
+          - os: macos-13
+            ruby-version: '2.2'
+            gemfile: cuke_modeler2
+          - os: macos-13
+            ruby-version: '2.2'
+            gemfile: cuke_modeler3
+          - os: macos-13
+            ruby-version: '2.3'
+            gemfile: cuke_modeler1
+          - os: macos-13
+            ruby-version: '2.3'
+            gemfile: cuke_modeler2
+          - os: macos-13
+            ruby-version: '2.3'
+            gemfile: cuke_modeler3
+          - os: macos-13
+            ruby-version: '2.5'
+            gemfile: cuke_modeler1
+          - os: macos-13
+            ruby-version: '2.5'
+            gemfile: cuke_modeler2
+          - os: macos-13
+            ruby-version: '2.5'
+            gemfile: cuke_modeler3
 
 
     runs-on: ${{ matrix.os }}
