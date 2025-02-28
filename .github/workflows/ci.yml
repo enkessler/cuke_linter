@@ -40,6 +40,10 @@ jobs:
           - gemfile: cuke_modeler2
             ruby-version: '3.0'
 
+          # These JRuby versions are not available on macOS 14 (which is currently the latest macOS available), so they can only run on an older one
+          - os: macos-latest
+            ruby-version: jruby-9.1.17.0
+
           # Just not worth it to get these working and no additional and meaningful proof is provided by these
           # combinations, given the other combinations that are being tested.
 
@@ -53,15 +57,16 @@ jobs:
           - os: windows-latest
             ruby-version: '2.3'
 
-          # These JRuby versions are not available on macOS 14 (which is currently the latest macOS available), so they can only run on an older one
-          - os: macos-latest
-            ruby-version: jruby-9.1.17.0
-
           # Random JRuby bugs
           - os: ubuntu-latest
             ruby-version: 'jruby-9.1.17.0'
           - os: windows-latest
             ruby-version: 'jruby-9.1.17.0'
+
+          # Hits some kind of Java issue
+          - os: macos-13
+            ruby-version: jruby-9.1.17.0
+
 
         include:
           # Replacements for excluded ubuntu-latest + 2.2
