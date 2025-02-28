@@ -3,6 +3,7 @@ require 'cuke_modeler'
 
 require 'cuke_linter/version'
 require 'cuke_linter/formatters/pretty_formatter'
+require 'cuke_linter/formatters/pylint_formatter'
 require 'cuke_linter/linters/linter'
 require 'cuke_linter/linters/background_does_more_than_setup_linter'
 require 'cuke_linter/linters/element_with_common_tags_linter'
