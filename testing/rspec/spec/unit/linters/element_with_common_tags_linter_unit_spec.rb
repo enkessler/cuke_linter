@@ -161,7 +161,7 @@ RSpec.describe CukeLinter::ElementWithCommonTagsLinter do
           let(:test_model) do
             model = send("generate_#{model_type}_model", parent_file_path: model_file_path)
 
-            1.times do # rubocop:disable Lint/UselessTimes - Sticking with the same test structure as other similar tests
+            1.times do # rubocop:disable Lint/UselessTimes -- Sticking with the same test structure as other similar tests
               child_model      = generate_lintable_model
               child_model.tags = [generate_tag_model(source_text: '@a_tag')]
 

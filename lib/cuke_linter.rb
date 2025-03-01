@@ -101,7 +101,7 @@ module CukeLinter
       end
     end
 
-    def relevant_linters_for_model(base_linters, model) # rubocop:disable Metrics/AbcSize - Maybe I'll revisit this later
+    def relevant_linters_for_model(base_linters, model) # rubocop:disable Metrics/AbcSize -- Maybe I'll revisit this later
       feature_file_model = model.get_ancestor(:feature_file)
 
       # Linter directives are not applicable for directory and feature file models. Every other

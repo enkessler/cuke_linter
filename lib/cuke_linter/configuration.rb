@@ -22,7 +22,7 @@ module CukeLinter
     private
 
 
-    def configure_linters(configuration, linters) # rubocop:disable Metrics/CyclomaticComplexity - Maybe I'll revisit this later
+    def configure_linters(configuration, linters) # rubocop:disable Metrics/CyclomaticComplexity -- Maybe I'll revisit this later
       common_config = configuration['AllLinters'] || {}
       to_delete     = []
 
@@ -30,7 +30,7 @@ module CukeLinter
         linter_config = configuration[name] || {}
         final_config  = common_config.merge(linter_config)
 
-        disabled = (final_config.key?('Enabled') && !final_config['Enabled'])
+        disabled = final_config.key?('Enabled') && !final_config['Enabled']
 
         # Just save it for afterwards because modifying a collection while iterating through it is not a good idea
         to_delete << name if disabled

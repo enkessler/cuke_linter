@@ -63,3 +63,7 @@ Layout/EndOfLine:
 # The gemspec is the source of truth for a gem.
 Gemspec/DevelopmentDependencies:
   EnforcedStyle: gemspec
+# Additionally, easily distinguishing between runtime and development dependencies is important
+# when they live in the same place.
+Gemspec/AddRuntimeDependency:
+  Enabled: false

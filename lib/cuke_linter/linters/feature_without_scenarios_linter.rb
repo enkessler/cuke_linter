@@ -4,7 +4,7 @@ module CukeLinter
   class FeatureWithoutScenariosLinter < Linter
 
     # The rule used to determine if a model has a problem
-    def rule(model) # rubocop:disable Metrics/CyclomaticComplexity # It's good enough
+    def rule(model) # rubocop:disable Metrics/CyclomaticComplexity -- It's good enough
       return false unless model.is_a?(CukeModeler::Feature)
 
       feature_tests = model.tests && model.tests.any?
