@@ -47,6 +47,10 @@ Given(/^a linter for tests with bad names$/) do
   @linter = CukeLinter::TestWithBadNameLinter.new
 end
 
+Given(/^a linter for unique scenario names$/) do
+  @linter = CukeLinter::UniqueScenarioNamesLinter.new
+end
+
 Given(/^a linter for tests with too many steps$/) do
   @linter = CukeLinter::TestWithTooManyStepsLinter.new
 end
