@@ -10,7 +10,7 @@ module CukeLinter
 
       examples_rows = model.examples.collect(&:argument_rows).flatten
 
-      examples_rows.count == 1
+      examples_rows.one?
     end
 
     # The message used to describe the problem that has been found

@@ -51,7 +51,7 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
 
       end
 
-      context 'and no nested tests', if: cuke_modeler?((3..MOST_CURRENT_CUKE_MODELER_VERSION)) do
+      context 'and no nested tests', if: cuke_modeler?(3..MOST_CURRENT_CUKE_MODELER_VERSION) do
 
         context 'because it has no rules' do
 
@@ -178,7 +178,7 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
 
       end
 
-      context 'with a rule', if: cuke_modeler?((3..MOST_CURRENT_CUKE_MODELER_VERSION)) do
+      context 'with a rule', if: cuke_modeler?(3..MOST_CURRENT_CUKE_MODELER_VERSION) do
 
         context 'that has a scenario' do
 
@@ -213,7 +213,7 @@ RSpec.describe CukeLinter::FeatureWithoutScenariosLinter do
 
       end
 
-      context 'with multiple rules', if: cuke_modeler?((3..MOST_CURRENT_CUKE_MODELER_VERSION)) do
+      context 'with multiple rules', if: cuke_modeler?(3..MOST_CURRENT_CUKE_MODELER_VERSION) do
 
         let(:test_model) do
           gherkin = 'Feature:

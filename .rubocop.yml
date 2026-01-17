@@ -11,6 +11,10 @@ Layout/EmptyLinesAroundClassBody:
 Naming/VariableNumber:
   EnforcedStyle: snake_case
 
+# TODO: Turn it back on and use a new name for the #rule methods
+Naming/PredicateMethod:
+  Enabled: false
+
 # Non-specific exception handling is fine
 Style/RescueStandardError:
   EnforcedStyle: 'implicit'

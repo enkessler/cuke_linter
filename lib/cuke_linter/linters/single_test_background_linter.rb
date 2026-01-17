@@ -7,7 +7,7 @@ module CukeLinter
     def rule(model)
       return false unless model.is_a?(CukeModeler::Background)
 
-      model.parent_model.tests.count == 1
+      model.parent_model.tests.one?
     end
 
     # The message used to describe the problem that has been found
