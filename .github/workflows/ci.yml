@@ -16,28 +16,28 @@ jobs:
         os: [ubuntu-latest]
         ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0']
         gemfile: [ cuke_modeler1, cuke_modeler2, cuke_modeler3 ]
-        exclude:
-          # Problems installing Bundler (https://github.com/ruby/setup-ruby/issues/496#issuecomment-1520662740)
-          - os: ubuntu-latest
-            ruby-version: '2.2'
-
-          # CukeModeler 3.x requires at least Ruby 2.3
-          - gemfile: cuke_modeler3
-            ruby-version: '2.1'
-          - gemfile: cuke_modeler3
-            ruby-version: '2.2'
-          # CukeModeler 1.x and 2.x do not support beyond Ruby 2
-          - gemfile: cuke_modeler1
-            ruby-version: '3.0'
-          - gemfile: cuke_modeler2
-            ruby-version: '3.0'
+#        exclude:
+#          # Problems installing Bundler (https://github.com/ruby/setup-ruby/issues/496#issuecomment-1520662740)
+#          - os: ubuntu-latest
+#            ruby-version: '2.2'
+#
+#          # CukeModeler 3.x requires at least Ruby 2.3
+#          - gemfile: cuke_modeler3
+#            ruby-version: '2.1'
+#          - gemfile: cuke_modeler3
+#            ruby-version: '2.2'
+#          # CukeModeler 1.x and 2.x do not support beyond Ruby 2
+#          - gemfile: cuke_modeler1
+#            ruby-version: '3.0'
+#          - gemfile: cuke_modeler2
+#            ruby-version: '3.0'
 
           # Just not worth it to get these working and no additional and meaningful proof is provided by these
           # combinations, given the other combinations that are being tested.
 
-          # Random JRuby bugs
-          - os: ubuntu-latest
-            ruby-version: 'jruby-9.1.17.0'
+#          # Random JRuby bugs
+#          - os: ubuntu-latest
+#            ruby-version: 'jruby-9.1.17.0'
 
 # TODO: figure out why these hang or replace them
 #        include:
@@ -77,31 +77,31 @@ jobs:
         os: [macos-latest]
         ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0']
         gemfile: [ cuke_modeler1, cuke_modeler2, cuke_modeler3 ]
-        exclude:
-          # Older versions of Ruby (<2.6) can't handle ARM, so they can't run on the latest macOS
-          - os: macos-latest
-            ruby-version: '2.1'
-          - os: macos-latest
-            ruby-version: '2.2'
-          - os: macos-latest
-            ruby-version: '2.3'
-          - os: macos-latest
-            ruby-version: '2.5'
-
-          # CukeModeler 3.x requires at least Ruby 2.3
-          - gemfile: cuke_modeler3
-            ruby-version: '2.1'
-          - gemfile: cuke_modeler3
-            ruby-version: '2.2'
-          # CukeModeler 1.x and 2.x do not support beyond Ruby 2
-          - gemfile: cuke_modeler1
-            ruby-version: '3.0'
-          - gemfile: cuke_modeler2
-            ruby-version: '3.0'
-
-          # These JRuby versions are not available on macOS 14 (which is currently the latest macOS available), so they can only run on an older one
-          - os: macos-latest
-            ruby-version: jruby-9.1.17.0
+#        exclude:
+#          # Older versions of Ruby (<2.6) can't handle ARM, so they can't run on the latest macOS
+#          - os: macos-latest
+#            ruby-version: '2.1'
+#          - os: macos-latest
+#            ruby-version: '2.2'
+#          - os: macos-latest
+#            ruby-version: '2.3'
+#          - os: macos-latest
+#            ruby-version: '2.5'
+#
+#          # CukeModeler 3.x requires at least Ruby 2.3
+#          - gemfile: cuke_modeler3
+#            ruby-version: '2.1'
+#          - gemfile: cuke_modeler3
+#            ruby-version: '2.2'
+#          # CukeModeler 1.x and 2.x do not support beyond Ruby 2
+#          - gemfile: cuke_modeler1
+#            ruby-version: '3.0'
+#          - gemfile: cuke_modeler2
+#            ruby-version: '3.0'
+#
+#          # These JRuby versions are not available on macOS 14 (which is currently the latest macOS available), so they can only run on an older one
+#          - os: macos-latest
+#            ruby-version: jruby-9.1.17.0
 
     runs-on: ${{ matrix.os }}
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
@@ -131,34 +131,34 @@ jobs:
         os: [windows-latest]
         ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0']
         gemfile: [ cuke_modeler1, cuke_modeler2, cuke_modeler3 ]
-        exclude:
-          # CukeModeler 3.x requires at least Ruby 2.3
-          - gemfile: cuke_modeler3
-            ruby-version: '2.1'
-          - gemfile: cuke_modeler3
-            ruby-version: '2.2'
-          # CukeModeler 1.x and 2.x do not support beyond Ruby 2
-          - gemfile: cuke_modeler1
-            ruby-version: '3.0'
-          - gemfile: cuke_modeler2
-            ruby-version: '3.0'
-
-          # Just not worth it to get these working and no additional and meaningful proof is provided by these
-          # combinations, given the other combinations that are being tested.
-
-          # Problems building ChildProcess native extensions during gem installation
-          - os: windows-latest
-            ruby-version: '2.1'
-          - os: windows-latest
-            ruby-version: '2.2'
-
-          # Problems building FFI native extensions during gem installation
-          - os: windows-latest
-            ruby-version: '2.3'
-
-          # Random JRuby bugs
-          - os: windows-latest
-            ruby-version: 'jruby-9.1.17.0'
+#        exclude:
+#          # CukeModeler 3.x requires at least Ruby 2.3
+#          - gemfile: cuke_modeler3
+#            ruby-version: '2.1'
+#          - gemfile: cuke_modeler3
+#            ruby-version: '2.2'
+#          # CukeModeler 1.x and 2.x do not support beyond Ruby 2
+#          - gemfile: cuke_modeler1
+#            ruby-version: '3.0'
+#          - gemfile: cuke_modeler2
+#            ruby-version: '3.0'
+#
+#          # Just not worth it to get these working and no additional and meaningful proof is provided by these
+#          # combinations, given the other combinations that are being tested.
+#
+#          # Problems building ChildProcess native extensions during gem installation
+#          - os: windows-latest
+#            ruby-version: '2.1'
+#          - os: windows-latest
+#            ruby-version: '2.2'
+#
+#          # Problems building FFI native extensions during gem installation
+#          - os: windows-latest
+#            ruby-version: '2.3'
+#
+#          # Random JRuby bugs
+#          - os: windows-latest
+#            ruby-version: 'jruby-9.1.17.0'
 
     runs-on: ${{ matrix.os }}
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
