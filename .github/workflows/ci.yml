@@ -100,46 +100,6 @@ jobs:
           - os: macos-latest
             ruby-version: jruby-9.1.17.0
 
-          # Just not worth it to get these working and no additional and meaningful proof is provided by these
-          # combinations, given the other combinations that are being tested.
-
-          # Hits some kind of Java issue
-          - os: macos-13
-            ruby-version: jruby-9.1.17.0
-
-        include:
-          # Replacements for excluded macos-latest + <2.6
-          - os: macos-13
-            ruby-version: '2.1'
-            gemfile: cuke_modeler1
-          - os: macos-13
-            ruby-version: '2.1'
-            gemfile: cuke_modeler2
-          - os: macos-13
-            ruby-version: '2.2'
-            gemfile: cuke_modeler1
-          - os: macos-13
-            ruby-version: '2.2'
-            gemfile: cuke_modeler2
-          - os: macos-13
-            ruby-version: '2.3'
-            gemfile: cuke_modeler1
-          - os: macos-13
-            ruby-version: '2.3'
-            gemfile: cuke_modeler2
-          - os: macos-13
-            ruby-version: '2.3'
-            gemfile: cuke_modeler3
-          - os: macos-13
-            ruby-version: '2.5'
-            gemfile: cuke_modeler1
-          - os: macos-13
-            ruby-version: '2.5'
-            gemfile: cuke_modeler2
-          - os: macos-13
-            ruby-version: '2.5'
-            gemfile: cuke_modeler3
-
     runs-on: ${{ matrix.os }}
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
       BUNDLE_GEMFILE: testing/gemfiles/${{ matrix.gemfile }}.gemfile
