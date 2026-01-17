@@ -12,9 +12,8 @@ if RUBY_VERSION =~ /^2\.[123]/
   gem 'simplecov-lcov', '< 0.8.0'
 end
 
-# Cueumber 4.x doesn't work on all JRubies and this is the only earlier version
-# that is compatible with the `cucumber-gherkin` gem, upon which CukeModler 3.x depends
-gem 'cucumber', '2.2.0'
+# The minimum version of Cucumber that uses the `cucumber-gherkin` gem, upon which CukeModler 3.x depends
+gem 'cucumber', '>=4.0.0.rc.4'
 
 # The version of CukeModeler being tested
 gem 'cuke_modeler', '~> 3.0'
