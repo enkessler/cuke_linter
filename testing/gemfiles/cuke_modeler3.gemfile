@@ -15,5 +15,8 @@ end
 # The minimum version of Cucumber that uses the `cucumber-gherkin` gem, upon which CukeModler 3.x depends
 gem 'cucumber', '>=4.0.0.rc.4'
 
+# Some recent versions of Cucumber rely on win32ole and the gem stopped being included automatically after Ruby 4.0
+gem 'win32ole' if (RUBY_VERSION =~ /^4\./) && (RbConfig::CONFIG['host_os'].downcase =~ /mswin|msys|mingw32/)
+
 # The version of CukeModeler being tested
 gem 'cuke_modeler', '~> 3.0'
