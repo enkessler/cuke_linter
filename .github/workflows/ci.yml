@@ -11,6 +11,7 @@ jobs:
 
   test_ubuntu:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest]
         ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0']
@@ -38,14 +39,15 @@ jobs:
           - os: ubuntu-latest
             ruby-version: 'jruby-9.1.17.0'
 
-        include:
-          # Replacements for excluded ubuntu-latest + 2.2
-          - os: ubuntu-20.04
-            ruby-version: '2.2'
-            gemfile: cuke_modeler1
-          - os: ubuntu-20.04
-            ruby-version: '2.2'
-            gemfile: cuke_modeler2
+# TODO: figure out why these hang or replace them
+#        include:
+#          # Replacements for excluded ubuntu-latest + 2.2
+#          - os: ubuntu-20.04
+#            ruby-version: '2.2'
+#            gemfile: cuke_modeler1
+#          - os: ubuntu-20.04
+#            ruby-version: '2.2'
+#            gemfile: cuke_modeler2
 
     runs-on: ${{ matrix.os }}
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
@@ -70,6 +72,7 @@ jobs:
 
   test_macos:
     strategy:
+      fail-fast: false
       matrix:
         os: [macos-latest]
         ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0']
@@ -123,6 +126,7 @@ jobs:
 
   test_windows:
     strategy:
+      fail-fast: false
       matrix:
         os: [windows-latest]
         ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0']
