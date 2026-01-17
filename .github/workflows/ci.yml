@@ -28,7 +28,7 @@ jobs:
           # These JRuby versions are not available on the newer Ubuntu images. See included replacement jobs.
           - {os: ubuntu-latest, ruby-version: jruby-9.1.17.0}
 
-        include:
+#        include:
           # Replacements for the older JRuby jobs
           # Note: Failing due to some JRuby bug or other. Not going to worry about it, because
           # Ruby 2.x support will be dropped soon.
