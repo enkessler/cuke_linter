@@ -8,10 +8,11 @@ on:
     - cron: '0 0 1 * *'  # Monthly
 
 jobs:
-  test:
+
+  test_ubuntu:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest]
         ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0']
         gemfile: [ cuke_modeler1, cuke_modeler2, cuke_modeler3 ]
         exclude:
@@ -19,6 +20,61 @@ jobs:
           - os: ubuntu-latest
             ruby-version: '2.2'
 
+          # CukeModeler 3.x requires at least Ruby 2.3
+          - gemfile: cuke_modeler3
+            ruby-version: '2.1'
+          - gemfile: cuke_modeler3
+            ruby-version: '2.2'
+          # CukeModeler 1.x and 2.x do not support beyond Ruby 2
+          - gemfile: cuke_modeler1
+            ruby-version: '3.0'
+          - gemfile: cuke_modeler2
+            ruby-version: '3.0'
+
+          # Just not worth it to get these working and no additional and meaningful proof is provided by these
+          # combinations, given the other combinations that are being tested.
+
+          # Random JRuby bugs
+          - os: ubuntu-latest
+            ruby-version: 'jruby-9.1.17.0'
+
+        include:
+          # Replacements for excluded ubuntu-latest + 2.2
+          - os: ubuntu-20.04
+            ruby-version: '2.2'
+            gemfile: cuke_modeler1
+          - os: ubuntu-20.04
+            ruby-version: '2.2'
+            gemfile: cuke_modeler2
+
+    runs-on: ${{ matrix.os }}
+    env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
+      BUNDLE_GEMFILE: testing/gemfiles/${{ matrix.gemfile }}.gemfile
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Run CI Rake task
+        run: bundle exec rake cuke_linter:test_everything
+      - name: Push code coverage to Coveralls (conditional)
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          path-to-lcov: "./reports/coverage/lcov/lcov.info"
+          parallel: true
+          flag-name: run-${{ matrix.os }}-${{ matrix.ruby-version }}-${{ matrix.gemfile }}
+
+  test_macos:
+    strategy:
+      matrix:
+        os: [macos-latest]
+        ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0']
+        gemfile: [ cuke_modeler1, cuke_modeler2, cuke_modeler3 ]
+        exclude:
           # Older versions of Ruby (<2.6) can't handle ARM, so they can't run on the latest macOS
           - os: macos-latest
             ruby-version: '2.1'
@@ -47,36 +103,11 @@ jobs:
           # Just not worth it to get these working and no additional and meaningful proof is provided by these
           # combinations, given the other combinations that are being tested.
 
-          # Problems building ChildProcess native extensions during gem installation
-          - os: windows-latest
-            ruby-version: '2.1'
-          - os: windows-latest
-            ruby-version: '2.2'
-
-          # Problems building FFI native extensions during gem installation
-          - os: windows-latest
-            ruby-version: '2.3'
-
-          # Random JRuby bugs
-          - os: ubuntu-latest
-            ruby-version: 'jruby-9.1.17.0'
-          - os: windows-latest
-            ruby-version: 'jruby-9.1.17.0'
-
           # Hits some kind of Java issue
           - os: macos-13
             ruby-version: jruby-9.1.17.0
 
-
         include:
-          # Replacements for excluded ubuntu-latest + 2.2
-          - os: ubuntu-20.04
-            ruby-version: '2.2'
-            gemfile: cuke_modeler1
-          - os: ubuntu-20.04
-            ruby-version: '2.2'
-            gemfile: cuke_modeler2
-
           # Replacements for excluded macos-latest + <2.6
           - os: macos-13
             ruby-version: '2.1'
@@ -109,6 +140,61 @@ jobs:
             ruby-version: '2.5'
             gemfile: cuke_modeler3
 
+    runs-on: ${{ matrix.os }}
+    env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
+      BUNDLE_GEMFILE: testing/gemfiles/${{ matrix.gemfile }}.gemfile
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Run CI Rake task
+        run: bundle exec rake cuke_linter:test_everything
+      - name: Push code coverage to Coveralls (conditional)
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          path-to-lcov: "./reports/coverage/lcov/lcov.info"
+          parallel: true
+          flag-name: run-${{ matrix.os }}-${{ matrix.ruby-version }}-${{ matrix.gemfile }}
+
+  test_windows:
+    strategy:
+      matrix:
+        os: [windows-latest]
+        ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0']
+        gemfile: [ cuke_modeler1, cuke_modeler2, cuke_modeler3 ]
+        exclude:
+          # CukeModeler 3.x requires at least Ruby 2.3
+          - gemfile: cuke_modeler3
+            ruby-version: '2.1'
+          - gemfile: cuke_modeler3
+            ruby-version: '2.2'
+          # CukeModeler 1.x and 2.x do not support beyond Ruby 2
+          - gemfile: cuke_modeler1
+            ruby-version: '3.0'
+          - gemfile: cuke_modeler2
+            ruby-version: '3.0'
+
+          # Just not worth it to get these working and no additional and meaningful proof is provided by these
+          # combinations, given the other combinations that are being tested.
+
+          # Problems building ChildProcess native extensions during gem installation
+          - os: windows-latest
+            ruby-version: '2.1'
+          - os: windows-latest
+            ruby-version: '2.2'
+
+          # Problems building FFI native extensions during gem installation
+          - os: windows-latest
+            ruby-version: '2.3'
+
+          # Random JRuby bugs
+          - os: windows-latest
+            ruby-version: 'jruby-9.1.17.0'
 
     runs-on: ${{ matrix.os }}
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
@@ -132,7 +218,7 @@ jobs:
           flag-name: run-${{ matrix.os }}-${{ matrix.ruby-version }}-${{ matrix.gemfile }}
 
   test_finish:
-    needs: [ test ]
+    needs: [ test_ubuntu, test_macos, test_windows ]
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
