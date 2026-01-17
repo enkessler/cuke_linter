@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0']
+        ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0', '4.0']
         gemfile: [ cuke_modeler1, cuke_modeler2, cuke_modeler3 ]
         exclude:
           # CukeModeler 3.x requires at least Ruby 2.3
@@ -24,6 +24,8 @@ jobs:
           # CukeModeler 1.x and 2.x do not support beyond Ruby 2
           - {gemfile: cuke_modeler1, ruby-version: '3.0'}
           - {gemfile: cuke_modeler2, ruby-version: '3.0'}
+          - {gemfile: cuke_modeler1, ruby-version: '4.0'}
+          - {gemfile: cuke_modeler2, ruby-version: '4.0'}
 
           # These JRuby versions are not available on the newer Ubuntu images. See included replacement jobs.
           - {os: ubuntu-latest, ruby-version: jruby-9.1.17.0}
@@ -62,7 +64,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest]
-        ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0']
+        ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0', '4.0']
         gemfile: [ cuke_modeler1, cuke_modeler2, cuke_modeler3 ]
         exclude:
           # Older versions of Ruby (<2.6) can't handle ARM, so they can't run on
@@ -79,11 +81,12 @@ jobs:
           # CukeModeler 1.x and 2.x do not support beyond Ruby 2
           - {gemfile: cuke_modeler1, ruby-version: '3.0'}
           - {gemfile: cuke_modeler2, ruby-version: '3.0'}
+          - {gemfile: cuke_modeler1, ruby-version: '4.0'}
+          - {gemfile: cuke_modeler2, ruby-version: '4.0'}
 
           # These JRuby versions are not available on any of the currently available macOS images. Leaving it in
           # the build matrix for reference until the gem drops support for those versions of JRuby.
-          - os: macos-latest
-            ruby-version: jruby-9.1.17.0
+          - {os: macos-latest, ruby-version: jruby-9.1.17.0}
 
         include:
           # Replacements for the non-ARM-capable jobs
@@ -127,7 +130,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest]
-        ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0']
+        ruby-version: ['2.1', '2.2', '2.3', '2.5', '2.7', '3.0', 'jruby-9.1.17.0', '4.0']
         gemfile: [ cuke_modeler1, cuke_modeler2, cuke_modeler3 ]
         exclude:
           # CukeModeler 3.x requires at least Ruby 2.3
@@ -137,6 +140,8 @@ jobs:
           # CukeModeler 1.x and 2.x do not support beyond Ruby 2
           - {gemfile: cuke_modeler1, ruby-version: '3.0'}
           - {gemfile: cuke_modeler2, ruby-version: '3.0'}
+          - {gemfile: cuke_modeler1, ruby-version: '4.0'}
+          - {gemfile: cuke_modeler2, ruby-version: '4.0'}
 
 
           # Just not worth it to get these working and no additional and meaningful proof is provided by these

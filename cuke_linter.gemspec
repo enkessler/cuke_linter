@@ -35,18 +35,18 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = '>= 2.1', '< 4.0'
+  spec.required_ruby_version = '>= 2.1', '< 5.0'
 
   spec.add_runtime_dependency 'cuke_modeler', '>= 1.5', '< 4.0'
 
-  spec.add_development_dependency 'bundler', '< 3.0'
+  spec.add_development_dependency 'bundler', '< 5.0'
   spec.add_development_dependency 'childprocess', '< 6.0'
-  spec.add_development_dependency 'cucumber', '< 5.0'
+  spec.add_development_dependency 'cucumber', '< 11.0'
   spec.add_development_dependency 'cuke_slicer', '>= 2.0.2', '< 4.0'
   spec.add_development_dependency 'ffi', '~> 1.0'
   spec.add_development_dependency 'parallel', '~> 1.0'
   spec.add_development_dependency 'rainbow', '< 4.0.0'
-  spec.add_development_dependency 'rake', '~> 12.0'
+  spec.add_development_dependency 'rake', '<14.0'
   spec.add_development_dependency 'require_all', '~> 2.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
   # Running recent RuboCop versions requires a recent version of Ruby but it can still lint against Ruby 2.1 styles.
