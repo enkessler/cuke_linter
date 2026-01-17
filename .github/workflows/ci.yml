@@ -102,11 +102,9 @@ jobs:
           # Replacements for the non-ARM-capable jobs
           - {os: macos-15-intel, ruby-version: '2.1', gemfile: cuke_modeler1}
           - {os: macos-15-intel, ruby-version: '2.1', gemfile: cuke_modeler2}
-          - {os: macos-15-intel, ruby-version: '2.1', gemfile: cuke_modeler3}
 
           - {os: macos-15-intel, ruby-version: '2.2', gemfile: cuke_modeler1}
           - {os: macos-15-intel, ruby-version: '2.2', gemfile: cuke_modeler2}
-          - {os: macos-15-intel, ruby-version: '2.2', gemfile: cuke_modeler3}
 
           - {os: macos-15-intel, ruby-version: '2.3', gemfile: cuke_modeler1}
           - {os: macos-15-intel, ruby-version: '2.3', gemfile: cuke_modeler2}
